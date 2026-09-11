@@ -10,465 +10,1006 @@ import {
   ArrowRight,
   CheckCircle2,
   PieChart as PieIcon,
-  Diamond
+  Diamond,
+  Search,
+  Sliders,
+  Database,
+  BarChart2,
+  Clock,
+  UserCheck,
+  Zap,
+  Lock,
+  Check,
+  AlertTriangle,
+  Send,
+  Terminal,
+  FileText,
+  LineChart as LineChartIcon,
+  ChevronRight,
+  ExternalLink,
+  Cpu,
+  X
 } from 'lucide-react';
 import { 
   ResponsiveContainer, 
-  ScatterChart, 
-  Scatter, 
+  AreaChart, 
+  Area, 
+  LineChart, 
+  Line, 
   XAxis, 
   YAxis, 
-  ZAxis, 
   Tooltip, 
-  Cell 
+  CartesianGrid,
+  Legend
 } from 'recharts';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
-import { AIOptimizerWindow, StrategyIdea } from './AIOptimizerWindow';
+import { Input } from './ui/input';
+import { StrategyIdea } from './AIOptimizerWindow';
 
 interface AllocationOptimizerViewProps {
   funds: Fund[];
   onCommitRebalance: (orders: TradeOrder[]) => void;
   onExperimentInAgentWorkspace?: (strategy: StrategyIdea) => void;
+  onOpenAgentModal?: (query?: string) => void;
 }
 
 export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = ({
   funds,
   onCommitRebalance,
   onExperimentInAgentWorkspace,
+  onOpenAgentModal
 }) => {
-  // Current allocated weights: Oculus 35%, Composite 30%, Valence 15%, Arista 20%
-  const [weights, setWeights] = useState<Record<string, number>>({
-    'des-oculus': 35,
-    'des-composite': 30,
-    'des-valence': 15,
-    'des-arista': 20,
-  });
+  // Navigation Sub-Tabs matching wireframe: [Data and analysis] | [Portfolio stimulation Model 1] | [Portfolio stimulation Model 2]
+  const [activeSubTab, setActiveSubTab] = useState<'data-analysis' | 'sim-model-1' | 'sim-model-2'>('data-analysis');
 
-  const [committedNotice, setCommittedNotice] = useState(false);
+  // Timeframe / Metric pills in right panel
+  const [selectedTimeframe, setSelectedTimeframe] = useState<'1D' | '1W' | '1M' | '1Y'>('1M');
 
-  const totalWeight = useMemo(() => {
-    return Object.values(weights).reduce((a, b) => a + b, 0);
-  }, [weights]);
+  // Bottom prompt bar state
+  const [promptBarText, setPromptBarText] = useState<string>('');
+  const [promptResult, setPromptResult] = useState<string | null>(null);
+  const [isPromptRunning, setIsPromptRunning] = useState<boolean>(false);
 
-  // Normalized weights
-  const normWeights = useMemo(() => {
-    const sum = totalWeight || 1;
-    const res: Record<string, number> = {};
-    for (const id of Object.keys(weights)) {
-      res[id] = Number(((weights[id] / sum) * 100).toFixed(1));
-    }
-    return res;
-  }, [weights, totalWeight]);
+  // Trade Execution & Risk Restrictions Modal (Image 3)
+  const [isExecutionModalOpen, setIsExecutionModalOpen] = useState<boolean>(false);
+  const [executionTimeParam, setExecutionTimeParam] = useState<string>('TWAP 09:30 - 16:00 EST / 45-min interval');
+  const [humanSupervisor, setHumanSupervisor] = useState<string>('Alexander Vance (PM) & Dr. Elena Rostova');
+  const [gatewayParam, setGatewayParam] = useState<string>('NY4 FIX 4.4 Ultra-Low Latency DMA');
+  
+  // Autonomy, Human, Gateway toggles
+  const [autonomyMode, setAutonomyMode] = useState<'Autonomous' | 'Semi-Autonomous' | 'Rule-Based'>('Autonomous');
+  const [humanApprovalRequired, setHumanApprovalRequired] = useState<boolean>(true);
+  const [gatewayProtocol, setGatewayProtocol] = useState<'DMA FIX' | 'Smart Router' | 'Dark Pool'>('DMA FIX');
 
-  // Compute Blended Portfolio Metrics
-  const blendedReturn = useMemo(() => {
-    return Number(
-      funds
-        .reduce((sum, f) => sum + (f.oneYearReturnPct * (normWeights[f.id] || 0)) / 100, 0)
-        .toFixed(2)
-    );
-  }, [funds, normWeights]);
+  // Risk Management Restrictions Inputs
+  const [maxRiskIndex, setMaxRiskIndex] = useState<string>('1.25% 1-Day VaR 95%');
+  const [maxSectorExposure, setMaxSectorExposure] = useState<string>('15.0% Share of NAV');
+  const [maxSingleAssetExposure, setMaxSingleAssetExposure] = useState<string>('5.0% Single Equity NAV');
+  const [maxDrawdownLimit, setMaxDrawdownLimit] = useState<string>('3.50% Hard Stop Loss');
 
-  const blendedVol = useMemo(() => {
-    // Systematic diversification discount assumption
-    const weightedVol = funds.reduce(
-      (sum, f) => sum + (f.volatilityPct * (normWeights[f.id] || 0)) / 100,
-      0
-    );
-    return Number((weightedVol * 0.82).toFixed(2));
-  }, [funds, normWeights]);
+  // Notification status
+  const [publishSuccessNotice, setPublishSuccessNotice] = useState<string | null>(null);
 
-  const blendedSharpe = useMemo(() => {
-    return Number(((blendedReturn - 4.5) / blendedVol).toFixed(2));
-  }, [blendedReturn, blendedVol]);
+  // Interactive 9-Grid Card Selection State (Image 2)
+  const [selectedGridCard, setSelectedGridCard] = useState<string | null>('card-1');
 
-  const blendedVar = useMemo(() => {
-    return Number(
-      (
-        funds.reduce((sum, f) => sum + (f.var95Pct * (normWeights[f.id] || 0)) / 100, 0) * 0.85
-      ).toFixed(2)
-    );
-  }, [funds, normWeights]);
-
-  // Presets
-  const applyPreset = (type: 'maxSharpe' | 'minVol' | 'equal' | 'growth') => {
-    if (type === 'maxSharpe') {
-      setWeights({
-        'des-oculus': 30,
-        'des-composite': 40,
-        'des-valence': 10,
-        'des-arista': 20,
-      });
-    } else if (type === 'minVol') {
-      setWeights({
-        'des-oculus': 20,
-        'des-composite': 35,
-        'des-valence': 5,
-        'des-arista': 40,
-      });
-    } else if (type === 'equal') {
-      setWeights({
-        'des-oculus': 25,
-        'des-composite': 25,
-        'des-valence': 25,
-        'des-arista': 25,
-      });
-    } else if (type === 'growth') {
-      setWeights({
-        'des-oculus': 20,
-        'des-composite': 25,
-        'des-valence': 45,
-        'des-arista': 10,
-      });
-    }
-  };
-
-  // Scatter data: Volatility (X) vs Expected Return (Y)
-  const scatterData = useMemo(() => {
-    const items = funds.map((f) => ({
-      name: f.name,
-      vol: f.volatilityPct,
-      ret: f.oneYearReturnPct,
-      sharpe: f.sharpeRatio,
-      color: 'var(--chart-1)',
-    }));
-
-    // Add current blended simulated portfolio
-    items.push({
-      name: 'Simulated Target Portfolio (DT)',
-      vol: blendedVol,
-      ret: blendedReturn,
-      sharpe: blendedSharpe,
-      color: 'var(--primary)',
-    });
-
-    return items;
-  }, [funds, blendedVol, blendedReturn, blendedSharpe]);
-
-  // Correlation Matrix between funds
-  const correlations = [
-    { pair: 'Oculus vs Composite', value: 0.22 },
-    { pair: 'Oculus vs Valence', value: 0.38 },
-    { pair: 'Oculus vs Arista', value: 0.08 },
-    { pair: 'Composite vs Valence', value: 0.15 },
-    { pair: 'Composite vs Arista', value: -0.04 },
-    { pair: 'Valence vs Arista', value: -0.12 },
+  // Chart data for Data & Analysis (Image 1)
+  const dataAnalysisChartData = [
+    { time: 'Week 1', nav: 100.0, benchmark: 100.0, confidence: 99.8 },
+    { time: 'Week 2', nav: 102.4, benchmark: 101.1, confidence: 99.7 },
+    { time: 'Week 3', nav: 105.1, benchmark: 102.0, confidence: 99.8 },
+    { time: 'Week 4', nav: 107.8, benchmark: 102.8, confidence: 99.9 },
+    { time: 'Week 5', nav: 111.2, benchmark: 103.5, confidence: 99.8 },
+    { time: 'Week 6', nav: 114.6, benchmark: 104.2, confidence: 99.9 },
+    { time: 'Week 7', nav: 118.0, benchmark: 105.0, confidence: 99.8 },
+    { time: 'Week 8', nav: 122.5, benchmark: 106.1, confidence: 99.9 },
   ];
 
-  const handleCommitRebalance = () => {
-    const orders: TradeOrder[] = [];
-    const firmTotalAum = 5990; // $5.99B firm capital pool
+  // Chart data for Model 1 Simulation (Image 2)
+  const model1SimChartData = [
+    { time: '09:30', baseModel: 100.0, simulatedModel: 99.4, upperBand: 100.5, lowerBand: 98.5 },
+    { time: '10:30', baseModel: 101.8, simulatedModel: 103.2, upperBand: 104.2, lowerBand: 102.0 },
+    { time: '11:30', baseModel: 103.1, simulatedModel: 106.5, upperBand: 107.8, lowerBand: 105.1 },
+    { time: '12:30', baseModel: 104.5, simulatedModel: 109.8, upperBand: 111.0, lowerBand: 108.4 },
+    { time: '13:30', baseModel: 105.8, simulatedModel: 114.2, upperBand: 115.6, lowerBand: 112.8 },
+    { time: '14:30', baseModel: 107.2, simulatedModel: 118.9, upperBand: 120.4, lowerBand: 117.2 },
+    { time: '15:30', baseModel: 108.4, simulatedModel: 124.1, upperBand: 125.8, lowerBand: 122.5 },
+    { time: '16:00', baseModel: 109.2, simulatedModel: 128.5, upperBand: 130.2, lowerBand: 126.8 },
+  ];
 
-    funds.forEach((f) => {
-      const targetWeight = normWeights[f.id] || 25;
-      const currentWeight = Number(((f.aumMillions / firmTotalAum) * 100).toFixed(1));
-      const diffPct = targetWeight - currentWeight;
+  // Chart data for Model 2 Simulation (Image 2)
+  const model2SimChartData = [
+    { time: '09:30', baseModel: 100.0, simulatedModel: 98.8, upperBand: 100.2, lowerBand: 97.5 },
+    { time: '10:30', baseModel: 101.8, simulatedModel: 104.5, upperBand: 106.0, lowerBand: 103.0 },
+    { time: '11:30', baseModel: 103.1, simulatedModel: 108.2, upperBand: 110.1, lowerBand: 106.4 },
+    { time: '12:30', baseModel: 104.5, simulatedModel: 112.4, upperBand: 114.2, lowerBand: 110.5 },
+    { time: '13:30', baseModel: 105.8, simulatedModel: 117.9, upperBand: 120.0, lowerBand: 115.8 },
+    { time: '14:30', baseModel: 107.2, simulatedModel: 122.5, upperBand: 124.8, lowerBand: 120.2 },
+    { time: '15:30', baseModel: 108.4, simulatedModel: 127.8, upperBand: 130.0, lowerBand: 125.4 },
+    { time: '16:00', baseModel: 109.2, simulatedModel: 132.4, upperBand: 134.8, lowerBand: 130.0 },
+  ];
 
-      if (Math.abs(diffPct) > 0.5) {
-        const dollarDiffM = Number(((Math.abs(diffPct) / 100) * firmTotalAum).toFixed(1));
-        orders.push({
-          id: `ord-reb-${f.id.slice(-4)}-${Date.now().toString().slice(-4)}`,
-          timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
-          fundId: f.id,
-          ticker: f.id.toUpperCase(),
-          name: `${f.name} Rebalance`,
-          side: diffPct > 0 ? 'BUY' : 'SELL',
-          shares: Math.round((dollarDiffM * 1000000) / f.nav),
-          targetPrice: f.nav,
-          status: 'SIMULATED',
-          rationale: `Capital Allocation Model reweighting: ${currentWeight}% → ${targetWeight}% ($${dollarDiffM}M ${diffPct > 0 ? 'inflow' : 'trim'})`,
-        });
+  // 9 Interactive Factor & Asset Cards (Image 2)
+  const factorAndAssetCards = [
+    {
+      id: 'card-1',
+      title: 'Factors and stalks',
+      category: 'Alpha Factors',
+      metric: 'Momentum +1.84σ',
+      subtext: '42 Long / 18 Short equities',
+      status: 'OPTIMAL',
+      details: 'Dynamic cross-sectional momentum ranking across S&P 500 with Barra factor orthogonalization.'
+    },
+    {
+      id: 'card-2',
+      title: 'assets etc',
+      category: 'Asset Allocation',
+      metric: '58% Eq / 24% Opt / 18% UST',
+      subtext: 'Multi-asset overlay',
+      status: 'BALANCED',
+      details: 'Delta hedged equity portfolio with sovereign bond roll-down carry and volatility skew protection.'
+    },
+    {
+      id: 'card-3',
+      title: 'Sector Weights',
+      category: 'GICS Constraints',
+      metric: 'Tech 28.5% | Fin 22.0%',
+      subtext: 'Max sector cap: 15.0%',
+      status: 'COMPLIANT',
+      details: 'Strict sector bounds enforced to prevent over-concentration in semiconductor hardware.'
+    },
+    {
+      id: 'card-4',
+      title: 'Volatility Skew',
+      category: 'Options Convexity',
+      metric: '25Δ Skew: 2.4σ Arb',
+      subtext: 'Variance premia harvest',
+      status: 'ACTIVE',
+      details: 'ATM vs 25-delta OTM implied volatility surface arbitrage capturing systematic retail premium.'
+    },
+    {
+      id: 'card-5',
+      title: 'Beta Neutralization',
+      category: 'Risk Hedge',
+      metric: 'Market Beta: 0.008',
+      subtext: 'Target: 0.00 ± 0.02',
+      status: 'NEUTRALIZED',
+      details: 'S&P 500 E-mini future overlays continuously neutralizing systemic equity market direction.'
+    },
+    {
+      id: 'card-6',
+      title: 'Liquidity Depth',
+      category: 'Market Access',
+      metric: 'ADV Cap: <2.10%',
+      subtext: 'Est. Slippage: 0.18 bps',
+      status: 'HIGH DEPTH',
+      details: 'Order slicing algorithm guarantees orders do not exceed 2.5% of trailing 30-day average daily volume.'
+    },
+    {
+      id: 'card-7',
+      title: 'Carry & Yield',
+      category: 'Fixed Income / FX',
+      metric: '+14.2 bps Net Carry',
+      subtext: 'USD/JPY Cross-currency basis',
+      status: 'HARVESTING',
+      details: 'Captures offshore funding disparity via 3-month currency basis swaps into SOFR collateral.'
+    },
+    {
+      id: 'card-8',
+      title: 'Tail Risk Bounds',
+      category: 'VaR & Stress',
+      metric: '95% VaR: 1.14%',
+      subtext: 'Max Drawdown: -3.80%',
+      status: 'SECURE',
+      details: 'OTM put spread collar ladder guarantees capital preservation under catastrophic tail-risk shocks.'
+    },
+    {
+      id: 'card-9',
+      title: 'Execution Gateway',
+      category: 'FIX Protocol',
+      metric: 'DMA Route: 0.08 ms',
+      subtext: 'SEC 15c3-5 Approved',
+      status: 'ONLINE',
+      details: 'Low-latency direct market access with pre-trade price collar & capital threshold enforcement.'
+    }
+  ];
+
+  // Handle bottom prompt submission
+  const handlePromptSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!promptBarText.trim()) return;
+
+    setIsPromptRunning(true);
+    const query = promptBarText;
+
+    setTimeout(() => {
+      setIsPromptRunning(false);
+      setPromptResult(
+        `✓ PORTFOLIO FIT AUDIT COMPLETE FOR "${query}":\n` +
+        `• Active Allocation: 58.0% Equities / 24.0% Options Variance / 18.0% UST Yield.\n` +
+        `• Stress Test Verification: Passed SEC 15c3-5 and 95% VaR bounds (1.14% vs 1.25% limit).\n` +
+        `• Recommended Action: Deploy portfolio fit hypothesis with 15.0% max sector ceiling and automated TWAP routing.`
+      );
+    }, 700);
+  };
+
+  // Handle Publish Limits & Trade (Image 3)
+  const handlePublishLimitsAndTrade = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Create simulated execution orders
+    const newOrders: TradeOrder[] = [
+      {
+        id: `ord-lim-${Date.now()}-1`,
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        fundId: 'des-oculus',
+        ticker: 'SPY',
+        name: 'SPDR S&P 500 ETF (Delta Hedge)',
+        side: 'BUY',
+        shares: 45000,
+        targetPrice: 585.20,
+        status: 'EXECUTED',
+        rationale: `Published limits: Autonomy [${autonomyMode}], VaR Cap [${maxRiskIndex}], Approved by [${humanSupervisor}]`
+      },
+      {
+        id: `ord-lim-${Date.now()}-2`,
+        timestamp: new Date().toISOString().replace('T', ' ').slice(0, 19),
+        fundId: 'des-oculus',
+        ticker: 'NVDA',
+        name: 'NVIDIA Corp (Risk Rebalance)',
+        side: 'SELL',
+        shares: 12000,
+        targetPrice: 128.40,
+        status: 'EXECUTED',
+        rationale: `Sector restriction compliance: Capped tech exposure under ${maxSectorExposure}`
       }
-    });
+    ];
 
-    onCommitRebalance(orders);
-    setCommittedNotice(true);
-    setTimeout(() => setCommittedNotice(false), 3000);
+    onCommitRebalance(newOrders);
+    setIsExecutionModalOpen(false);
+    setPublishSuccessNotice(`✓ Trading limits published & ${newOrders.length} compliance orders dispatched via ${gatewayParam}!`);
+
+    setTimeout(() => {
+      setPublishSuccessNotice(null);
+    }, 5000);
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header Banner */}
-      <div className="bg-card p-4 rounded-lg border border-border shadow-xs flex flex-wrap items-center justify-between gap-4 transition-colors">
-        <div>
-          <h2 className="text-base font-bold text-foreground flex items-center gap-2">
-            <Diamond className="w-4 h-4 text-primary" />
-            Market Fund Manager
-          </h2>
-          <p className="text-xs text-muted-foreground mt-0.5">
-            Optimize cross-fund capital distributions, evaluate correlation diversification, and generate rebalance trade tickets.
-          </p>
-        </div>
-
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => applyPreset('maxSharpe')}
-            className="px-2.5 py-1.5 rounded-md text-xs font-mono font-medium bg-primary/10 hover:bg-primary/20 text-primary border border-primary/30 transition font-semibold"
-          >
-            Max Sharpe
-          </button>
-          <button
-            onClick={() => applyPreset('minVol')}
-            className="px-2.5 py-1.5 rounded-md text-xs font-mono font-medium bg-white hover:bg-slate-50 text-foreground border border-border transition"
-          >
-            Min Volatility
-          </button>
-          <button
-            onClick={() => applyPreset('growth')}
-            className="px-2.5 py-1.5 rounded-md text-xs font-mono font-medium bg-white hover:bg-slate-50 text-foreground border border-border transition"
-          >
-            Max Alpha / Growth
-          </button>
-          <button
-            onClick={() => applyPreset('equal')}
-            className="px-2.5 py-1.5 rounded-md text-xs font-mono font-medium bg-white hover:bg-slate-50 text-foreground border border-border transition"
-          >
-            1/N Equal
-          </button>
-        </div>
-      </div>
-
-      {/* Blended Metric Dashboard Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
-          <span className="text-[11px] text-muted-foreground font-medium">Projected Annual Return</span>
-          <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-xl font-bold text-emerald-500">+{blendedReturn}%</span>
-          </div>
-          <span className="text-[11px] text-muted-foreground font-mono">Benchmark Excess: +12.1%</span>
-        </div>
-
-        <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
-          <span className="text-[11px] text-muted-foreground font-medium">Blended Volatility</span>
-          <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-xl font-bold text-foreground">{blendedVol}%</span>
-          </div>
-          <span className="text-[11px] text-emerald-500 font-mono">-18% Diversification Gain</span>
-        </div>
-
-        <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
-          <span className="text-[11px] text-muted-foreground font-medium">Blended Sharpe Ratio</span>
-          <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-xl font-bold text-primary">{blendedSharpe}</span>
-          </div>
-          <span className="text-[11px] text-muted-foreground font-mono">Risk-Free Rate: 4.5%</span>
-        </div>
-
-        <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
-          <span className="text-[11px] text-muted-foreground font-medium">Blended 95% Daily VaR</span>
-          <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-xl font-bold text-foreground">{blendedVar}%</span>
-          </div>
-          <span className="text-[11px] text-muted-foreground font-mono">Within 1.5% Risk Mandate</span>
-        </div>
-      </div>
-
-      {/* AI Quantitative Allocation Insight */}
-      <div className="relative overflow-hidden bg-card border border-primary/30 rounded-lg p-3.5 shadow-xs ring-1 ring-primary/15 transition-all">
-        <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-primary via-primary/70 to-transparent" />
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <div className="w-7 h-7 rounded-md bg-primary/10 border border-primary/20 flex items-center justify-center text-primary shrink-0 mt-0.5">
-              <Sparkles className="w-3.5 h-3.5 text-primary" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-foreground">AI Optimization Signal: Markowitz Frontier Tangency</span>
-                <Badge variant="outline" className="bg-primary/10 text-primary border-primary/30 text-[10px] font-mono px-1.5 py-0 font-bold">
-                  AI INSIGHT
-                </Badge>
-              </div>
-              <p className="text-xs text-muted-foreground mt-0.5">
-                Dynamic covariance matrix suggests maintaining overweight in Oculus Fund (35%) while paring Valence (15%) to dampen macro inflation beta and expand Sharpe ratio to {blendedSharpe}.
-              </p>
-            </div>
-          </div>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => applyPreset('maxSharpe')}
-            className="text-xs font-mono border-primary/30 text-primary hover:bg-primary/10 h-7 px-2.5 gap-1 shrink-0"
-          >
-            <Sparkles className="w-3 h-3 text-primary" />
-            Apply AI Tangency Weights
-          </Button>
-        </div>
-      </div>
-
-      {/* AI Optimisation Window: Research & Managing Node Strategy Generator */}
-      <AIOptimizerWindow onExperimentInAgentWorkspace={onExperimentInAgentWorkspace} />
-
-      {/* Allocation Sliders and Scatter Frontier */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Sliders Box */}
-        <div className="bg-card p-5 rounded-lg border border-border shadow-xs flex flex-col justify-between transition-colors">
-          <div>
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
-                <PieIcon className="w-4 h-4 text-primary" />
-                Target Fund Capital Weights
-              </h3>
-              <span className={`text-xs font-mono font-bold ${Math.abs(totalWeight - 100) < 0.1 ? 'text-emerald-500' : 'text-primary'}`}>
-                Sum: {totalWeight.toFixed(0)}% (Normalized: 100%)
-              </span>
-            </div>
-
-            <div className="space-y-4">
-              {funds.map((f) => {
-                const currentVal = weights[f.id] || 0;
-                const normalizedVal = normWeights[f.id] || 0;
-                return (
-                  <div key={f.id} className="p-3 bg-white rounded-lg border border-border">
-                    <div className="flex justify-between items-center text-xs mb-1.5">
-                      <div>
-                        <span className="font-bold text-foreground">{f.name}</span>
-                        <span className="block text-[10px] text-muted-foreground font-sans">{f.strategy}</span>
-                      </div>
-                      <div className="text-right font-mono">
-                        <span className="text-sm font-bold text-primary">{normalizedVal}%</span>
-                        <span className="text-[10px] text-muted-foreground block">
-                          ${((5990 * normalizedVal) / 100).toFixed(0)}M
-                        </span>
-                      </div>
-                    </div>
-
-                    <input
-                      type="range"
-                      min="0"
-                      max="70"
-                      step="5"
-                      value={currentVal}
-                      onChange={(e) =>
-                        setWeights((prev) => ({ ...prev, [f.id]: Number(e.target.value) }))
-                      }
-                      className="w-full accent-primary h-1.5 bg-muted rounded-lg cursor-pointer"
-                    />
-
-                    <div className="flex justify-between text-[10px] text-muted-foreground font-mono mt-1">
-                      <span>1Y Ret: +{f.oneYearReturnPct}%</span>
-                      <span>Vol: {f.volatilityPct}%</span>
-                      <span>Sharpe: {f.sharpeRatio}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
-            <span className="text-xs text-muted-foreground">Total Firm Capital: <strong className="text-foreground font-mono">$5,990M</strong></span>
+    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-slate-50/50 p-2 sm:p-3">
+      
+      {/* =========================================================================
+          TOP COMMAND & HEADER BAR MATCHING SKETCH
+          - Left: /agent bar
+          - Sub-bar: [Current portfolio and market]
+          - Right Tabs: [Data and analysis] [Portfolio stimulation Model 1] [Portfolio stimulation Model 2]
+         ========================================================================= */}
+      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
+        
+        {/* Left: /agent bar */}
+        <div className="flex items-center gap-2 flex-1 max-w-md">
+          <div className="relative w-full flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-lg transition-all">
+            <span className="pl-3 pr-1 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+            </span>
+            <input
+              type="text"
+              value={promptBarText}
+              onChange={(e) => setPromptBarText(e.target.value)}
+              onKeyDown={(e) => e.key === 'Enter' && handlePromptSubmit(e)}
+              placeholder="/agent bar - query market stats or optimize portfolio..."
+              className="w-full py-1.5 pl-1 pr-8 text-xs font-mono text-foreground placeholder:text-muted-foreground bg-transparent focus:outline-hidden"
+            />
             <button
-              onClick={handleCommitRebalance}
-              className="px-4 py-2 rounded-md text-xs font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-xs transition flex items-center gap-1.5"
+              type="button"
+              onClick={handlePromptSubmit}
+              className="absolute right-2 p-1 rounded text-blue-600 hover:bg-blue-50"
+              title="Execute /agent search"
             >
-              {committedNotice ? (
-                <>
-                  <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
-                  Tickets Routed to Blotter!
-                </>
-              ) : (
-                <>
-                  <CheckCircle2 className="w-4 h-4 text-primary-foreground" />
-                  Commit Target Rebalance Tickets
-                </>
-              )}
+              <Search className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
 
-        {/* Risk-Return Frontier & Correlation Matrix */}
-        <div className="space-y-6">
-          {/* Scatter Plot */}
-          <div className="bg-card p-5 rounded-lg border border-border shadow-xs transition-colors">
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-sm font-semibold text-foreground">Risk vs. Return Efficient Frontier</h3>
-                <p className="text-xs text-muted-foreground">Annual Volatility vs. Expected 1Y Return</p>
+        {/* Center/Right: Sub-tabs exactly matching wireframe sketches */}
+        <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('data-analysis')}
+            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+              activeSubTab === 'data-analysis'
+                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
+                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+            }`}
+          >
+            <BarChart2 className="w-3.5 h-3.5" />
+            <span>Data and analysis</span>
+            {activeSubTab === 'data-analysis' && <Check className="w-3 h-3 ml-0.5" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('sim-model-1')}
+            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+              activeSubTab === 'sim-model-1'
+                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
+                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+            }`}
+          >
+            <LineChartIcon className="w-3.5 h-3.5" />
+            <span>Portfolio stimulation Model 1</span>
+            {activeSubTab === 'sim-model-1' && <Check className="w-3 h-3 ml-0.5" />}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveSubTab('sim-model-2')}
+            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+              activeSubTab === 'sim-model-2'
+                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
+                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+            }`}
+          >
+            <Zap className="w-3.5 h-3.5" />
+            <span>Portfolio stimulation Model 2</span>
+            {activeSubTab === 'sim-model-2' && <Check className="w-3 h-3 ml-0.5" />}
+          </button>
+        </div>
+
+        {/* Right Action: Restrictions & Deploy Button */}
+        <div className="flex items-center gap-2 shrink-0">
+          <Button
+            type="button"
+            size="sm"
+            onClick={() => setIsExecutionModalOpen(true)}
+            className="h-8 px-3 text-xs font-mono font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg gap-1.5 shadow-2xs"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Restrictions &amp; Trade Limits</span>
+          </Button>
+        </div>
+
+      </div>
+
+      {/* Success Notification Banner */}
+      {publishSuccessNotice && (
+        <div className="px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <span>{publishSuccessNotice}</span>
+          </div>
+          <Badge className="bg-emerald-600 text-white text-[10px] font-mono">
+            PUBLISHED &amp; ROUTED
+          </Badge>
+        </div>
+      )}
+
+      {/* Sub-Header Tag: "Current portfolio and market" */}
+      <div className="flex items-center justify-between px-1">
+        <div className="flex items-center gap-2">
+          <span className="px-2.5 py-0.5 bg-white border border-border rounded-lg text-xs font-mono font-bold text-foreground shadow-2xs flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Current portfolio and market</span>
+          </span>
+          <span className="text-[11px] font-mono text-muted-foreground">
+            {activeSubTab === 'data-analysis' ? 'Live Data Feed & Predictive AI Risk Analysis' : 'Interactive Factor Allocation & Benchmark Simulation Sandbox'}
+          </span>
+        </div>
+      </div>
+
+      {/* =========================================================================
+          MAIN 2-COLUMN VIEWPORT MATCHING WIREFRAME
+          Left: 3 Stacked Cards (Market stats / Portfolio monitoring)
+          Right: Dynamic Canvas (Data & Analysis OR Portfolio Simulation 3x3 Grid)
+         ========================================================================= */}
+      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
+        
+        {/* =========================================================================
+            LEFT COLUMN: 3 STACKED CARDS MATCHING WIREFRAME
+            Card 1: Market stats / Portfolio monitoring
+            Card 2: Market stats (Factor Loadings / Volatility)
+            Card 3: Market stats (Asset Distribution & Liquidity)
+           ========================================================================= */}
+        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0 space-y-3">
+          
+          {/* Card 1: Market stats or Portfolio monitoring */}
+          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                  {activeSubTab === 'data-analysis' ? 'Market stats (Index & Rates)' : 'Portfolio monitoring (Live)'}
+                </span>
               </div>
-              <span className="text-[10px] font-mono text-primary font-semibold">Blue Dot = Blended Portfolio</span>
+              <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-300 text-[9px] font-mono">
+                {activeSubTab === 'data-analysis' ? 'S&P 500: 5,852.4' : 'Sharpe 2.84'}
+              </Badge>
             </div>
 
-            <div className="h-[200px] w-full">
-              <ResponsiveContainer width="100%" height="100%">
-                <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: -20 }}>
-                  <XAxis
-                    type="number"
-                    dataKey="vol"
-                    name="Volatility"
-                    unit="%"
-                    stroke="var(--muted-foreground)"
-                    fontSize={10}
-                    fontFamily="JetBrains Mono"
-                  />
-                  <YAxis
-                    type="number"
-                    dataKey="ret"
-                    name="Return"
-                    unit="%"
-                    stroke="var(--muted-foreground)"
-                    fontSize={10}
-                    fontFamily="JetBrains Mono"
-                  />
-                  <Tooltip
-                    cursor={{ strokeDasharray: '3 3' }}
-                    content={({ payload }) => {
-                      if (!payload || !payload.length) return null;
-                      const data = payload[0].payload;
-                      return (
-                        <div className="bg-card border border-border p-2.5 rounded-lg shadow-xs text-xs font-mono text-foreground">
-                          <p className="font-bold text-primary">{data.name}</p>
-                          <p>Volatility: {data.vol}%</p>
-                          <p>Return: +{data.ret}%</p>
-                          <p>Sharpe: {data.sharpe}</p>
-                        </div>
-                      );
-                    }}
-                  />
-                  <Scatter data={scatterData}>
-                    {scatterData.map((entry, index) => (
-                      <Cell
-                        key={`cell-${index}`}
-                        fill={entry.name.includes('Simulated') ? 'var(--primary)' : 'var(--chart-5)'}
-                      />
-                    ))}
-                  </Scatter>
-                </ScatterChart>
-              </ResponsiveContainer>
+            <div className="grid grid-cols-2 gap-2 text-xs font-mono">
+              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+                <span className="text-[9px] uppercase text-muted-foreground block">1-Year Return</span>
+                <span className="text-sm font-bold text-emerald-600">+22.4%</span>
+                <span className="text-[9px] text-muted-foreground block">+4.2% vs Benchmark</span>
+              </div>
+              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+                <span className="text-[9px] uppercase text-muted-foreground block">95% Daily VaR</span>
+                <span className="text-sm font-bold text-foreground">1.14%</span>
+                <span className="text-[9px] text-emerald-600 block">Below 1.25% Cap</span>
+              </div>
+              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+                <span className="text-[9px] uppercase text-muted-foreground block">Net Beta Tilt</span>
+                <span className="text-sm font-bold text-foreground">0.008</span>
+                <span className="text-[9px] text-emerald-600 block">Market Neutral</span>
+              </div>
+              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+                <span className="text-[9px] uppercase text-muted-foreground block">VIX Implied Vol</span>
+                <span className="text-sm font-bold text-purple-700">14.82</span>
+                <span className="text-[9px] text-muted-foreground block">Skew: 2.4σ Rich</span>
+              </div>
             </div>
           </div>
 
-          {/* Correlation Matrix */}
-          <div className="bg-card p-5 rounded-lg border border-border shadow-xs transition-colors">
-            <h3 className="text-sm font-semibold text-foreground mb-2">Inter-Fund Return Correlation Matrix</h3>
-            <p className="text-xs text-muted-foreground mb-3">
-              Low/negative cross-fund correlation preserves portfolio Sharpe ratio under market stress.
-            </p>
+          {/* Card 2: Market stats (Factor & Sector Dynamics) */}
+          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-blue-500" />
+                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                  Market stats (Factor Loadings)
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-muted-foreground">Barra GEM3</span>
+            </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-              {correlations.map((c) => (
-                <div
-                  key={c.pair}
-                  className="p-2.5 bg-white rounded-lg border border-border text-center font-mono"
-                >
-                  <span className="block text-[10px] text-muted-foreground truncate">{c.pair}</span>
-                  <span
-                    className={`text-xs font-bold block mt-1 ${
-                      c.value <= 0
-                        ? 'text-emerald-500'
-                        : c.value < 0.25
-                        ? 'text-primary'
-                        : 'text-foreground'
-                    }`}
-                  >
-                    {c.value > 0 ? `+${c.value.toFixed(2)}` : c.value.toFixed(2)}
-                  </span>
+            <div className="space-y-1.5 text-xs font-mono">
+              {[
+                { factor: 'Momentum Factor', score: '+1.84σ', color: 'text-emerald-600', fill: '85%' },
+                { factor: 'Volatility Skew Premia', score: '+2.40σ', color: 'text-purple-600', fill: '92%' },
+                { factor: 'Value vs Growth Spread', score: '-0.38σ', color: 'text-amber-600', fill: '40%' },
+                { factor: 'Quality & Balance Sheet', score: '+1.12σ', color: 'text-blue-600', fill: '68%' },
+              ].map((f, idx) => (
+                <div key={idx} className="bg-slate-50 p-1.5 rounded-lg border border-border/60 space-y-1">
+                  <div className="flex items-center justify-between text-[11px]">
+                    <span className="text-foreground font-medium">{f.factor}</span>
+                    <span className={`font-bold ${f.color}`}>{f.score}</span>
+                  </div>
+                  <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
+                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: f.fill }} />
+                  </div>
                 </div>
               ))}
             </div>
           </div>
+
+          {/* Card 3: Market stats (Asset Allocation & Liquidity) */}
+          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+              <div className="flex items-center gap-1.5">
+                <div className="w-2 h-2 rounded-full bg-purple-500" />
+                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                  Market stats (Liquidity &amp; Asset Split)
+                </span>
+              </div>
+              <span className="text-[10px] font-mono text-emerald-700 font-bold">100% Allocated</span>
+            </div>
+
+            <div className="space-y-1.5 text-xs font-mono">
+              <div className="grid grid-cols-3 gap-1.5 text-center">
+                <div className="bg-emerald-50/80 p-1.5 rounded border border-emerald-200">
+                  <span className="text-[9px] uppercase text-emerald-800 block">Equities</span>
+                  <span className="text-xs font-bold text-emerald-950">58.0%</span>
+                </div>
+                <div className="bg-purple-50/80 p-1.5 rounded border border-purple-200">
+                  <span className="text-[9px] uppercase text-purple-800 block">Options/Var</span>
+                  <span className="text-xs font-bold text-purple-950">24.0%</span>
+                </div>
+                <div className="bg-blue-50/80 p-1.5 rounded border border-blue-200">
+                  <span className="text-[9px] uppercase text-blue-800 block">UST / Cash</span>
+                  <span className="text-xs font-bold text-blue-950">18.0%</span>
+                </div>
+              </div>
+
+              <div className="bg-slate-50 p-2 rounded-lg border border-border/60 text-[10.5px] text-muted-foreground space-y-0.5">
+                <div className="flex items-center justify-between">
+                  <span>ADV Liquidity Utilization:</span>
+                  <strong className="text-foreground font-mono">2.1% (Cap &lt;2.5%)</strong>
+                </div>
+                <div className="flex items-center justify-between">
+                  <span>Slippage Model Impact:</span>
+                  <strong className="text-emerald-600 font-mono">0.18 bps</strong>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
+
+        {/* =========================================================================
+            RIGHT AREA - VIEW 1: DATA AND ANALYSIS (Image 1)
+           ========================================================================= */}
+        {activeSubTab === 'data-analysis' && (
+          <div className="lg:col-span-8 p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3">
+            
+            {/* Top 4 Mini Pill Buttons matching wireframe sketch */}
+            <div className="flex items-center justify-between pb-1 border-b border-border/70">
+              <div className="flex items-center gap-1.5">
+                {(['1D', '1W', '1M', '1Y'] as const).map((t) => (
+                  <button
+                    key={t}
+                    type="button"
+                    onClick={() => setSelectedTimeframe(t)}
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold transition-all border ${
+                      selectedTimeframe === t
+                        ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
+                        : 'bg-white text-muted-foreground hover:bg-slate-50 border-border'
+                    }`}
+                  >
+                    {t}
+                  </button>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
+                <span className="flex items-center gap-1">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+                  Portfolio Trajectory
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="w-2.5 h-0.5 bg-slate-400 inline-block" />
+                  S&amp;P 500 Baseline
+                </span>
+              </div>
+            </div>
+
+            {/* Main Interactive Growth / Trajectory Line Chart */}
+            <div className="h-56 sm:h-64 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={dataAnalysisChartData}>
+                  <defs>
+                    <linearGradient id="dataAnalysisGrad" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="5%" stopColor="#059669" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="#059669" stopOpacity={0.0} />
+                    </linearGradient>
+                  </defs>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
+                  <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 130]} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <Area 
+                    type="monotone" 
+                    dataKey="nav" 
+                    stroke="#059669" 
+                    strokeWidth={2.5} 
+                    fillOpacity={1} 
+                    fill="url(#dataAnalysisGrad)" 
+                    name="Simulated Portfolio NAV" 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="benchmark" 
+                    stroke="#64748b" 
+                    strokeWidth={1.75} 
+                    strokeDasharray="4 4" 
+                    dot={false} 
+                    name="Benchmark Index" 
+                  />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* AI Suggestion Box (Green styled container matching the wireframe in Image 1) */}
+            <div className="rounded-xl border-2 border-emerald-400 bg-emerald-50/80 p-3 shadow-2xs space-y-2.5">
+              <div className="flex items-center gap-2 text-emerald-950 font-mono text-xs font-bold">
+                <Sparkles className="w-4 h-4 text-emerald-700" />
+                <span>Ai suggestion on how it might change, compare and for cast, risk coming, montoring etc,</span>
+              </div>
+
+              {/* 4 Distinct Detailed Bullet Lines matching the sketch */}
+              <div className="space-y-2 font-sans text-xs text-emerald-950 bg-white/80 p-3 rounded-lg border border-emerald-200 shadow-2xs">
+                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong>Regime Shift &amp; Volatility Forecast:</strong> Neural factor surface projects a 78% probability of volatility compression into upcoming macro rate decision. Implied skew curve is expected to flatten by 1.8 vol points across mega-cap tech index options.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong>Comparative Model Performance:</strong> Model 1 (+22.5% cumulative alpha) outpaces passive benchmark by 16.4% while maintaining strict factor beta neutrality (0.008) and lower maximum drawdown (-3.8% vs -8.2%).
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong>Proactive Risk &amp; Concentration Warning:</strong> Semiconductor GICS exposure currently sits at 13.8% (approaching the 15.0% mandate cap). Recommend staging pre-trade collar hedge to lock in unrealized gamma gains before earnings.
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2">
+                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong>Live Telemetry &amp; Anti-Hallucination Monitoring:</strong> All sub-agent scratchpads refreshed 38s ago against live OPRA and NY4 tick logs. Confidence score is mathematically grounded at 99.8% with zero memory drift.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        )}
+
+        {/* =========================================================================
+            RIGHT AREA - VIEW 2 & 3: PORTFOLIO STIMULATION MODEL 1 & MODEL 2 (Image 2)
+           ========================================================================= */}
+        {(activeSubTab === 'sim-model-1' || activeSubTab === 'sim-model-2') && (
+          <div className="lg:col-span-8 p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3">
+            
+            {/* Top 4 Mini Pill Buttons matching wireframe sketch */}
+            <div className="flex items-center justify-between pb-1 border-b border-border/70">
+              <div className="flex items-center gap-1.5">
+                {[
+                  { label: 'Expected Sharpe', val: activeSubTab === 'sim-model-1' ? '2.84' : '3.12' },
+                  { label: 'Simulated 95% VaR', val: activeSubTab === 'sim-model-1' ? '1.14%' : '0.98%' },
+                  { label: 'Alpha Outperformance', val: activeSubTab === 'sim-model-1' ? '+5.6%' : '+7.2%' },
+                  { label: 'Max Drawdown', val: activeSubTab === 'sim-model-1' ? '-3.8%' : '-2.4%' },
+                ].map((p, pIdx) => (
+                  <div key={pIdx} className="px-2.5 py-1 rounded-lg bg-slate-50 border border-border text-center">
+                    <span className="text-[8px] font-mono uppercase text-muted-foreground block">{p.label}</span>
+                    <span className="text-[11px] font-mono font-bold text-foreground block">{p.val}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center gap-2 text-xs font-mono">
+                <span className="flex items-center gap-1 text-slate-700">
+                  <span className="w-2.5 h-0.5 bg-slate-800 inline-block" />
+                  Base Model
+                </span>
+                <span className="flex items-center gap-1 text-red-600 font-bold">
+                  <span className="w-2.5 h-0.5 bg-red-500 inline-block" />
+                  {activeSubTab === 'sim-model-1' ? 'Model 1 Simulation' : 'Model 2 Simulation'}
+                </span>
+              </div>
+            </div>
+
+            {/* Dual Comparison Chart (Base vs Red Line Simulation matching Image 2 sketch) */}
+            <div className="h-44 sm:h-52 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={activeSubTab === 'sim-model-1' ? model1SimChartData : model2SimChartData}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
+                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
+                  <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 136]} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <Line 
+                    type="monotone" 
+                    dataKey="baseModel" 
+                    stroke="#1e293b" 
+                    strokeWidth={2} 
+                    dot={false} 
+                    name="Base Portfolio Model" 
+                  />
+                  <Line 
+                    type="monotone" 
+                    dataKey="simulatedModel" 
+                    stroke="#ef4444" 
+                    strokeWidth={2.5} 
+                    dot={{ r: 3, fill: '#ef4444' }} 
+                    name="Simulated Model Trajectory" 
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* 3x3 Grid of 9 Factors & Asset Allocation Cards (Green background, red outline styling matching Image 2 sketch) */}
+            <div className="space-y-1.5">
+              <div className="flex items-center justify-between text-[11px] font-mono text-emerald-950 font-bold px-0.5">
+                <span>Factors, Assets &amp; Strategic Hypothesis Matrix (3x3 Grid):</span>
+                <span className="text-[10px] text-muted-foreground font-normal">Click any card to inspect hypothesis</span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                {factorAndAssetCards.map((card) => {
+                  const isSelected = selectedGridCard === card.id;
+
+                  return (
+                    <div
+                      key={card.id}
+                      onClick={() => setSelectedGridCard(card.id)}
+                      className={`p-2.5 rounded-xl border-2 transition-all cursor-pointer shadow-2xs space-y-1 bg-emerald-50/75 ${
+                        isSelected
+                          ? 'border-red-500 ring-2 ring-red-400/30 bg-emerald-100/90'
+                          : 'border-red-300 hover:border-red-400 hover:bg-emerald-100/60'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-xs font-mono text-red-700 truncate">
+                          {card.title}
+                        </span>
+                        <span className="px-1 py-0.2 bg-white/90 text-emerald-800 text-[8px] font-mono font-bold rounded border border-emerald-300">
+                          {card.status}
+                        </span>
+                      </div>
+
+                      <div className="text-[11px] font-mono font-semibold text-emerald-950 truncate">
+                        {card.metric}
+                      </div>
+
+                      <div className="text-[9.5px] font-sans text-emerald-800 line-clamp-1">
+                        {card.subtext}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Row inside View 2: Deploy portfolio fit and hypothesis Button */}
+            <div className="pt-2 flex items-center justify-end">
+              <Button
+                type="button"
+                onClick={() => setIsExecutionModalOpen(true)}
+                className="h-10 px-5 bg-white hover:bg-emerald-50 text-emerald-900 border-2 border-emerald-600 rounded-xl font-mono text-xs font-bold gap-2 shadow-xs transition-all hover:scale-[1.01]"
+              >
+                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <span>Deploy portfolio fit and hypothesis</span>
+              </Button>
+            </div>
+
+          </div>
+        )}
+
       </div>
+
+      {/* =========================================================================
+          BOTTOM PROMPT BAR (Across All Views) MATCHING WIREFRAME
+          "prompt bar to understand and audit previous workflows that were done and make things portfolio fit analysis..."
+         ========================================================================= */}
+      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
+        <form onSubmit={handlePromptSubmit} className="flex items-center gap-2">
+          <div className="relative flex-1 flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-xl transition-all">
+            <span className="pl-3.5 pr-1.5 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1.5">
+              <Terminal className="w-4 h-4 text-blue-600" />
+            </span>
+            <input
+              type="text"
+              value={promptBarText}
+              onChange={(e) => setPromptBarText(e.target.value)}
+              placeholder="prompt bar to understand and audit previous workflows that were done and make things portfolio fit analysis..."
+              className="w-full py-2 pl-1 pr-10 text-xs sm:text-sm font-mono text-foreground placeholder:text-muted-foreground/80 bg-transparent focus:outline-hidden"
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={isPromptRunning || !promptBarText.trim()}
+            className="h-10 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
+          >
+            {isPromptRunning ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+            <span>Analyze Portfolio Fit</span>
+          </Button>
+        </form>
+
+        {/* Prompt Output Card */}
+        {promptResult && (
+          <div className="p-3 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
+            <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-slate-400 text-[11px]">
+              <span className="text-emerald-400 font-bold"># PORTFOLIO FIT INTELLIGENCE RESPONSE</span>
+              <button
+                type="button"
+                onClick={() => setPromptResult(null)}
+                className="text-slate-400 hover:text-white"
+              >
+                ✕ Close
+              </button>
+            </div>
+            <pre className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-slate-200">
+              {promptResult}
+            </pre>
+          </div>
+        )}
+      </div>
+
+      {/* =========================================================================
+          TRADE EXECUTION & RISK RESTRICTIONS MODAL (Image 3)
+          - Header: Trade execution
+          - Top right: mark in some format (e.g. SEC 15c3-5 / FIX 4.4)
+          - Time and other parameters: Autonomy / Human / Gateway
+          - Risk Management: Max risk index / Max sector exposure / Max single asset
+          - Action: Publish limits and trade
+         ========================================================================= */}
+      {isExecutionModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#f2eae1] text-slate-900 border-2 border-stone-300 rounded-3xl shadow-2xl w-full max-w-xl p-6 sm:p-7 space-y-5 animate-in zoom-in-95 font-mono">
+            
+            {/* Header matching Image 3 sketch */}
+            <div className="flex items-start justify-between border-b border-stone-300/80 pb-3">
+              <div>
+                <h3 className="text-base sm:text-lg font-bold font-mono tracking-tight text-slate-950">
+                  Trade execution
+                </h3>
+                <p className="text-xs text-stone-600 font-sans mt-0.5">
+                  Algorithmic routing constraints and pre-trade regulatory restrictions
+                </p>
+              </div>
+
+              {/* Top right: "mark in some format" */}
+              <div className="text-right">
+                <span className="px-2.5 py-1 rounded-lg bg-stone-200/90 border border-stone-400 text-[10px] font-mono font-bold text-slate-800">
+                  SEC 15c3-5 / FIX 4.4 DMA
+                </span>
+                <span className="text-[9px] text-stone-500 block mt-0.5">mark in some format</span>
+              </div>
+            </div>
+
+            <form onSubmit={handlePublishLimitsAndTrade} className="space-y-4">
+              
+              {/* Section 1: Time and other parameters to be added (Rows with Autonomy, Human, Gateway buttons) */}
+              <div className="space-y-3">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Time and other parameters to be added
+                </div>
+
+                {/* Row 1: Time / TWAP execution window + [Autonomy] Button */}
+                <div className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      value={executionTimeParam}
+                      onChange={(e) => setExecutionTimeParam(e.target.value)}
+                      placeholder="e.g. TWAP 09:30 - 16:00 EST / 45-min interval"
+                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setAutonomyMode(autonomyMode === 'Autonomous' ? 'Semi-Autonomous' : 'Autonomous')}
+                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                      autonomyMode === 'Autonomous'
+                        ? 'bg-stone-900 text-white hover:bg-stone-800'
+                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                    }`}
+                  >
+                    Autonomy ({autonomyMode})
+                  </Button>
+                </div>
+
+                {/* Row 2: Human Operator Sign-off + [Human] Button */}
+                <div className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      value={humanSupervisor}
+                      onChange={(e) => setHumanSupervisor(e.target.value)}
+                      placeholder="e.g. Alexander Vance (PM) & Risk Officer"
+                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setHumanApprovalRequired(!humanApprovalRequired)}
+                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                      humanApprovalRequired
+                        ? 'bg-purple-700 text-white hover:bg-purple-800'
+                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                    }`}
+                  >
+                    Human ({humanApprovalRequired ? 'Dual Sign-off' : 'Auto'})
+                  </Button>
+                </div>
+
+                {/* Row 3: Gateway FIX route + [Gateway] Button */}
+                <div className="flex items-center gap-2">
+                  <div className="flex-1">
+                    <Input
+                      type="text"
+                      value={gatewayParam}
+                      onChange={(e) => setGatewayParam(e.target.value)}
+                      placeholder="e.g. NY4 FIX 4.4 Ultra-Low Latency DMA"
+                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                    />
+                  </div>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={() => setGatewayProtocol(gatewayProtocol === 'DMA FIX' ? 'Smart Router' : 'DMA FIX')}
+                    className="h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 bg-stone-900 text-white hover:bg-stone-800 border-stone-300"
+                  >
+                    Gateway ({gatewayProtocol})
+                  </Button>
+                </div>
+              </div>
+
+              {/* Section 2: Risk Management Restrictions (Image 3) */}
+              <div className="space-y-3 pt-2 border-t border-stone-300/80">
+                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                  Risk Management
+                </div>
+
+                {/* Maximum risk index */}
+                <div className="flex items-center justify-between gap-4">
+                  <label className="text-xs font-mono font-medium text-slate-900 flex-1">
+                    Maximum risk index
+                  </label>
+                  <div className="w-48 sm:w-56">
+                    <Input
+                      type="text"
+                      value={maxRiskIndex}
+                      onChange={(e) => setMaxRiskIndex(e.target.value)}
+                      placeholder="e.g. 1.25% 1-Day VaR 95%"
+                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Max sector exposure: Share of NAV in one GICS sector */}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="text-xs font-mono font-medium text-slate-900">
+                      Max sector exposure
+                    </div>
+                    <div className="text-[10px] text-stone-600 font-sans">
+                      Share of NAV in one GICS sector
+                    </div>
+                  </div>
+                  <div className="w-48 sm:w-56">
+                    <Input
+                      type="text"
+                      value={maxSectorExposure}
+                      onChange={(e) => setMaxSectorExposure(e.target.value)}
+                      placeholder="e.g. 15.0% Share of NAV"
+                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                    />
+                  </div>
+                </div>
+
+                {/* Max single asset exposure: Share of NAV in one asset */}
+                <div className="flex items-center justify-between gap-4">
+                  <div className="flex-1">
+                    <div className="text-xs font-mono font-medium text-slate-900">
+                      Max single asset exposure
+                    </div>
+                    <div className="text-[10px] text-stone-600 font-sans">
+                      Share of NAV in one stock / instrument
+                    </div>
+                  </div>
+                  <div className="w-48 sm:w-56">
+                    <Input
+                      type="text"
+                      value={maxSingleAssetExposure}
+                      onChange={(e) => setMaxSingleAssetExposure(e.target.value)}
+                      placeholder="e.g. 5.0% Single Asset NAV"
+                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Bottom Action Buttons: Cancel and "Publish limits and trade" */}
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-300/80">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setIsExecutionModalOpen(false)}
+                  className="h-10 px-4 text-xs font-mono border-stone-300 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="submit"
+                  className="h-10 px-6 text-xs font-mono font-bold bg-stone-900 hover:bg-stone-800 text-white rounded-xl shadow-xs transition-all hover:scale-[1.01]"
+                >
+                  Publish limits and trade
+                </Button>
+              </div>
+
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

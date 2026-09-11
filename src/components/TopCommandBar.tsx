@@ -115,16 +115,6 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
 
       {/* Right side: Live Status export + Profile Avatar Box matching wireframe */}
       <div className="flex items-center gap-2 sm:gap-2.5 shrink-0" ref={containerRef}>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onSelectTab('agent-builder')}
-          className="font-mono text-xs gap-1.5 h-8 border-primary/30 bg-white hover:bg-slate-50 text-primary hidden md:flex"
-        >
-          <Bot className="w-3.5 h-3.5 text-primary" />
-          <span>Agent Workspace</span>
-        </Button>
-
         {/* Live Status export button matching wireframe */}
         <Button
           variant="outline"

@@ -25,6 +25,7 @@ import {
   AlertCircle,
   Cpu,
   RefreshCw,
+  RotateCw,
   ExternalLink,
   Columns3,
   SlidersHorizontal,
@@ -431,6 +432,44 @@ export const AgentWorkspaceView: React.FC<AgentWorkspaceViewProps> = ({
       setSelectedProperty(selectedNode.defaultProperty);
     }
   }, [selectedNodeId, activeModelId]);
+
+  // Anti-hallucination auto-refresh countdown state per node
+  const [nodeCountdowns, setNodeCountdowns] = useState<Record<string, number>>({
+    'node-1': 42,
+    'node-2': 36,
+    'node-3': 58,
+    'node-4': 24,
+  });
+  const [refreshingNodeId, setRefreshingNodeId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNodeCountdowns((prev) => {
+        const next = { ...prev };
+        Object.keys(next).forEach((k) => {
+          if (next[k] <= 1) {
+            next[k] = k === 'node-1' ? 45 : k === 'node-2' ? 40 : k === 'node-3' ? 60 : 30;
+          } else {
+            next[k] -= 1;
+          }
+        });
+        return next;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const handleManualNodeRefresh = (e: React.MouseEvent, nodeId: string) => {
+    e.stopPropagation();
+    setRefreshingNodeId(nodeId);
+    setTimeout(() => {
+      setRefreshingNodeId(null);
+      setNodeCountdowns((prev) => ({
+        ...prev,
+        [nodeId]: 45
+      }));
+    }, 600);
+  };
 
   // Version dropdown
   const [selectedVersion, setSelectedVersion] = useState<string>(activeModel.version || 'Version 1');
@@ -1142,7 +1181,7 @@ class VolSkewAgent(QuantParentAgent):
                   {activeModel.nodes[0] && (
                     <div
                       onClick={() => setSelectedNodeId(activeModel.nodes[0].id)}
-                      className={`absolute left-2 top-[70px] w-[130px] h-[105px] p-2.5 rounded-2xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
+                      className={`absolute left-2 top-[60px] w-[138px] h-[115px] p-2 rounded-2xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[0].id
                           ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
                           : 'bg-white hover:bg-slate-50 border-border'
@@ -1153,14 +1192,23 @@ class VolSkewAgent(QuantParentAgent):
                           <span className="text-[9px] font-mono uppercase tracking-wider text-blue-600 font-bold">
                             {activeModel.nodes[0].type}
                           </span>
-                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                          <button
+                            type="button"
+                            onClick={(e) => handleManualNodeRefresh(e, 'node-1')}
+                            title="Anti-Hallucination Refresh countdown"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
+                          >
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-1' ? 'animate-spin text-emerald-600' : ''}`} />
+                            <span>{nodeCountdowns['node-1'] || 42}s</span>
+                          </button>
                         </div>
-                        <span className="text-[11px] font-bold text-foreground font-mono leading-tight block">
+                        <span className="text-[10px] font-bold text-foreground font-mono leading-tight block">
                           {activeModel.nodes[0].name}
                         </span>
                       </div>
-                      <div className="text-[9px] font-mono text-muted-foreground border-t border-border pt-1">
-                        Lat: {activeModel.nodes[0].latency}
+                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
+                        <span>Lat: {activeModel.nodes[0].latency}</span>
+                        <span className="text-emerald-600 font-semibold">Grounded</span>
                       </div>
                     </div>
                   )}
@@ -1169,22 +1217,34 @@ class VolSkewAgent(QuantParentAgent):
                   {activeModel.nodes[1] && (
                     <div
                       onClick={() => setSelectedNodeId(activeModel.nodes[1].id)}
-                      className={`absolute left-[195px] top-[15px] w-[115px] h-[75px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
+                      className={`absolute left-[195px] top-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[1].id
                           ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
                           : 'bg-white hover:bg-slate-50 border-border'
                       }`}
                     >
                       <div>
-                        <span className="text-[9px] font-mono uppercase tracking-wider text-purple-600 font-bold block">
-                          {activeModel.nodes[1].type}
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-purple-600 font-bold block">
+                            {activeModel.nodes[1].type}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => handleManualNodeRefresh(e, 'node-2')}
+                            title="Anti-Hallucination Refresh countdown"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[8px] font-mono font-bold hover:bg-purple-100"
+                          >
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-2' ? 'animate-spin text-purple-600' : ''}`} />
+                            <span>{nodeCountdowns['node-2'] || 36}s</span>
+                          </button>
+                        </div>
                         <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
                           {activeModel.nodes[1].name}
                         </span>
                       </div>
-                      <div className="text-[9px] font-mono text-muted-foreground border-t border-border pt-0.5">
-                        {activeModel.nodes[1].latency}
+                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
+                        <span>{activeModel.nodes[1].latency}</span>
+                        <span className="text-purple-600 font-semibold">Synced</span>
                       </div>
                     </div>
                   )}
@@ -1193,22 +1253,34 @@ class VolSkewAgent(QuantParentAgent):
                   {activeModel.nodes[2] && (
                     <div
                       onClick={() => setSelectedNodeId(activeModel.nodes[2].id)}
-                      className={`absolute left-[190px] bottom-[15px] w-[115px] h-[75px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
+                      className={`absolute left-[190px] bottom-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[2].id
                           ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
                           : 'bg-white hover:bg-slate-50 border-border'
                       }`}
                     >
                       <div>
-                        <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-600 font-bold block">
-                          {activeModel.nodes[2].type}
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-600 font-bold block">
+                            {activeModel.nodes[2].type}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => handleManualNodeRefresh(e, 'node-3')}
+                            title="Anti-Hallucination Refresh countdown"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
+                          >
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-3' ? 'animate-spin text-emerald-600' : ''}`} />
+                            <span>{nodeCountdowns['node-3'] || 58}s</span>
+                          </button>
+                        </div>
                         <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
                           {activeModel.nodes[2].name}
                         </span>
                       </div>
-                      <div className="text-[9px] font-mono text-muted-foreground border-t border-border pt-0.5">
-                        {activeModel.nodes[2].latency}
+                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
+                        <span>{activeModel.nodes[2].latency}</span>
+                        <span className="text-emerald-600 font-semibold">L2 Validated</span>
                       </div>
                     </div>
                   )}
@@ -1217,21 +1289,32 @@ class VolSkewAgent(QuantParentAgent):
                   {activeModel.nodes[3] && (
                     <div
                       onClick={() => setSelectedNodeId(activeModel.nodes[3].id)}
-                      className={`absolute right-2 top-[80px] w-[120px] h-[85px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
+                      className={`absolute right-2 top-[75px] w-[128px] h-[92px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[3].id
                           ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
                           : 'bg-white hover:bg-slate-50 border-border'
                       }`}
                     >
                       <div>
-                        <span className="text-[9px] font-mono uppercase tracking-wider text-amber-600 font-bold block">
-                          Terminal Gate
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-amber-600 font-bold block">
+                            Terminal Gate
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => handleManualNodeRefresh(e, 'node-4')}
+                            title="Anti-Hallucination Refresh countdown"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 text-[8px] font-mono font-bold hover:bg-amber-100"
+                          >
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-4' ? 'animate-spin text-amber-600' : ''}`} />
+                            <span>{nodeCountdowns['node-4'] || 24}s</span>
+                          </button>
+                        </div>
                         <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
                           {activeModel.nodes[3].name}
                         </span>
                       </div>
-                      <div className="text-[9px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
+                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
                         <span>SEC 15c3-5</span>
                         <span className="text-emerald-700 font-bold">PASS</span>
                       </div>

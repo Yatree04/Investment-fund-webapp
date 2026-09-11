@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { AgentWorkspaceView } from './AgentWorkspaceView';
 import { DataRepositoryView } from './DataRepositoryView';
+import { AuditLogView } from './AuditLogView';
 
 interface WorkspaceViewsProps {
   activeTab: ViewTab;
@@ -89,31 +90,11 @@ export const WorkspaceViews: React.FC<WorkspaceViewsProps> = ({
 
   if (activeTab === 'audit-log') {
     return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-lg font-bold text-foreground tracking-tight font-mono">Audit Log</h2>
-            <p className="text-xs text-muted-foreground">Immutable systematic telemetry of parent/sub agent calls and executions.</p>
-          </div>
-          <button onClick={onNavigateToOverview} className="text-xs font-mono text-primary hover:underline">
-            ← Back to Overview
-          </button>
-        </div>
-
-        <div className="bg-card border border-border rounded-xl p-4 font-mono text-xs space-y-2 max-h-96 overflow-y-auto">
-          {[
-            { time: '10:52:14 UTC', event: 'Agent Call Initiated via Ctrl key command bar' },
-            { time: '10:50:02 UTC', event: 'Delta Neutralizer Sub-Agent verified zero factor breach' },
-            { time: '10:45:18 UTC', event: 'Rebalance order blotter synced with NY4 colocation gateway' },
-            { time: '10:30:00 UTC', event: 'Total Gain evaluated at Rs. 810,000,000 across core holdings' },
-          ].map((log, idx) => (
-            <div key={idx} className="flex items-start gap-3 p-2 rounded hover:bg-slate-50 transition-colors">
-              <span className="text-muted-foreground shrink-0">{log.time}</span>
-              <span className="text-foreground">{log.event}</span>
-            </div>
-          ))}
-        </div>
-      </div>
+      <AuditLogView
+        onNavigateToOverview={onNavigateToOverview}
+        onOpenAgentModal={onOpenAgentModal}
+        onSelectTab={onSelectTab}
+      />
     );
   }
 
