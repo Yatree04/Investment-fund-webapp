@@ -33,9 +33,9 @@
   --sidebar-accent-foreground: oklch(0.2077 0.0398 265.7549);
   --sidebar-border: oklch(0.9288 0.0126 255.5078);
   --sidebar-ring: oklch(0.6231 0.1880 259.8145);
-  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-serif: 'Georgia', serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-sans: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-serif: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --radius: 0.5rem;
   --shadow-x: 0px;
   --shadow-y: 4px;
@@ -152,12 +152,17 @@
 }
 
 @layer base {
-  * {
+  *, ::before, ::after {
     @apply border-border outline-ring/50;
+    font-family: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
-  body {
+  html, body {
     @apply bg-background text-foreground font-sans;
+    font-family: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
     letter-spacing: var(--tracking-normal);
+  }
+  button, input, optgroup, select, textarea, table, code, pre, kbd, samp {
+    font-family: 'Google Sans', 'Google Sans Text', 'Google Sans Flex', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   }
 }
 

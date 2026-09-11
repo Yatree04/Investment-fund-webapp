@@ -20,6 +20,8 @@ import {
   CartesianGrid
 } from 'recharts';
 import { AIOptimizerWindow, StrategyIdea } from './AIOptimizerWindow';
+import { ResizableSplit } from './ui/ResizableSplit';
+import { ResizableCard } from './ui/ResizableCard';
 
 interface OverviewViewProps {
   fund: Fund;
@@ -255,11 +257,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
   return (
     <div className="space-y-3 sm:space-y-4 max-w-[1600px] mx-auto pb-6">
       {/* =========================================================================
-          TOP ROW: 3 COLUMNS (Overview Chart | Total Gain & Fund Ratio | Holdings)
+          TOP ROW: 3 RESIZABLE COLUMNS (Overview Chart | Total Gain & Fund Ratio | Holdings)
          ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
-        {/* ----------------- Column 1: Performance Area Chart (6 cols) ----------------- */}
-        <div className="lg:col-span-6 bg-card border border-border rounded-lg p-4 sm:p-5 shadow-xs flex flex-col justify-between">
+      <ResizableSplit
+        direction="horizontal"
+        initialSizes={[50, 25, 25]}
+        minSizes={[25, 18, 18]}
+        storageKey="overview_top_row_split"
+        className="gap-3 sm:gap-4 items-stretch"
+      >
+        {/* ----------------- Column 1: Performance Area Chart (50% default) ----------------- */}
+        <div className="bg-card border border-border rounded-lg p-4 sm:p-5 shadow-xs flex flex-col justify-between h-full">
           {/* Chart Header: [Overview] [P&L] [Sandbox] [AI]   and   [1y] [3y] [5y] */}
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             {/* Left segmented tabs */}
@@ -364,8 +372,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
         </div>
 
-        {/* ----------------- Column 2: Total Gain & Fund Ratio Stack (3 cols) ----------------- */}
-        <div className="lg:col-span-3 flex flex-col gap-3 sm:gap-4">
+        {/* ----------------- Column 2: Total Gain & Fund Ratio Stack (25% default) ----------------- */}
+        <div className="flex flex-col gap-3 sm:gap-4 h-full">
           {/* Top Card: TOTAL GAIN */}
           <div className="bg-card border border-border rounded-lg p-4 shadow-xs flex-1 flex flex-col justify-between">
             <div>
@@ -454,8 +462,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
         </div>
 
-        {/* ----------------- Column 3: HOLDINGS List Card (3 cols) ----------------- */}
-        <div className="lg:col-span-3 bg-card border border-border rounded-lg p-4 shadow-xs flex flex-col justify-between">
+        {/* ----------------- Column 3: HOLDINGS List Card (25% default) ----------------- */}
+        <div className="bg-card border border-border rounded-lg p-4 shadow-xs flex flex-col justify-between h-full">
           <div>
             <div className="flex items-center justify-between pb-2 border-b border-border mb-2.5">
               <span className="text-[11px] font-mono tracking-wider text-muted-foreground font-semibold uppercase">
@@ -508,7 +516,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      </ResizableSplit>
 
       {/* =========================================================================
           AI STRATEGY OPTIMISATION WINDOW (Idea generation from Research & Managing Nodes)
@@ -516,11 +524,17 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       <AIOptimizerWindow onExperimentInAgentWorkspace={onExperimentInAgentWorkspace} />
 
       {/* =========================================================================
-          BOTTOM ROW: 2 COLUMNS (News & Important Updates | Team Updates)
+          BOTTOM ROW: 2 RESIZABLE COLUMNS (News & Important Updates | Team Updates)
          ========================================================================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 items-stretch">
-        {/* ----------------- News & Important Updates (9 cols) ----------------- */}
-        <div className="lg:col-span-9 bg-card border border-border rounded-lg p-4 sm:p-5 shadow-xs flex flex-col justify-between">
+      <ResizableSplit
+        direction="horizontal"
+        initialSizes={[72, 28]}
+        minSizes={[40, 20]}
+        storageKey="overview_bottom_row_split"
+        className="gap-3 sm:gap-4 items-stretch"
+      >
+        {/* ----------------- News & Important Updates (72% default) ----------------- */}
+        <div className="bg-card border border-border rounded-lg p-4 sm:p-5 shadow-xs flex flex-col justify-between h-full">
           <div>
             {/* Header: News & Important Updates with red badge '5' */}
             <div className="flex items-center gap-2 pb-3 border-b border-border mb-3">
@@ -556,8 +570,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           </div>
         </div>
 
-        {/* ----------------- Team Updates Chat (3 cols) ----------------- */}
-        <div className="lg:col-span-3 bg-card border border-border rounded-lg p-4 shadow-xs flex flex-col justify-between">
+        {/* ----------------- Team Updates Chat (28% default) ----------------- */}
+        <div className="bg-card border border-border rounded-lg p-4 shadow-xs flex flex-col justify-between h-full">
           <div>
             {/* Header: Team Updates + Live badge */}
             <div className="flex items-center justify-between pb-2.5 border-b border-border mb-3">
@@ -629,7 +643,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
           </div>
         </div>
-      </div>
+      </ResizableSplit>
     </div>
   );
 };

@@ -45,6 +45,17 @@ export const SidePanel: React.FC<SidePanelProps> = ({
 }) => {
   const [isPortfolioMenuOpen, setIsPortfolioMenuOpen] = useState(false);
   const portfolioMenuRef = useRef<HTMLDivElement>(null);
+  const [sidebarWidth, setSidebarWidth] = useState<number>(() => {
+    try {
+      const saved = localStorage.getItem('deshaw_sidebar_width');
+      return saved ? parseInt(saved, 10) : 240;
+    } catch {
+      return 240;
+    }
+  });
+  const [isDraggingSidebar, setIsDraggingSidebar] = useState<boolean>(false);
+  const startDragXRef = useRef<number>(0);
+  const startWidthRef = useRef<number>(240);
 
   // Close portfolio menu on click outside
   useEffect(() => {
@@ -56,6 +67,54 @@ export const SidePanel: React.FC<SidePanelProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Save width to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem('deshaw_sidebar_width', sidebarWidth.toString());
+    } catch {
+      // ignore
+    }
+  }, [sidebarWidth]);
+
+  // Handle pointer down for drag resizing sidebar
+  const handleSidebarPointerDown = (e: React.PointerEvent) => {
+    if (isCollapsed) return;
+    e.preventDefault();
+    e.stopPropagation();
+    startDragXRef.current = e.clientX;
+    startWidthRef.current = sidebarWidth;
+    setIsDraggingSidebar(true);
+    (e.target as HTMLElement).setPointerCapture(e.pointerId);
+  };
+
+  useEffect(() => {
+    if (!isDraggingSidebar) return;
+
+    const handlePointerMove = (e: PointerEvent) => {
+      const deltaX = e.clientX - startDragXRef.current;
+      const newWidth = Math.min(460, Math.max(180, startWidthRef.current + deltaX));
+      setSidebarWidth(newWidth);
+    };
+
+    const handlePointerUp = () => {
+      setIsDraggingSidebar(false);
+    };
+
+    window.addEventListener('pointermove', handlePointerMove);
+    window.addEventListener('pointerup', handlePointerUp);
+    window.addEventListener('pointercancel', handlePointerUp);
+    document.body.style.userSelect = 'none';
+    document.body.style.cursor = 'col-resize';
+
+    return () => {
+      window.removeEventListener('pointermove', handlePointerMove);
+      window.removeEventListener('pointerup', handlePointerUp);
+      window.removeEventListener('pointercancel', handlePointerUp);
+      document.body.style.userSelect = '';
+      document.body.style.cursor = '';
+    };
+  }, [isDraggingSidebar]);
 
   // Navigation items exactly matching the screenshot:
   // 1. Portfolio Overview
@@ -82,7 +141,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
     },
     {
       id: 'agent-builder',
-      label: 'Agent Builder / Workspace',
+      label: 'Agent Workspace',
       icon: Disc3,
     },
     {
@@ -110,10 +169,13 @@ export const SidePanel: React.FC<SidePanelProps> = ({
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 bottom-0 z-40 bg-white border-r border-border flex flex-col justify-between transition-all duration-200 ease-in-out shrink-0 select-none ${
+        style={{
+          width: isOpenMobile ? undefined : isCollapsed ? '3.5rem' : `${sidebarWidth}px`,
+        }}
+        className={`fixed lg:static top-0 left-0 bottom-0 z-40 bg-white border-r border-border flex flex-col justify-between transition-[width] duration-150 ease-in-out shrink-0 select-none relative ${
           isOpenMobile 
             ? 'translate-x-0 w-64' 
-            : '-translate-x-full lg:translate-x-0 ' + (isCollapsed ? 'w-14' : 'w-60')
+            : '-translate-x-full lg:translate-x-0'
         }`}
       >
         {/* Top Section */}
@@ -303,6 +365,24 @@ export const SidePanel: React.FC<SidePanelProps> = ({
             </div>
           )}
         </div>
+
+        {/* Desktop Draggable Sidebar Splitter Handle */}
+        {!isCollapsed && (
+          <div
+            onPointerDown={handleSidebarPointerDown}
+            onDoubleClick={() => setSidebarWidth(240)}
+            title="Drag to resize sidebar width. Double-click to reset (240px)."
+            className={`hidden lg:flex absolute top-0 right-0 w-2 h-full -mr-1 cursor-col-resize z-50 items-center justify-center group ${
+              isDraggingSidebar ? 'bg-primary/30' : 'hover:bg-primary/20'
+            }`}
+          >
+            <div
+              className={`w-[2px] h-10 rounded-full transition-all duration-150 ${
+                isDraggingSidebar ? 'bg-primary h-16 w-[3px]' : 'bg-transparent group-hover:bg-primary/70'
+              }`}
+            />
+          </div>
+        )}
       </aside>
     </>
   );

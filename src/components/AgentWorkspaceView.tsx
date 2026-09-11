@@ -6,6 +6,7 @@ import {
   Code2, 
   Grid3X3, 
   ChevronDown, 
+  ChevronUp,
   Play, 
   Sparkles, 
   Check, 
@@ -36,7 +37,17 @@ import {
   GitMerge,
   Copy,
   Zap,
-  Tag
+  Tag,
+  Maximize2,
+  Minimize2,
+  FolderTree,
+  Lightbulb,
+  BookOpen,
+  Library,
+  GripHorizontal,
+  Move,
+  CheckCircle,
+  HelpCircle
 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Card, CardHeader, CardTitle, CardContent } from './ui/card';
@@ -48,6 +59,7 @@ import { AgentBacktestSandbox } from './AgentBacktestSandbox';
 export type CanvasViewMode = 'matrix' | 'Node' | 'code';
 export type RepoFilter = 'all' | 'codebases' | 'subagents' | 'templates' | 'data';
 export type RightPanelTab = 'agent' | 'instructions' | 'code' | 'sandbox';
+export type BottomDrawerTab = 'all' | 'skills' | 'code' | 'inputs' | 'risk' | 'firm_ideas' | 'research_papers';
 
 export interface AgentNode {
   id: string;
@@ -65,6 +77,21 @@ export interface AgentNode {
   latency: string;
   x: number;
   y: number;
+}
+
+export interface ResourceItem {
+  id: string;
+  category: 'skills' | 'code' | 'inputs' | 'risk' | 'firm_ideas' | 'research_papers';
+  name: string;
+  subtitle: string;
+  badge: string;
+  type: 'subagent' | 'data' | 'tool' | 'parent';
+  description: string;
+  defaultProperty: string;
+  tools: string[];
+  latency: string;
+  codeSnippet: string;
+  isHot?: boolean;
 }
 
 const DEFAULT_CORE_NODES: AgentNode[] = [
@@ -353,6 +380,275 @@ class CMEFuturesGate(TerminalGate):
   }
 ];
 
+// Comprehensive Firm Resource & Research Repository Catalog
+const ENTERPRISE_RESOURCES: ResourceItem[] = [
+  // SKILLS & SUBAGENTS
+  {
+    id: 'res-skill-1',
+    category: 'skills',
+    name: 'Momentum Arb Subagent',
+    subtitle: 'Cross-Asset Statistical Momentum',
+    badge: 'Quant Arb',
+    type: 'subagent',
+    description: 'High-speed momentum arbitrage subagent tracking 15-minute lead-lag anomalies across global indices.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['Barra Risk API', 'Execution Gateway', 'Tick Momentum Sizer'],
+    latency: '10ms',
+    codeSnippet: `# MOMENTUM ARB SUBAGENT\nclass MomentumArbSubagent(QuantSubAgent):\n    def evaluate_cross_momentum(self, returns_stream):\n        return self.extract_anomalies(returns_stream)`,
+    isHot: true,
+  },
+  {
+    id: 'res-skill-2',
+    category: 'skills',
+    name: 'Volatility Skew Extractor',
+    subtitle: 'Options Term Structure & Smile',
+    badge: 'Vol Surface',
+    type: 'subagent',
+    description: 'Calculates 25-delta risk reversal and butterfly spreads across S&P 500 and EuroStoxx 50 options chains.',
+    defaultProperty: 'Highest Sharpe Weighting',
+    tools: ['CBOE Live Feed', 'Black-Scholes-Merton Engine'],
+    latency: '6ms',
+    codeSnippet: `# VOLATILITY SKEW EXTRACTOR\nclass VolSkewExtractor(FeatureExtractor):\n    def extract_skew(self, options_chain):\n        return self.compute_smile_curvature(options_chain)`,
+    isHot: true,
+  },
+  {
+    id: 'res-skill-3',
+    category: 'skills',
+    name: 'Mean Reversion Alpha Engine',
+    subtitle: 'Cointegrated Pairs Trading',
+    badge: 'Stat Arb',
+    type: 'subagent',
+    description: 'Dickey-Fuller stationary cointegration engine triggering Bollinger pair reversion sweeps.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['Cointegration Engine', 'Z-Score Monitor'],
+    latency: '8ms',
+    codeSnippet: `# MEAN REVERSION ALPHA\nclass MeanReversionAlpha(QuantSubAgent):\n    def check_spread(self, pair_z_score):\n        return abs(pair_z_score) > 2.0`,
+  },
+  {
+    id: 'res-skill-4',
+    category: 'skills',
+    name: 'Earnings NLP Sentiment Parser',
+    subtitle: 'Transcript Tone & Guidance Delta',
+    badge: 'Alternative Data',
+    type: 'subagent',
+    description: 'Large language model processing 10-K filings and CEO earnings call audio transcripts for tone shifts.',
+    defaultProperty: 'Highest Sharpe Weighting',
+    tools: ['SEC EDGAR Feeder', 'Transcript Parser API'],
+    latency: '45ms',
+    codeSnippet: `# NLP SENTIMENT PARSER\nclass NLPSentimentParser(QuantSubAgent):\n    def score_transcript(self, transcript_text):\n        return self.llm.classify_tone(transcript_text)`,
+  },
+  {
+    id: 'res-skill-5',
+    category: 'skills',
+    name: 'Commodity Carry & Roll Yield',
+    subtitle: 'WTI, Brent & Metals Curve',
+    badge: 'Macro Premia',
+    type: 'subagent',
+    description: 'Extracts backwardation and contango carry roll yields across NYMEX and LME futures curves.',
+    defaultProperty: 'Conservative 15c3-5 Check',
+    tools: ['CME Globex API', 'Roll Yield Calculator'],
+    latency: '14ms',
+    codeSnippet: `# COMMODITY CARRY\nclass CommodityCarrySubagent(QuantSubAgent):\n    def calculate_roll(self, futures_curve):\n        return futures_curve.front_month - futures_curve.next_month`,
+  },
+
+  // CODE & TEMPLATES
+  {
+    id: 'res-code-1',
+    category: 'code',
+    name: 'Python FIX 4.4 Engine',
+    subtitle: 'Institutional DMA Gateway',
+    badge: 'FIX Engine',
+    type: 'tool',
+    description: 'Production-ready ultra low latency FIX 4.4 order routing engine with pre-baked session reconnects.',
+    defaultProperty: 'Strict Delta Capped',
+    tools: ['FIX 4.4 Port 9800', 'DMA Router'],
+    latency: '0.08ms',
+    codeSnippet: `# FIX 4.4 PROTOCOL ROUTER\nclass FixEngine(FIXGateway):\n    def send_twap(self, order):\n        return self.dispatch_fix_packet(order, session_id="DESHAW_DMA")`,
+    isHot: true,
+  },
+  {
+    id: 'res-code-2',
+    category: 'code',
+    name: 'Barra Multi-Asset Template',
+    subtitle: 'Factor Risk Model Pipeline',
+    badge: 'Barra Model',
+    type: 'data',
+    description: 'Standardized Barra risk factor decomposition wrapper isolating style, industry, and specific risk.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['Barra Multi-Factor API'],
+    latency: '15ms',
+    codeSnippet: `# BARRA MULTI-ASSET WRAPPER\nclass BarraPipeline(RiskModel):\n    def decompose(self, portfolio):\n        return self.barra.compute_betas(portfolio)`,
+  },
+  {
+    id: 'res-code-3',
+    category: 'code',
+    name: 'L2 Microstructure Parser',
+    subtitle: 'Nanosecond ITCH/OUCH Feed',
+    badge: 'C++ Bridge',
+    type: 'data',
+    description: 'C++ shared library wrapper decoding binary NASDAQ ITCH 5.0 order book messages.',
+    defaultProperty: 'Conservative 15c3-5 Check',
+    tools: ['ITCH 5.0 Feed', 'FPGA Sizer'],
+    latency: '0.04ms',
+    codeSnippet: `# ITCH 5.0 PARSER\nclass ITCHParser(DataNode):\n    def parse_depth(self, buffer):\n        return cpp_bridge.decode_itch50(buffer)`,
+  },
+  {
+    id: 'res-code-4',
+    category: 'code',
+    name: 'Almgren-Chriss Optimal Execution',
+    subtitle: 'Market Impact & Risk Aversion',
+    badge: 'Execution Model',
+    type: 'tool',
+    description: 'Calculates optimal non-linear execution trajectories balancing temporary market impact vs price risk.',
+    defaultProperty: 'Highest Sharpe Weighting',
+    tools: ['Execution Gateway', 'Market Impact Calculator'],
+    latency: '1.2ms',
+    codeSnippet: `# ALMGREN-CHRISS TRAJECTORY\nclass OptimalExecution(TerminalGate):\n    def compute_trajectory(self, order, vol, liquidity):\n        return almgren_chriss_solver(order, vol, liquidity)`,
+  },
+
+  // INPUT NODES & DATA
+  {
+    id: 'res-input-1',
+    category: 'inputs',
+    name: 'Equinix NY4 Tick L2 Stream',
+    subtitle: 'Direct Cross-Connect Colocation',
+    badge: 'Colo Direct',
+    type: 'data',
+    description: 'Sub-microsecond direct optical cross-connect from Equinix NY4 Secaucus data center.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['NY4 Colocation', 'Direct Fiber'],
+    latency: '0.02ms',
+    codeSnippet: `# NY4 DIRECT FEED\nclass NY4FeedNode(DataNode):\n    def stream(self):\n        return self.optical_receiver.read()`,
+    isHot: true,
+  },
+  {
+    id: 'res-input-2',
+    category: 'inputs',
+    name: 'Barra Risk & Covariance Store',
+    subtitle: 'Historical 10-Year Matrices',
+    badge: 'KDB+ Tick',
+    type: 'data',
+    description: 'KDB+/q high-performance timeseries database serving continuous rolling factor covariances.',
+    defaultProperty: 'Conservative 15c3-5 Check',
+    tools: ['KDB+ /q Store', 'Barra Engine'],
+    latency: '2ms',
+    codeSnippet: `# KDB COVARIANCE STORE\nclass KDBCovariance(DataNode):\n    def query_matrix(self, dt):\n        return self.q_connection.query(f"select from cov where date={dt}")`,
+  },
+  {
+    id: 'res-input-3',
+    category: 'inputs',
+    name: 'Fed & Central Bank Rate Trackers',
+    subtitle: 'SOFR, Fed Funds & ECB OIS',
+    badge: 'Rates Feeder',
+    type: 'data',
+    description: 'Real-time forward rate agreements (FRA) and overnight index swaps (OIS) curves.',
+    defaultProperty: 'Highest Sharpe Weighting',
+    tools: ['Bloomberg BVAL', 'CME FedWatch'],
+    latency: '12ms',
+    codeSnippet: `# RATES TRACKER\nclass CentralBankRateFeed(DataNode):\n    def get_ois_curve(self):\n        return self.bval.fetch_curve("USD_SOFR_OIS")`,
+  },
+
+  // RISK & COMPLIANCE
+  {
+    id: 'res-risk-1',
+    category: 'risk',
+    name: 'SEC Rule 15c3-5 Pre-Trade Gate',
+    subtitle: 'Market Access Hard Limits',
+    badge: 'Regulatory Core',
+    type: 'tool',
+    description: 'SEC Market Access Rule 15c3-5 gate blocking erroneous orders, credit cap breaches, and price collar violations.',
+    defaultProperty: 'Strict 10% Capped',
+    tools: ['Pre-Trade Risk Validator', 'SEC 15c3-5 Gate'],
+    latency: '0.05ms',
+    codeSnippet: `# SEC 15c3-5 GATE\nclass SEC15c35Gate(TerminalGate):\n    def validate(self, order):\n        if order.value > self.credit_limit: return False\n        return True`,
+    isHot: true,
+  },
+  {
+    id: 'res-risk-2',
+    category: 'risk',
+    name: 'Delta Neutral Overlay Hedge Guard',
+    subtitle: 'Portfolio Beta & Factor Bounds',
+    badge: 'Risk Guard',
+    type: 'tool',
+    description: 'Autonomous risk overlay that synthetically shorts index futures if overall net portfolio beta exceeds ±0.03.',
+    defaultProperty: 'Strict Delta Capped',
+    tools: ['CME Globex API', 'Beta Neutralizer'],
+    latency: '1.8ms',
+    codeSnippet: `# DELTA NEUTRAL OVERLAY\nclass DeltaHedgeGuard(TerminalGate):\n    def check_beta(self, current_beta):\n        if abs(current_beta) > 0.03:\n            self.fire_synthetic_hedge()`,
+  },
+
+  // FIRM IDEAS & ALPHA HYPOTHESES (D. E. Shaw Internal Ideas)
+  {
+    id: 'res-idea-1',
+    category: 'firm_ideas',
+    name: 'Hyperscaler AI Capex Rotation Idea',
+    subtitle: 'Semis vs Cloud Providers Spread',
+    badge: 'Firm Alpha Idea',
+    type: 'parent',
+    description: 'Hypothesis: Lead-lag cycle between NVDA/TSM hardware revenue delivery and MSFT/GOOG/AMZN AI monetisation multiples.',
+    defaultProperty: 'Highest Sharpe Weighting',
+    tools: ['Macro News Wire', 'Barra Multi-Factor API', 'Capex Tracker'],
+    latency: '18ms',
+    codeSnippet: `# CAPEX ROTATION STRATEGY\nclass AICapexRotation(QuantParentAgent):\n    def analyze_capex_spread(self, hardware_rev, cloud_ebitda):\n        return hardware_rev / cloud_ebitda`,
+    isHot: true,
+  },
+  {
+    id: 'res-idea-2',
+    category: 'firm_ideas',
+    name: 'FOMC Volatility Squeeze Compression',
+    subtitle: 'Pre-Meeting Straddle Harvest',
+    badge: 'Firm Alpha Idea',
+    type: 'parent',
+    description: 'Hypothesis: S&P 500 implied volatility spikes 3 days prior to rate announcements, creating consistent short-gamma variance risk premium harvest.',
+    defaultProperty: 'Conservative 15c3-5 Check',
+    tools: ['CBOE Live Feed', 'Black-Scholes-Merton Engine'],
+    latency: '14ms',
+    codeSnippet: `# FOMC VOL COMPRESSION\nclass FOMCVolCompression(QuantParentAgent):\n    def harvest_gamma(self, days_to_fomc, iv_skew):\n        if days_to_fomc <= 2 and iv_skew > 1.8:\n            return self.sell_strangle_spread()`,
+    isHot: true,
+  },
+  {
+    id: 'res-idea-3',
+    category: 'firm_ideas',
+    name: 'Cross-Sovereign Yield Curve Steepener',
+    subtitle: 'US 2Y/10Y vs German Bunds',
+    badge: 'Firm Alpha Idea',
+    type: 'parent',
+    description: 'Hypothesis: Diverging central bank terminal rates between Fed and ECB create asymmetric curve twist arbitrage.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['Fed Funds Live', 'Bloomberg BVAL Feeder'],
+    latency: '22ms',
+    codeSnippet: `# CURVE STEEPENER\nclass SovereignCurveArbitrage(QuantParentAgent):\n    def compare_term_structures(self, us_curve, bund_curve):\n        return us_curve.slope - bund_curve.slope`,
+  },
+
+  // RESEARCH PAPERS & QUANT LABS
+  {
+    id: 'res-paper-1',
+    category: 'research_papers',
+    name: 'Deep Order Flow Imbalance (Cartea & Jaimungal 2024)',
+    subtitle: 'Microstructure Probability of Informed Trading',
+    badge: 'Research Lab',
+    type: 'subagent',
+    description: 'Empirical model computing conditional volume-synchronized probability of toxicity (VPIN) in sub-millisecond crypto & equity regimes.',
+    defaultProperty: 'Factor Neutral Union',
+    tools: ['ITCH 5.0 Feed', 'KDB+ Tick Store'],
+    latency: '0.06ms',
+    codeSnippet: `# CARTEA-JAIMUNGAL FLOW MODEL\nclass DeepOrderFlowImbalance(QuantSubAgent):\n    def compute_informed_probability(self, vpin_vector):\n        return solve_cartea_informed_flow(vpin_vector)`,
+  },
+  {
+    id: 'res-paper-2',
+    category: 'research_papers',
+    name: 'Factor Zoo Orthogonalization (Harvey & Liu)',
+    subtitle: 't-stat Thresholds & p-Hacking Filter',
+    badge: 'Research Lab',
+    type: 'data',
+    description: 'Implements multiple testing haircut adjustments (Bonferroni & Holm) requiring t-stat > 3.0 for legitimate factor alpha inclusion.',
+    defaultProperty: 'Conservative 15c3-5 Check',
+    tools: ['Barra Risk Model', 'Eigenvalue Decomposer'],
+    latency: '16ms',
+    codeSnippet: `# FACTOR ZOO HAIRCUT\nclass FactorHaircutValidator(DataNode):\n    def filter_alphas(self, factor_t_stats):\n        return [f for f in factor_t_stats if f.t_stat >= 3.0]`,
+  }
+];
+
 interface AgentWorkspaceViewProps {
   activeTab: ViewTab;
   importedModel?: WorkspaceModel | null;
@@ -490,6 +786,140 @@ export const AgentWorkspaceView: React.FC<AgentWorkspaceViewProps> = ({
 
   // Audit modal state
   const [isAuditModalOpen, setIsAuditModalOpen] = useState<boolean>(false);
+
+  // Extensible Bottom Enterprise Resource Drawer State
+  const [isBottomPanelExpanded, setIsBottomPanelExpanded] = useState<boolean>(false);
+  const [resourceCategory, setResourceCategory] = useState<BottomDrawerTab>('all');
+  const [resourceSearchQuery, setResourceSearchQuery] = useState<string>('');
+  const [draggedResource, setDraggedResource] = useState<ResourceItem | null>(null);
+  const [resourceNotification, setResourceNotification] = useState<string | null>(null);
+
+  // Toast feedback helper
+  const showResourceFeedback = (msg: string) => {
+    setResourceNotification(msg);
+    setTimeout(() => {
+      setResourceNotification(null);
+    }, 3500);
+  };
+
+  // Instantiate resource item as a node in the active model
+  const handleAddResourceToModel = (resource: ResourceItem, dropCoords?: { x: number; y: number }) => {
+    // If it's a parent idea, instantiate or create a complete strategy branch
+    const uniqueId = `node-${resource.category}-${Date.now().toString().slice(-4)}`;
+    
+    // Calculate intelligent default offset
+    const existingCount = activeModel.nodes.length;
+    const defaultX = dropCoords ? dropCoords.x : 200 + (existingCount % 4) * 80;
+    const defaultY = dropCoords ? dropCoords.y : 60 + ((existingCount * 45) % 180);
+
+    const newNode: AgentNode = {
+      id: uniqueId,
+      name: resource.name,
+      type: resource.type,
+      role: resource.subtitle,
+      status: 'READY',
+      description: resource.description,
+      inputs: resource.type === 'data' ? 'Direct Exchange Optical Stream / KDB+' : 'Factor Matrix & Tick Feeds',
+      outputLink: resource.type === 'tool' ? 'CME Globex DMA Router' : 'Downstream Execution Gate',
+      instructions: `Execute ${resource.name} quantitative logic under ${resource.defaultProperty}.`,
+      defaultProperty: resource.defaultProperty,
+      codeSnippet: resource.codeSnippet,
+      tools: resource.tools,
+      latency: resource.latency,
+      x: defaultX,
+      y: defaultY,
+    };
+
+    setModels(prev => prev.map(m => m.id === activeModelId ? { ...m, nodes: [...m.nodes, newNode] } : m));
+    setSelectedNodeId(newNode.id);
+    showResourceFeedback(`Added "${resource.name}" to ${activeModel.name}`);
+  };
+
+  // Create an entirely new model from a firm idea
+  const handleCreateModelFromIdea = (resource: ResourceItem) => {
+    const newModelId = `model-idea-${Date.now()}`;
+    const newModel: WorkspaceModel = {
+      id: newModelId,
+      name: resource.name.replace(' Idea', ''),
+      tag: resource.badge,
+      version: 'v1.0-alpha',
+      description: resource.description,
+      targetVol: 13,
+      maxPosition: 8,
+      varLimit: 1.15,
+      expectedSharpe: 2.15,
+      expectedReturn: 15.6,
+      color: '#8b5cf6',
+      nodes: [
+        {
+          id: `node-idea-parent-${Date.now()}`,
+          name: resource.name,
+          type: 'parent',
+          role: resource.subtitle,
+          status: 'ACTIVE',
+          description: resource.description,
+          inputs: 'Macro signals, yields, and firm quantitative streams',
+          outputLink: 'Execution Sub-Agent & Terminal DMA',
+          instructions: `Systematic implementation of ${resource.name}. Balance portfolio Sharpe while bounding tail risk.`,
+          defaultProperty: resource.defaultProperty,
+          codeSnippet: resource.codeSnippet,
+          tools: resource.tools,
+          latency: resource.latency,
+          x: 30,
+          y: 110,
+        },
+        {
+          id: `node-idea-factor-${Date.now() + 1}`,
+          name: 'Barra Factor Covariance Stream',
+          type: 'data',
+          role: 'Quantitative Feature Store',
+          status: 'ACTIVE',
+          description: 'Historical Barra rolling covariance matrix for factor-neutral hedging.',
+          inputs: 'Barra Multi-Horizon Risk Feed',
+          outputLink: resource.name,
+          instructions: 'Stream orthogonalized factor vectors.',
+          defaultProperty: 'Factor Neutral Union',
+          codeSnippet: `# FACTOR STREAM\nclass FactorStream(DataNode):\n    pass`,
+          tools: ['Barra Risk API'],
+          latency: '4ms',
+          x: 220,
+          y: 25,
+        },
+        {
+          id: `node-idea-gate-${Date.now() + 2}`,
+          name: 'SEC 15c3-5 DMA Gate',
+          type: 'tool',
+          role: 'Terminal Execution Gate',
+          status: 'READY',
+          description: 'Pre-trade compliance & credit collar gate.',
+          inputs: 'Execution orders',
+          outputLink: 'DMA Terminal',
+          instructions: 'Verify credit limits before routing.',
+          defaultProperty: 'Conservative 15c3-5 Check',
+          codeSnippet: `# SEC GATE\nclass SECGate(TerminalGate):\n    pass`,
+          tools: ['SEC 15c3-5 Gate'],
+          latency: '0.05ms',
+          x: 390,
+          y: 110,
+        }
+      ]
+    };
+
+    setModels(prev => [...prev, newModel]);
+    setActiveModelId(newModel.id);
+    showResourceFeedback(`Created model "${newModel.name}" from firm idea catalog!`);
+  };
+
+  // Filtered enterprise resources
+  const filteredEnterpriseResources = ENTERPRISE_RESOURCES.filter(res => {
+    const matchesCategory = resourceCategory === 'all' || res.category === resourceCategory;
+    const matchesQuery = !resourceSearchQuery || 
+      res.name.toLowerCase().includes(resourceSearchQuery.toLowerCase()) ||
+      res.subtitle.toLowerCase().includes(resourceSearchQuery.toLowerCase()) ||
+      res.description.toLowerCase().includes(resourceSearchQuery.toLowerCase()) ||
+      res.badge.toLowerCase().includes(resourceSearchQuery.toLowerCase());
+    return matchesCategory && matchesQuery;
+  });
 
   // Model creation handler
   const handleCreateNewModel = (type: 'blank' | 'clone' | 'template') => {
@@ -713,7 +1143,7 @@ class VolSkewAgent(QuantParentAgent):
         <div className="flex items-center gap-2">
           <Bot className="w-4 h-4 text-blue-600" />
           <span className="text-sm font-bold text-foreground font-mono tracking-tight">
-            Agent Builder / Workspace
+            Agent Workspace
           </span>
           <Badge variant="outline" className="text-[10px] font-mono bg-slate-50 text-slate-700 border-border">
             DAG Architecture
@@ -893,237 +1323,127 @@ class VolSkewAgent(QuantParentAgent):
         </div>
       )}
 
-      {/* Main 3-Column Container matching wireframe sketch */}
+      {/* Main 2-Panel Layout matching the updated sketch (Canvas + Bottom Tray on Left, Inspector on Right) */}
       <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         
         {/* =========================================================================
-            LEFT COLUMN: REPOSITORY (Images 1-4)
-            - Repository title
-            - Filter buttons: [ All ] [ Code bases ] [ sub agents ] [ templates ]
-            - Vertical list of items
+            LEFT / CENTER MAIN AREA (Cols 1-8):
+            - Top Bar: [ matrix / Node / code ] + [ Version 1 ▼ ]
+            - Canvas with DAG Nodes & Lower-Left AI Suggestion Reasoning Box
+            - Bottom Component Library Tray: [ Skills & subagents | Code & templates | Input nodes | Risk & compliance ]
            ========================================================================= */}
-        <div className="lg:col-span-3 border-r border-border p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
-          <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
-            <div className="mb-2 shrink-0 flex items-center justify-between">
-              <h2 className="text-xs font-bold text-foreground tracking-tight font-mono">
-                Repository
-              </h2>
-              <span className="text-[10px] font-mono text-muted-foreground">
-                Model: <strong className="text-foreground">{activeModel.name}</strong>
-              </span>
-            </div>
-
-            {/* Filter pills matching sketch */}
-            <div className="grid grid-cols-2 gap-1 mb-3 shrink-0">
+        <div className="lg:col-span-8 flex flex-col justify-between border-r border-border bg-white p-3 min-h-0 overflow-hidden">
+          
+          {/* TOP CANVAS HEADER: "matrix / Node / code" + "Version 1 ▼" */}
+          <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-border shrink-0">
+            
+            {/* Mode switch container: [ matrix / Node / code ] */}
+            <div className="flex items-center px-2 py-0.5 rounded-xl border border-border bg-white font-mono text-xs shadow-2xs">
               <button
                 type="button"
-                onClick={() => setRepoFilter('all')}
-                className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
-                  repoFilter === 'all'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                onClick={() => setViewMode('matrix')}
+                className={`px-2 py-0.5 rounded-md transition-all ${
+                  viewMode === 'matrix'
+                    ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                    : 'text-foreground hover:text-primary'
                 }`}
               >
-                All
+                matrix
               </button>
+              <span className="text-muted-foreground mx-1">/</span>
               <button
                 type="button"
-                onClick={() => setRepoFilter('codebases')}
-                className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
-                  repoFilter === 'codebases'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                onClick={() => setViewMode('Node')}
+                className={`px-2 py-0.5 rounded-md transition-all ${
+                  viewMode === 'Node'
+                    ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                    : 'text-foreground hover:text-primary'
                 }`}
               >
-                Code bases
+                Node
               </button>
+              <span className="text-muted-foreground mx-1">/</span>
               <button
                 type="button"
-                onClick={() => setRepoFilter('subagents')}
-                className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
-                  repoFilter === 'subagents'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                onClick={() => setViewMode('code')}
+                className={`px-2 py-0.5 rounded-md transition-all ${
+                  viewMode === 'code'
+                    ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                    : 'text-foreground hover:text-primary'
                 }`}
               >
-                sub agents
-              </button>
-              <button
-                type="button"
-                onClick={() => setRepoFilter('templates')}
-                className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
-                  repoFilter === 'templates'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
-                }`}
-              >
-                templates
+                code
               </button>
             </div>
 
-            {/* Vertical list of items */}
-            <div className="space-y-1.5 flex-1 min-h-0 overflow-y-auto pr-1">
-              {filteredRepoItems.map((item) => {
-                const isSelected = selectedNode?.name === item.title;
-                return (
-                  <div
-                    key={item.id}
-                    onClick={() => {
-                      const matched = activeModel.nodes.find(n => n.name.toLowerCase().includes(item.title.toLowerCase().slice(0, 8)));
-                      if (matched) setSelectedNodeId(matched.id);
-                    }}
-                    className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all ${
-                      isSelected
-                        ? 'bg-blue-50 border-blue-500 shadow-2xs'
-                        : 'bg-white hover:bg-slate-50 border-border'
-                    }`}
-                  >
-                    <span className="text-xs font-semibold text-foreground font-mono block">
-                      {item.title}
-                    </span>
-                    <span className="text-[10px] text-muted-foreground font-mono">
-                      {item.tag}
-                    </span>
-                  </div>
-                );
-              })}
+            {/* Version dropdown: [ Version 1 ▼ ] */}
+            <div className="relative">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setIsVersionDropdownOpen(!isVersionDropdownOpen)}
+                className="h-7 text-xs font-mono gap-1 text-foreground px-2.5 bg-white hover:bg-slate-50 border-border rounded-lg shadow-2xs"
+              >
+                <span>{selectedVersion}</span>
+                <ChevronDown className="w-3 h-3 text-muted-foreground" />
+              </Button>
+
+              {isVersionDropdownOpen && (
+                <div className="absolute right-0 mt-1 w-56 bg-white border border-border rounded-xl shadow-lg z-30 p-1 font-mono text-xs animate-in fade-in">
+                  {[
+                    'Version 1 (Production Core)',
+                    'Version 1.1 (Low Latency DMA)',
+                    'Version 1.2 (Delta-Neutral Alpha)',
+                    'Version 2.0-Alpha (Omni Macro)',
+                  ].map((v) => (
+                    <button
+                      key={v}
+                      onClick={() => {
+                        setSelectedVersion(v.split(' (')[0]);
+                        setIsVersionDropdownOpen(false);
+                      }}
+                      className={`w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center justify-between ${
+                        selectedVersion === v.split(' (')[0] ? 'text-blue-600 font-bold bg-blue-50' : 'text-foreground'
+                      }`}
+                    >
+                      <span>{v}</span>
+                      {selectedVersion === v.split(' (')[0] && <Check className="w-3 h-3 text-blue-600" />}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Bottom quick add button */}
-          <div className="pt-2 border-t border-border shrink-0">
-            <Button
-              variant="outline"
-              size="sm"
-              className="w-full text-[11px] font-mono text-foreground hover:bg-slate-50 h-8 gap-1 border-border bg-white"
-              onClick={() => {
-                const newNode: AgentNode = {
-                  id: `node-${Date.now().toString().slice(-3)}`,
-                  name: `Custom Sub-Agent #${activeModel.nodes.length + 1}`,
-                  type: 'subagent',
-                  role: 'Custom Quantitative Sub-Agent',
-                  status: 'READY',
-                  description: 'Custom quantitative risk and alpha signal generator.',
-                  inputs: 'Real-time L2 orderbook stream & factor covariance feed',
-                  outputLink: 'Execution Sub-Agent',
-                  instructions: 'Execute systematic statistical arbitrage and maintain beta neutrality under volatile conditions.',
-                  defaultProperty: 'Factor Neutral Union',
-                  codeSnippet: `# CUSTOM QUANTITATIVE SUB-AGENT\nclass CustomSubAgent(QuantAgent):\n    def execute(self, ticks):\n        return alpha_signal`,
-                  tools: ['Barra Risk API', 'Execution Gateway'],
-                  latency: '10ms',
-                  x: 220,
-                  y: 110,
-                };
-                
-                setModels(prev => prev.map(m => {
-                  if (m.id === activeModelId) {
-                    return { ...m, nodes: [...m.nodes, newNode] };
-                  }
-                  return m;
-                }));
-                setSelectedNodeId(newNode.id);
-              }}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              <span>Add Sub-Agent Node</span>
-            </Button>
-          </div>
-        </div>
-
-        {/* =========================================================================
-            CENTER COLUMN: CANVAS GRAPH + BOTTOM IDEATOR (Images 1-4)
-            - Top bar: [ matrix / Node / code ] + [ Version 1 ▼ ]
-            - Middle: Interactive Node DAG (or Code view if "code" is active)
-            - Bottom: Model Idea / workspace ideator prompt and edit bar
-           ========================================================================= */}
-        <div className="lg:col-span-5 flex flex-col justify-between border-r border-border bg-white p-3 min-h-0 overflow-hidden">
-          <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
-            {/* Top Bar matching sketch: "matrix / Node / code" + "Version 1 ▼" */}
-            <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-border shrink-0">
-              
-              {/* Mode switch container: [ matrix / Node / code ] */}
-              <div className="flex items-center px-2.5 py-1 rounded-xl border border-border bg-white font-mono text-xs shadow-2xs">
-                <button
-                  type="button"
-                  onClick={() => setViewMode('matrix')}
-                  className={`px-1.5 py-0.5 rounded transition-all ${
-                    viewMode === 'matrix'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
-                      : 'text-foreground hover:text-primary'
-                  }`}
-                >
-                  matrix
-                </button>
-                <span className="text-muted-foreground mx-1">/</span>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('Node')}
-                  className={`px-1.5 py-0.5 rounded transition-all ${
-                    viewMode === 'Node'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
-                      : 'text-foreground hover:text-primary'
-                  }`}
-                >
-                  Node
-                </button>
-                <span className="text-muted-foreground mx-1">/</span>
-                <button
-                  type="button"
-                  onClick={() => setViewMode('code')}
-                  className={`px-1.5 py-0.5 rounded transition-all ${
-                    viewMode === 'code'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
-                      : 'text-foreground hover:text-primary'
-                  }`}
-                >
-                  code
-                </button>
-              </div>
-
-              {/* Version dropdown matching sketch: [ Version 1 ▼ ] */}
-              <div className="relative">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsVersionDropdownOpen(!isVersionDropdownOpen)}
-                  className="h-7 text-xs font-mono gap-1 text-foreground px-2.5 bg-white hover:bg-slate-50 border-border rounded-lg shadow-2xs"
-                >
-                  <span>{selectedVersion}</span>
-                  <ChevronDown className="w-3 h-3 text-muted-foreground" />
-                </Button>
-
-                {isVersionDropdownOpen && (
-                  <div className="absolute right-0 mt-1 w-56 bg-white border border-border rounded-xl shadow-lg z-30 p-1 font-mono text-xs animate-in fade-in">
-                    {[
-                      'Version 1 (Production Core)',
-                      'Version 1.1 (Low Latency DMA)',
-                      'Version 1.2 (Delta-Neutral Alpha)',
-                      'Version 2.0-Alpha (Omni Macro)',
-                    ].map((v) => (
-                      <button
-                        key={v}
-                        onClick={() => {
-                          setSelectedVersion(v.split(' (')[0]);
-                          setIsVersionDropdownOpen(false);
-                        }}
-                        className={`w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center justify-between ${
-                          selectedVersion === v.split(' (')[0] ? 'text-blue-600 font-bold bg-blue-50' : 'text-foreground'
-                        }`}
-                      >
-                        <span>{v}</span>
-                        {selectedVersion === v.split(' (')[0] && <Check className="w-3 h-3 text-blue-600" />}
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Interactive Canvas View (when "Node" is active) */}
+          {/* MAIN INTERACTIVE CANVAS AREA */}
+          <div 
+            className="relative flex-1 min-h-[280px] rounded-xl border border-border bg-white overflow-hidden p-2 select-none flex flex-col justify-between"
+            onDragOver={(e) => {
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'copy';
+            }}
+            onDrop={(e) => {
+              e.preventDefault();
+              try {
+                const dataStr = e.dataTransfer.getData('text/plain');
+                if (dataStr) {
+                  const item: ResourceItem = JSON.parse(dataStr);
+                  const rect = e.currentTarget.getBoundingClientRect();
+                  const dropX = Math.max(20, Math.min(rect.width - 160, e.clientX - rect.left - 70));
+                  const dropY = Math.max(20, Math.min(rect.height - 120, e.clientY - rect.top - 40));
+                  handleAddResourceToModel(item, { x: dropX, y: dropY });
+                }
+              } catch (err) {
+                console.error('Drop error:', err);
+              }
+            }}
+          >
+            
+            {/* Interactive Node DAG */}
             {viewMode === 'Node' && (
-              <div className="relative w-full flex-1 min-h-[260px] rounded-xl border border-border bg-white overflow-hidden p-2 select-none flex items-center justify-center">
+              <div className="relative w-full h-full flex-1 overflow-auto">
                 {/* SVG Connections matching sketch topology */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
+                <svg className="absolute inset-0 w-full h-full pointer-events-none z-0 min-w-[550px] min-h-[260px]">
                   <defs>
                     <marker
                       id="arrow"
@@ -1138,189 +1458,148 @@ class VolSkewAgent(QuantParentAgent):
                     </marker>
                   </defs>
 
-                  {/* Node 1 (left) -> Node 2 (top) */}
+                  {/* Node 1 (Center-Left) -> Node 2 (Top-Middle) */}
                   <path
-                    d="M 140 120 C 165 95, 175 60, 205 50"
+                    d="M 175 110 C 215 90, 235 60, 275 45"
                     fill="none"
                     stroke="#1e293b"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
 
-                  {/* Node 1 (left) -> Node 3 (bottom) */}
+                  {/* Node 1 (Center-Left) -> Node 3 (Judgement node / Bottom-Middle) */}
                   <path
-                    d="M 140 150 C 165 175, 170 215, 195 220"
+                    d="M 175 145 C 210 165, 230 180, 265 190"
                     fill="none"
                     stroke="#1e293b"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
 
-                  {/* Node 2 (top) -> Terminal / Node 4 (right) */}
+                  {/* Node 2 (Top-Middle) -> Outflow Arrow */}
                   <path
-                    d="M 305 60 C 335 75, 350 105, 375 130"
+                    d="M 395 50 C 430 70, 460 95, 490 115"
                     fill="none"
                     stroke="#1e293b"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
 
-                  {/* Node 3 (bottom) -> Terminal / Node 4 (right) */}
+                  {/* Node 3 (Judgement node) -> Outflow Arrow */}
                   <path
-                    d="M 300 220 C 335 200, 350 165, 375 145"
+                    d="M 430 190 C 465 170, 495 130, 525 90"
                     fill="none"
                     stroke="#1e293b"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
+
+                  {/* Additional dynamic connection paths for added nodes */}
+                  {activeModel.nodes.length > 3 && activeModel.nodes.slice(3).map((n, i) => (
+                    <path
+                      key={n.id}
+                      d={`M ${n.x + 60} ${n.y + 40} C ${n.x + 90} ${n.y + 70}, 380 140, 470 120`}
+                      fill="none"
+                      stroke="#64748b"
+                      strokeWidth="1.25"
+                      strokeDasharray="4,4"
+                      markerEnd="url(#arrow)"
+                    />
+                  ))}
                 </svg>
 
-                {/* Node Cards inside canvas */}
-                <div className="relative w-full h-full">
-                  {/* Node 1: Left tall rounded card (Research Judgement agent / Parent) */}
-                  {activeModel.nodes[0] && (
+                {/* Render Core / Model Nodes */}
+                {activeModel.nodes.map((node, index) => {
+                  const isSelected = selectedNodeId === node.id;
+                  const isParent = node.type === 'parent';
+                  const isData = node.type === 'data';
+                  const isTool = node.type === 'tool';
+                  
+                  // Coordinate fallback
+                  const posX = node.x ?? (index === 0 ? 30 : index === 1 ? 270 : index === 2 ? 255 : 420);
+                  const posY = node.y ?? (index === 0 ? 50 : index === 1 ? 10 : index === 2 ? 150 : 25 + (index * 30));
+
+                  return (
                     <div
-                      onClick={() => setSelectedNodeId(activeModel.nodes[0].id)}
-                      className={`absolute left-2 top-[60px] w-[138px] h-[115px] p-2 rounded-2xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
-                        selectedNodeId === activeModel.nodes[0].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
+                      key={node.id}
+                      onClick={() => setSelectedNodeId(node.id)}
+                      style={{
+                        left: `${posX}px`,
+                        top: `${posY}px`,
+                      }}
+                      className={`absolute min-w-[135px] max-w-[165px] p-2.5 rounded-2xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
+                        isSelected
+                          ? isParent
+                            ? 'bg-[#eae4ff] border-purple-500 ring-2 ring-purple-400/30'
+                            : 'bg-white border-blue-500 ring-2 ring-blue-400/30'
+                          : isParent
+                          ? 'bg-[#eae4ff]/80 hover:bg-[#eae4ff] border-purple-200'
+                          : isData
+                          ? 'bg-[#f0fdf4] hover:bg-[#dcfce7] border-emerald-200'
+                          : isTool
+                          ? 'bg-[#f8fafc] hover:bg-slate-100 border-slate-300'
                           : 'bg-white hover:bg-slate-50 border-border'
                       }`}
                     >
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-blue-600 font-bold">
-                            {activeModel.nodes[0].type}
+                          <span className={`text-[8.5px] font-mono uppercase tracking-wider font-bold ${
+                            isParent 
+                              ? 'text-purple-700' 
+                              : isData 
+                              ? 'text-emerald-700' 
+                              : isTool
+                              ? 'text-amber-700'
+                              : 'text-blue-600'
+                          }`}>
+                            {node.type === 'parent' ? 'parent orchestrator' : node.type === 'data' ? 'feature store' : node.type}
                           </span>
                           <button
                             type="button"
-                            onClick={(e) => handleManualNodeRefresh(e, 'node-1')}
+                            onClick={(e) => handleManualNodeRefresh(e, node.id)}
                             title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-200 text-[8px] font-mono font-bold hover:bg-slate-200"
                           >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-1' ? 'animate-spin text-emerald-600' : ''}`} />
-                            <span>{nodeCountdowns['node-1'] || 42}s</span>
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === node.id ? 'animate-spin text-blue-600' : ''}`} />
+                            <span>{nodeCountdowns[node.id] || 40}s</span>
                           </button>
                         </div>
-                        <span className="text-[10px] font-bold text-foreground font-mono leading-tight block">
-                          {activeModel.nodes[0].name}
+                        <span className="text-[10.5px] font-bold text-slate-900 font-mono leading-tight block truncate">
+                          {node.name}
                         </span>
                       </div>
-                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
-                        <span>Lat: {activeModel.nodes[0].latency}</span>
-                        <span className="text-emerald-600 font-semibold">Grounded</span>
+                      <div className="text-[8px] font-mono text-muted-foreground border-t border-black/5 pt-1 flex items-center justify-between mt-1">
+                        <span>{node.latency}</span>
+                        <span className="text-emerald-600 font-semibold truncate max-w-[70px]">
+                          {node.defaultProperty ? node.defaultProperty.split(' ')[0] : 'Synced'}
+                        </span>
                       </div>
                     </div>
-                  )}
+                  );
+                })}
 
-                  {/* Node 2: Top card (Market trend refereall / Subagent) */}
-                  {activeModel.nodes[1] && (
-                    <div
-                      onClick={() => setSelectedNodeId(activeModel.nodes[1].id)}
-                      className={`absolute left-[195px] top-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
-                        selectedNodeId === activeModel.nodes[1].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-purple-600 font-bold block">
-                            {activeModel.nodes[1].type}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={(e) => handleManualNodeRefresh(e, 'node-2')}
-                            title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[8px] font-mono font-bold hover:bg-purple-100"
-                          >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-2' ? 'animate-spin text-purple-600' : ''}`} />
-                            <span>{nodeCountdowns['node-2'] || 36}s</span>
-                          </button>
-                        </div>
-                        <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
-                          {activeModel.nodes[1].name}
-                        </span>
-                      </div>
-                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
-                        <span>{activeModel.nodes[1].latency}</span>
-                        <span className="text-purple-600 font-semibold">Synced</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Node 3: Bottom card (Data & Factor Matrix / Data) */}
-                  {activeModel.nodes[2] && (
-                    <div
-                      onClick={() => setSelectedNodeId(activeModel.nodes[2].id)}
-                      className={`absolute left-[190px] bottom-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
-                        selectedNodeId === activeModel.nodes[2].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-600 font-bold block">
-                            {activeModel.nodes[2].type}
-                          </span>
-                          <button
-                            type="button"
-                            onClick={(e) => handleManualNodeRefresh(e, 'node-3')}
-                            title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
-                          >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-3' ? 'animate-spin text-emerald-600' : ''}`} />
-                            <span>{nodeCountdowns['node-3'] || 58}s</span>
-                          </button>
-                        </div>
-                        <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
-                          {activeModel.nodes[2].name}
-                        </span>
-                      </div>
-                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
-                        <span>{activeModel.nodes[2].latency}</span>
-                        <span className="text-emerald-600 font-semibold">L2 Validated</span>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Node 4: Right terminal node (Execution Sub-Agent / Tool) */}
-                  {activeModel.nodes[3] && (
-                    <div
-                      onClick={() => setSelectedNodeId(activeModel.nodes[3].id)}
-                      className={`absolute right-2 top-[75px] w-[128px] h-[92px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
-                        selectedNodeId === activeModel.nodes[3].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
-                      }`}
-                    >
-                      <div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-amber-600 font-bold block">
-                            Terminal Gate
-                          </span>
-                          <button
-                            type="button"
-                            onClick={(e) => handleManualNodeRefresh(e, 'node-4')}
-                            title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 text-[8px] font-mono font-bold hover:bg-amber-100"
-                          >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-4' ? 'animate-spin text-amber-600' : ''}`} />
-                            <span>{nodeCountdowns['node-4'] || 24}s</span>
-                          </button>
-                        </div>
-                        <span className="text-[10px] font-bold text-foreground font-mono leading-tight block mt-0.5">
-                          {activeModel.nodes[3].name}
-                        </span>
-                      </div>
-                      <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
-                        <span>SEC 15c3-5</span>
-                        <span className="text-emerald-700 font-bold">PASS</span>
-                      </div>
-                    </div>
-                  )}
+                {/* AI Suggestion with Complete Bullet Reasoning Box (Lower-Left of Canvas, matching sketch) */}
+                <div className="absolute left-3 bottom-3 w-[210px] sm:w-[230px] p-2.5 rounded-2xl border border-emerald-300 bg-[#eef8f2] shadow-2xs z-20 space-y-1.5 animate-in fade-in">
+                  <div className="flex items-center gap-1.5 text-emerald-950 font-mono text-[10px] font-bold border-b border-emerald-200/80 pb-1">
+                    <Sparkles className="w-3.5 h-3.5 text-emerald-700 shrink-0" />
+                    <span>AI suggestion with complete bullet reasoning</span>
+                  </div>
+                  <ul className="text-[9.5px] font-sans text-emerald-950 space-y-1 leading-snug">
+                    <li className="flex items-start gap-1">
+                      <span className="text-emerald-700 font-bold">•</span>
+                      <span>Factor skew indicates vol compression into FOMC; calibrate delta overlays.</span>
+                    </li>
+                    <li className="flex items-start gap-1">
+                      <span className="text-emerald-700 font-bold">•</span>
+                      <span>Maintain Barra beta neutrality (&lt;0.01) while scaling tech momentum.</span>
+                    </li>
+                    <li className="flex items-start gap-1">
+                      <span className="text-emerald-700 font-bold">•</span>
+                      <span>Pre-trade collar hedge staged to prevent single-sector limit breaches.</span>
+                    </li>
+                  </ul>
                 </div>
+
               </div>
             )}
 
@@ -1385,89 +1664,269 @@ class VolSkewAgent(QuantParentAgent):
           </div>
 
           {/* =========================================================================
-              BOTTOM: MODEL IDEA / WORKSPACE IDEATOR PROMPT & EDIT BAR (Images 1-4)
-              - Ideation chip buttons: Delta-Neutral Hedge Overlay, L2 Imbalance, Barra Covariance
-              - Prompt Input field + [ Ideate & Apply ]
+              BOTTOM EXTENDABLE & SCROLLABLE ENTERPRISE RESOURCES & FIRM IDEAS PANEL
+              - Collapsed (compact 4-column quick tray) OR Expanded (rich scrollable library)
+              - Categories: All, Skills & Subagents, Code & Templates, Input Nodes, Risk & Compliance, Firm Ideas, Research Papers
+              - Drag-and-drop onto canvas OR 1-click instantiate
+              - Search and filter across institutional library
              ========================================================================= */}
-          <div className="pt-2 border-t border-border mt-2 shrink-0 space-y-2">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-foreground font-mono flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                Model Ideator &amp; Architecture Engine
-              </span>
-              <span className="text-[10px] font-mono text-muted-foreground">
-                Active: <strong className="text-foreground">{activeModel.name}</strong>
-              </span>
-            </div>
+          <div 
+            id="enterprise-resources-panel"
+            className={`mt-2 border border-border rounded-2xl bg-white shadow-2xs transition-all duration-300 flex flex-col shrink-0 overflow-hidden ${
+              isBottomPanelExpanded ? 'h-[290px]' : 'max-h-[175px]'
+            }`}
+            onDragOver={(e) => e.preventDefault()}
+          >
+            {/* Header bar with extend/collapse toggle, tabs & search */}
+            <div className="p-2 border-b border-border bg-slate-50/80 flex flex-wrap items-center justify-between gap-2 shrink-0">
+              
+              {/* Left: Title + Expand Button */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 font-mono text-xs font-bold text-foreground">
+                  <Library className="w-3.5 h-3.5 text-blue-600" />
+                  <span>Enterprise Resources &amp; Ideas Library</span>
+                  <Badge variant="outline" className="text-[9px] font-mono bg-white text-muted-foreground ml-1">
+                    {filteredEnterpriseResources.length} items
+                  </Badge>
+                </div>
 
-            {/* Quick Prompt Ideation Chips */}
-            <div className="flex flex-wrap items-center gap-1">
-              {[
-                'Delta-Neutral Hedge Overlay',
-                'L2 Order Imbalance Filter',
-                'Barra Covariance Decomposer',
-                'SEC 15c3-5 Pre-Trade Limit Gate'
-              ].map((chip) => (
-                <button
-                  key={chip}
-                  type="button"
-                  onClick={() => setIdeaPrompt(`Apply ${chip} with strict risk constraints on ${activeModel.name}.`)}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-border transition-all"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setIsBottomPanelExpanded(!isBottomPanelExpanded)}
+                  className="h-6 px-2 text-[10px] font-mono text-blue-700 bg-blue-50/80 hover:bg-blue-100/80 border border-blue-200/80 rounded-md gap-1 ml-1"
                 >
-                  + {chip}
-                </button>
-              ))}
-            </div>
-
-            {/* Prompt input and action button */}
-            <div className="flex items-center gap-2">
-              <div className="relative flex-1">
-                <input
-                  type="text"
-                  value={ideaPrompt}
-                  onChange={(e) => setIdeaPrompt(e.target.value)}
-                  placeholder="Ideate or modify model architecture, agent weights, or parameters..."
-                  className="w-full h-8 pl-2.5 pr-8 text-xs font-mono rounded-lg border border-border bg-white text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500"
-                />
+                  {isBottomPanelExpanded ? (
+                    <>
+                      <ChevronDown className="w-3 h-3" />
+                      <span>Compact Tray</span>
+                    </>
+                  ) : (
+                    <>
+                      <ChevronUp className="w-3 h-3" />
+                      <span>Extend Panel &amp; Search</span>
+                    </>
+                  )}
+                </Button>
               </div>
-              <Button
-                type="button"
-                size="sm"
-                onClick={handleSynthesizeIdea}
-                disabled={isSynthesizing}
-                className="h-8 px-3 font-mono text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg gap-1 shrink-0 font-semibold shadow-2xs"
-              >
-                <Sparkles className={`w-3 h-3 ${isSynthesizing ? 'animate-spin' : ''}`} />
-                <span>{isSynthesizing ? 'Synthesizing...' : 'Ideate & Apply'}</span>
-              </Button>
+
+              {/* Right: Quick filter tabs & Search input */}
+              <div className="flex items-center gap-1.5 overflow-x-auto">
+                {/* Category Pills */}
+                <div className="flex items-center gap-1 font-mono text-[10px]">
+                  {[
+                    { id: 'all', label: 'All' },
+                    { id: 'skills', label: 'Skills' },
+                    { id: 'code', label: 'Code' },
+                    { id: 'inputs', label: 'Inputs' },
+                    { id: 'risk', label: 'Risk' },
+                    { id: 'firm_ideas', label: '💡 Ideas' },
+                    { id: 'research_papers', label: '📄 Papers' },
+                  ].map((cat) => (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        setResourceCategory(cat.id as BottomDrawerTab);
+                        if (!isBottomPanelExpanded) setIsBottomPanelExpanded(true);
+                      }}
+                      className={`px-2 py-0.5 rounded-md transition-all whitespace-nowrap ${
+                        resourceCategory === cat.id
+                          ? 'bg-blue-600 text-white font-bold shadow-2xs'
+                          : 'text-slate-600 hover:bg-slate-200/60 bg-white border border-border/80'
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Search input in expanded mode */}
+                {isBottomPanelExpanded && (
+                  <div className="relative w-40 sm:w-48">
+                    <Search className="w-3 h-3 absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+                    <Input
+                      type="text"
+                      placeholder="Filter resources..."
+                      value={resourceSearchQuery}
+                      onChange={(e) => setResourceSearchQuery(e.target.value)}
+                      className="h-6 text-[10px] pl-6 py-0 font-mono bg-white border-border"
+                    />
+                    {resourceSearchQuery && (
+                      <button
+                        type="button"
+                        onClick={() => setResourceSearchQuery('')}
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                      >
+                        <X className="w-2.5 h-2.5" />
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
 
-            {ideatorOutput && (
-              <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-[10px] font-mono text-emerald-900 whitespace-pre-line animate-in fade-in">
-                {ideatorOutput}
+            {/* Notification Toast if an item was added */}
+            {resourceNotification && (
+              <div className="px-3 py-1 bg-emerald-50 border-b border-emerald-200 text-emerald-900 text-[10px] font-mono flex items-center justify-between shrink-0 animate-in fade-in">
+                <span className="flex items-center gap-1.5 font-bold">
+                  <CheckCircle className="w-3 h-3 text-emerald-600 shrink-0" />
+                  {resourceNotification}
+                </span>
+                <span className="text-[9px] text-emerald-700">Drag to re-order on canvas</span>
               </div>
             )}
+
+            {/* Content Area: Scrollable resource cards grid */}
+            <div className="flex-1 min-h-0 p-2 overflow-y-auto overflow-x-hidden font-mono">
+              {filteredEnterpriseResources.length === 0 ? (
+                <div className="h-full flex flex-col items-center justify-center text-center p-4 text-muted-foreground text-xs">
+                  <HelpCircle className="w-5 h-5 mb-1 text-slate-400" />
+                  <span>No institutional resources matching "{resourceSearchQuery}"</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setResourceSearchQuery('');
+                      setResourceCategory('all');
+                    }}
+                    className="text-blue-600 underline text-[10px] mt-1"
+                  >
+                    Reset filters
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
+                  {filteredEnterpriseResources.map((item) => (
+                    <div
+                      key={item.id}
+                      draggable
+                      onDragStart={(e) => {
+                        setDraggedResource(item);
+                        e.dataTransfer.setData('text/plain', JSON.stringify(item));
+                      }}
+                      onDragEnd={() => setDraggedResource(null)}
+                      className={`group relative p-2 rounded-xl border transition-all flex flex-col justify-between cursor-grab active:cursor-grabbing text-left shadow-2xs ${
+                        item.category === 'firm_ideas' 
+                          ? 'bg-[#f5f0ff] border-purple-300 hover:border-purple-500 hover:shadow-sm' 
+                          : item.category === 'research_papers'
+                          ? 'bg-[#f0f9ff] border-sky-300 hover:border-sky-500 hover:shadow-sm'
+                          : 'bg-[#faece6] border-border hover:border-slate-400 hover:bg-[#faece6]/80'
+                      }`}
+                    >
+                      {/* Top item badge & category */}
+                      <div className="space-y-1">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className={`text-[8px] font-bold px-1.5 py-0.2 rounded uppercase tracking-wider ${
+                            item.category === 'firm_ideas'
+                              ? 'bg-purple-200 text-purple-900'
+                              : item.category === 'research_papers'
+                              ? 'bg-sky-200 text-sky-900'
+                              : 'bg-white/80 text-slate-800 border border-border/80'
+                          }`}>
+                            {item.badge}
+                          </span>
+                          <span className="text-[8px] text-muted-foreground flex items-center gap-0.5">
+                            <GripHorizontal className="w-3 h-3 text-slate-400 group-hover:text-slate-700" />
+                            <span>Drag</span>
+                          </span>
+                        </div>
+
+                        {/* Name & Subtitle */}
+                        <div>
+                          <span className="text-[10px] font-bold text-slate-900 block leading-tight truncate" title={item.name}>
+                            {item.name}
+                          </span>
+                          <span className="text-[9px] text-slate-600 block truncate">
+                            {item.subtitle}
+                          </span>
+                        </div>
+
+                        {/* Description (visible on extended panel) */}
+                        {isBottomPanelExpanded && (
+                          <p className="text-[8.5px] font-sans text-slate-700 line-clamp-2 leading-tight pt-0.5 border-t border-black/5">
+                            {item.description}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Action buttons footer */}
+                      <div className="pt-1.5 mt-1 border-t border-black/5 flex items-center justify-between gap-1">
+                        <span className="text-[8px] text-slate-500">
+                          {item.latency}
+                        </span>
+
+                        <div className="flex items-center gap-1">
+                          {item.category === 'firm_ideas' ? (
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleCreateModelFromIdea(item);
+                              }}
+                              className="px-1.5 py-0.5 text-[8.5px] font-bold rounded bg-purple-600 hover:bg-purple-700 text-white flex items-center gap-0.5 shadow-2xs"
+                              title="Create entire model from this idea"
+                            >
+                              <Sparkles className="w-2.5 h-2.5" />
+                              <span>Make Model</span>
+                            </button>
+                          ) : null}
+
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleAddResourceToModel(item);
+                            }}
+                            className="px-1.5 py-0.5 text-[8.5px] font-bold rounded bg-white hover:bg-slate-100 text-slate-900 border border-slate-300 flex items-center gap-0.5 shadow-2xs"
+                            title="Add node to current model"
+                          >
+                            <Plus className="w-2.5 h-2.5 text-blue-600" />
+                            <span>Add Node</span>
+                          </button>
+                        </div>
+                      </div>
+
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Bottom Drag Guidance Tip */}
+            <div className="px-2.5 py-1 bg-slate-100/70 border-t border-border/80 text-[9px] font-mono text-slate-600 flex items-center justify-between shrink-0">
+              <span className="flex items-center gap-1">
+                <Move className="w-2.5 h-2.5 text-slate-500" />
+                <span>Tip: Drag any enterprise resource directly onto the DAG canvas to wire into active model</span>
+              </span>
+              <span className="text-slate-500 font-semibold">
+                Active: {activeModel.name} ({activeModel.nodes.length} nodes)
+              </span>
+            </div>
+
           </div>
+
         </div>
 
         {/* =========================================================================
-            RIGHT COLUMN: AGENT INSPECTOR & SANDBOX (Images 1-4)
-            - Tabs: [ Agent ] [ Instructions ] [ Code ] [ Backtest Sandbox ]
-            - Content updates dynamically per active tab
-            - In Sandbox mode: Supports Single Model, Compare Models, and Merge Models
+            RIGHT COLUMN: AGENT INSPECTOR & CUSTOM BUILDER (from uploaded sketch)
+            - Top Tabs: [ Agent | Instructions | Code ]
+            - Inputs: Name, Instructions, Default Property ▾
+            - Agent Custom Builder header + [ agent audit ] button
+            - Custom Builder Cards
+            - Bottom bar: [ Prompt the selected agent/subagent ]
            ========================================================================= */}
-        <div className="lg:col-span-4 p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
+        <div className="lg:col-span-4 p-3.5 flex flex-col justify-between bg-[#f3f3f3] min-h-0 overflow-hidden">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             
-            {/* Top Tabs matching sketch */}
-            <div className="flex items-center justify-between pb-2 border-b border-border mb-2 shrink-0">
+            {/* Top Tabs matching sketch: [ Agent | Instructions | Code ] */}
+            <div className="flex items-center justify-between pb-2 border-b border-border/80 mb-2.5 shrink-0">
               <div className="flex items-center gap-1 font-mono text-xs overflow-x-auto py-0.5">
                 <button
                   type="button"
                   onClick={() => setRightTab('agent')}
-                  className={`px-2 py-1 rounded-md transition-all ${
+                  className={`px-3 py-1 rounded-lg transition-all ${
                     rightTab === 'agent'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-white text-foreground font-bold border border-border shadow-2xs'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -1476,9 +1935,9 @@ class VolSkewAgent(QuantParentAgent):
                 <button
                   type="button"
                   onClick={() => setRightTab('instructions')}
-                  className={`px-2 py-1 rounded-md transition-all ${
+                  className={`px-3 py-1 rounded-lg transition-all ${
                     rightTab === 'instructions'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-emerald-100 text-emerald-900 font-bold border border-emerald-300 shadow-2xs'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -1487,40 +1946,30 @@ class VolSkewAgent(QuantParentAgent):
                 <button
                   type="button"
                   onClick={() => setRightTab('code')}
-                  className={`px-2 py-1 rounded-md transition-all ${
+                  className={`px-3 py-1 rounded-lg transition-all ${
                     rightTab === 'code'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-white text-foreground font-bold border border-border shadow-2xs'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   Code
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setRightTab('sandbox')}
-                  className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
-                    rightTab === 'sandbox'
-                      ? 'bg-blue-600 text-white font-bold border border-blue-600 shadow-2xs'
-                      : 'text-blue-600 hover:text-blue-700'
-                  }`}
-                >
-                  <TestTube className="w-3 h-3" />
-                  <span>Sandbox</span>
-                </button>
               </div>
 
-              {/* Audit Badge */}
-              <button
-                type="button"
-                onClick={() => setIsAuditModalOpen(true)}
-                className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-all shrink-0 flex items-center gap-1"
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setRightTab('sandbox')}
+                className={`h-7 px-2 text-xs font-mono rounded-lg gap-1 ${
+                  rightTab === 'sandbox' ? 'bg-blue-600 text-white font-bold' : 'text-blue-600 hover:bg-blue-50'
+                }`}
               >
-                <ShieldCheck className="w-3 h-3" />
-                <span>audit</span>
-              </button>
+                <TestTube className="w-3 h-3" />
+                <span>Sandbox</span>
+              </Button>
             </div>
 
-            {/* TAB CONTENT: SANDBOX (Interactive Model Outputs, Compare & Merge) */}
+            {/* TAB CONTENT: SANDBOX */}
             {rightTab === 'sandbox' && (
               <div className="flex-1 min-h-0 overflow-y-auto">
                 <AgentBacktestSandbox
@@ -1542,7 +1991,7 @@ class VolSkewAgent(QuantParentAgent):
               <div className="flex-1 min-h-0 overflow-y-auto font-mono text-xs space-y-2">
                 <div className="flex items-center justify-between pb-1 border-b border-border">
                   <span className="text-muted-foreground">Source: {selectedNode.name}.py</span>
-                  <Badge variant="outline" className="text-[10px] bg-slate-50">FIX 4.4 Engine</Badge>
+                  <Badge variant="outline" className="text-[10px] bg-white">Python 3.11</Badge>
                 </div>
                 <div className="p-2.5 rounded-xl bg-slate-900 text-slate-100 text-[11px] leading-relaxed overflow-x-auto">
                   <pre>{selectedNode.codeSnippet}</pre>
@@ -1554,7 +2003,7 @@ class VolSkewAgent(QuantParentAgent):
             {rightTab === 'instructions' && (
               <div className="flex-1 min-h-0 overflow-y-auto font-mono text-xs space-y-3">
                 <div className="space-y-1">
-                  <label className="text-[11px] text-muted-foreground block">System Prompt / Behavioral Guidelines:</label>
+                  <label className="text-[11px] text-muted-foreground block font-bold">System Prompt &amp; Behavioral Guidelines:</label>
                   <textarea
                     value={agentInstructionsText}
                     onChange={(e) => setAgentInstructionsText(e.target.value)}
@@ -1564,10 +2013,10 @@ class VolSkewAgent(QuantParentAgent):
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[11px] text-muted-foreground block">Allocated API Tools:</label>
+                  <label className="text-[11px] text-muted-foreground block font-bold">Allocated Quantitative Tools:</label>
                   <div className="flex flex-wrap gap-1">
                     {selectedNode.tools.map((t, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-50 border border-border text-[10px]">
+                      <span key={idx} className="px-2 py-0.5 rounded-md bg-white border border-border text-[10px]">
                         {t}
                       </span>
                     ))}
@@ -1576,119 +2025,105 @@ class VolSkewAgent(QuantParentAgent):
               </div>
             )}
 
-            {/* TAB CONTENT: AGENT INSPECTOR (Default wireframe layout) */}
+            {/* TAB CONTENT: AGENT (Default view matching sketch) */}
             {rightTab === 'agent' && (
-              <div className="flex flex-col flex-1 min-h-0 justify-between">
-                <div className="space-y-2.5 overflow-y-auto pr-0.5 flex-1 min-h-0">
-                  
-                  {/* Agent / Sub-agent Name Input */}
+              <div className="flex flex-col flex-1 min-h-0 justify-between space-y-3 overflow-y-auto pr-0.5">
+                
+                {/* Upper Form Fields matching wireframe sketch */}
+                <div className="space-y-2 shrink-0">
+                  {/* Name field */}
                   <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
+                    <label className="text-xs font-mono font-medium text-slate-800 block mb-1">
                       Name
                     </label>
                     <input
                       type="text"
                       value={agentNameInput}
                       onChange={(e) => setAgentNameInput(e.target.value)}
-                      className="w-full font-mono text-xs font-bold border border-border rounded-lg px-2 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                      className="w-full font-mono text-xs font-bold border border-border rounded-xl px-2.5 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 shadow-2xs"
                     />
                   </div>
 
-                  {/* Inputs */}
+                  {/* Instructions field */}
                   <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
-                      Inputs
-                    </label>
-                    <textarea
-                      value={agentInputsText}
-                      onChange={(e) => setAgentInputsText(e.target.value)}
-                      rows={2}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
-                    />
-                  </div>
-
-                  {/* Description */}
-                  <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
-                      Description
-                    </label>
-                    <textarea
-                      value={agentDescText}
-                      onChange={(e) => setAgentDescText(e.target.value)}
-                      rows={3}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
-                    />
-                  </div>
-
-                  {/* Output Link */}
-                  <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
-                      Output Link
-                    </label>
-                    <input
-                      type="text"
-                      value={agentOutputLinkText}
-                      onChange={(e) => setAgentOutputLinkText(e.target.value)}
-                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  {/* Instructions */}
-                  <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
+                    <label className="text-xs font-mono font-medium text-slate-800 block mb-1">
                       Instructions
                     </label>
                     <textarea
                       value={agentInstructionsText}
                       onChange={(e) => setAgentInstructionsText(e.target.value)}
                       rows={3}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
+                      className="w-full font-mono text-xs border border-border rounded-2xl p-2.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none shadow-2xs leading-relaxed"
                     />
                   </div>
 
-                  {/* Default Properties Dropdown */}
+                  {/* Default property dropdown */}
                   <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-0.5">
-                      Default Properties
-                    </label>
                     <select
                       value={selectedProperty}
                       onChange={(e) => setSelectedProperty(e.target.value)}
-                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                      className="w-full font-mono text-xs border border-border rounded-xl px-2.5 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 shadow-2xs"
                     >
-                      <option value="Highest Sharpe Weighting">Highest Sharpe Weighting</option>
-                      <option value="Factor Neutral Union">Factor Neutral Union</option>
-                      <option value="Conservative 15c3-5 Check">Conservative 15c3-5 Check</option>
-                      <option value="Strict Delta Capped">Strict Delta Capped</option>
+                      <option value="Highest Sharpe Weighting">Default property: Highest Sharpe Weighting</option>
+                      <option value="Factor Neutral Union">Default property: Factor Neutral Union</option>
+                      <option value="Conservative 15c3-5 Check">Default property: Conservative 15c3-5 Check</option>
+                      <option value="Strict Delta Capped">Default property: Strict Delta Capped</option>
                     </select>
                   </div>
+                </div>
 
-                  {/* Tools list */}
-                  <div>
-                    <label className="text-[10px] font-mono text-muted-foreground uppercase tracking-wider block mb-1">
-                      Assigned Tools
-                    </label>
-                    <div className="flex flex-wrap gap-1">
-                      {selectedNode.tools.map((t, idx) => (
-                        <Badge key={idx} variant="outline" className="text-[10px] font-mono bg-slate-50 border-border">
-                          {t}
-                        </Badge>
-                      ))}
+                {/* Section Header: [ Agent Custom Builder ] + [ agent audit ] button */}
+                <div className="pt-2 border-t border-border/80 shrink-0 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold font-mono text-slate-900">
+                      Agent Custom Builder
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsAuditModalOpen(true)}
+                      className="text-[10px] font-mono px-2 py-0.5 rounded-lg border border-border text-slate-800 bg-white hover:bg-slate-50 transition-all flex items-center gap-1 shadow-2xs font-semibold"
+                    >
+                      <span>agent audit</span>
+                    </button>
+                  </div>
+
+                  {/* Custom Builder Cards (stacked cards on left + card below as in sketch) */}
+                  <div className="space-y-2">
+                    <div className="grid grid-cols-2 gap-2">
+                      <div className="p-2.5 rounded-xl border border-border bg-white shadow-2xs space-y-1">
+                        <span className="text-[10px] font-bold font-mono text-slate-900 block">Signal Grounding</span>
+                        <span className="text-[9px] font-mono text-emerald-700 font-semibold block">99.8% Grounded</span>
+                      </div>
+                      <div className="p-2.5 rounded-xl border border-border bg-white shadow-2xs space-y-1">
+                        <span className="text-[10px] font-bold font-mono text-slate-900 block">DAG Routing</span>
+                        <span className="text-[9px] font-mono text-blue-700 font-semibold block">NY4 Colocated</span>
+                      </div>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl border border-border bg-white shadow-2xs flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold font-mono text-slate-900 block">Anti-Hallucination Telemetry</span>
+                        <span className="text-[9px] font-mono text-muted-foreground block">OPRA &amp; BVAL live feeds</span>
+                      </div>
+                      <Badge variant="outline" className="text-[9px] bg-emerald-50 text-emerald-800 border-emerald-300">
+                        Active Sync
+                      </Badge>
                     </div>
                   </div>
                 </div>
 
-                {/* Bottom Action Button: [ Prompt the selected agent/subagent ] */}
-                <div className="pt-2 border-t border-border shrink-0">
+                {/* Bottom Action / Input: Prompt the selected agent/subagent */}
+                <div className="pt-2 shrink-0">
                   <Button
                     type="button"
                     onClick={() => setIsPromptModalOpen(true)}
-                    className="w-full font-mono text-xs h-9 bg-white hover:bg-slate-50 text-foreground border border-border rounded-xl font-semibold shadow-2xs gap-1.5"
+                    className="w-full font-mono text-xs h-9 bg-white hover:bg-slate-50 text-slate-900 border border-border rounded-xl font-semibold shadow-2xs gap-1.5 justify-center"
                   >
                     <Send className="w-3.5 h-3.5 text-blue-600" />
                     <span>Prompt the selected agent/subagent</span>
                   </Button>
                 </div>
+
               </div>
             )}
 

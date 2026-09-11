@@ -30,6 +30,7 @@ import { Input } from './ui/input';
 import { Badge } from './ui/badge';
 import { Card } from './ui/card';
 import { ViewTab } from '../types';
+import { ResizableSplit } from './ui/ResizableSplit';
 
 export interface DatasetColumn {
   name: string;
@@ -466,13 +467,13 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
          ========================================================================= */}
       <div className="flex flex-wrap items-center justify-between pb-1.5 border-b border-border gap-2 shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/50 border border-blue-400/40 flex items-center justify-center text-blue-600 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-white border border-blue-400/40 flex items-center justify-center text-blue-600 shadow-2xs">
             <Database className="w-4 h-4" />
           </div>
           <div>
             <h1 className="text-sm sm:text-base font-bold text-foreground font-mono tracking-tight flex items-center gap-2">
               <span>Quantitative Data Repository</span>
-              <Badge variant="outline" className="text-[10px] font-mono border-blue-400/50 text-blue-600 bg-blue-50/40 dark:bg-blue-950/40">
+              <Badge variant="outline" className="text-[10px] font-mono border-blue-400/50 text-blue-600 bg-white">
                 NY4 Colocation
               </Badge>
             </h1>
@@ -514,14 +515,20 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
       </div>
 
       {/* =========================================================================
-          MAIN WORKSPACE LAYOUT: Master List (Left 4 cols) + Schema Inspector (Right 8 cols)
+          MAIN WORKSPACE LAYOUT: Master List (Left) + Schema Inspector (Right)
          ========================================================================= */}
-      <div className="flex-1 min-h-0 border border-border rounded-xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
-        
-        {/* =========================================================================
-            LEFT COLUMN: DATASET CATALOG & FILTERS (4 of 12)
-           ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
+      <div className="flex-1 min-h-0 border border-border rounded-xl bg-white shadow-xs overflow-hidden flex flex-col">
+        <ResizableSplit
+          direction="horizontal"
+          initialSizes={[33, 67]}
+          minSizes={[22, 35]}
+          storageKey="data_repository_view_split"
+          className="h-full"
+        >
+          {/* =========================================================================
+              LEFT COLUMN: DATASET CATALOG & FILTERS
+             ========================================================================= */}
+          <div className="border-r border-border p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden h-full">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             
             {/* Search Bar */}
@@ -636,9 +643,9 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
         </div>
 
         {/* =========================================================================
-            RIGHT COLUMN: DATASET SCHEMA, PREVIEW & CODE INSPECTOR (8 of 12)
+            RIGHT COLUMN: DATASET SCHEMA, PREVIEW & CODE INSPECTOR
            ========================================================================= */}
-        <div className="lg:col-span-8 flex flex-col min-h-0 bg-white overflow-hidden">
+        <div className="flex flex-col min-h-0 bg-white overflow-hidden h-full">
           
           {/* Header & Tabs for Selected Dataset */}
           <div className="p-3 sm:p-4 border-b border-border bg-white flex flex-wrap items-center justify-between gap-2 shrink-0">
@@ -800,7 +807,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                       onClick={() => onSelectTab && onSelectTab('agent-builder')}
                       className="h-6 text-[10px] font-mono text-blue-600 hover:text-blue-700 hover:bg-slate-50"
                     >
-                      Connect in Agent Builder Canvas →
+                      Connect in Agent Workspace Canvas →
                     </Button>
                   </div>
                 </div>
@@ -966,6 +973,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
           </div>
         </div>
 
+        </ResizableSplit>
       </div>
 
       {/* =========================================================================

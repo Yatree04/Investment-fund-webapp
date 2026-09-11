@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
+import { ResizableSplit } from './ui/ResizableSplit';
 
 interface StressTestingViewProps {
   fund: Fund;
@@ -176,10 +177,16 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
         </div>
       </div>
 
-      {/* Interactive Sensitivity Shocker & Decision Recommendations */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      {/* Interactive Sensitivity Shocker & Decision Recommendations (Resizable Split) */}
+      <ResizableSplit
+        direction="horizontal"
+        initialSizes={[65, 35]}
+        minSizes={[35, 25]}
+        storageKey="stresstesting_console_split"
+        className="gap-4 items-stretch"
+      >
         {/* Sliders Console */}
-        <div className="lg:col-span-2 bg-card p-5 rounded-lg border border-border shadow-xs transition-colors">
+        <div className="bg-card p-5 rounded-lg border border-border shadow-xs transition-colors h-full flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
               <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
@@ -382,7 +389,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             Real-time compliance checks: <span className="text-emerald-500 font-mono font-semibold">PASSED</span>
           </div>
         </div>
-      </div>
+      </ResizableSplit>
     </div>
   );
 };

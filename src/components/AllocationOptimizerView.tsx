@@ -46,6 +46,7 @@ import { Badge } from './ui/badge';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { StrategyIdea } from './AIOptimizerWindow';
+import { ResizableSplit } from './ui/ResizableSplit';
 
 interface AllocationOptimizerViewProps {
   funds: Fund[];
@@ -276,19 +277,19 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
   };
 
   return (
-    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-slate-50/50 p-2 sm:p-3">
+    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2.5 select-none bg-slate-50/50 p-2 sm:p-3">
       
       {/* =========================================================================
-          TOP COMMAND & HEADER BAR MATCHING SKETCH
+          TOP COMMAND & HEADER BAR
           - Left: /agent bar
-          - Sub-bar: [Current portfolio and market]
-          - Right Tabs: [Data and analysis] [Portfolio stimulation Model 1] [Portfolio stimulation Model 2]
+          - Center: Sub-tabs
+          - Right: Restrictions & Trade Limits
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
+      <div className="bg-white border border-slate-200/80 rounded-xl p-2.5 sm:p-3 shadow-xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
         
         {/* Left: /agent bar */}
         <div className="flex items-center gap-2 flex-1 max-w-md">
-          <div className="relative w-full flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-lg transition-all">
+          <div className="relative w-full flex items-center bg-white border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-lg transition-all shadow-2xs">
             <span className="pl-3 pr-1 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-blue-600" />
             </span>
@@ -297,13 +298,13 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               value={promptBarText}
               onChange={(e) => setPromptBarText(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePromptSubmit(e)}
-              placeholder="/agent bar - query market stats or optimize portfolio..."
-              className="w-full py-1.5 pl-1 pr-8 text-xs font-mono text-foreground placeholder:text-muted-foreground bg-transparent focus:outline-hidden"
+              placeholder="Search or execute quant command..."
+              className="w-full py-1.5 pl-1 pr-8 text-xs font-mono text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-hidden"
             />
             <button
               type="button"
               onClick={handlePromptSubmit}
-              className="absolute right-2 p-1 rounded text-blue-600 hover:bg-blue-50"
+              className="absolute right-2 p-1 rounded-md text-blue-600 hover:bg-blue-50 transition-colors"
               title="Execute /agent search"
             >
               <Search className="w-3.5 h-3.5" />
@@ -311,47 +312,47 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           </div>
         </div>
 
-        {/* Center/Right: Sub-tabs exactly matching wireframe sketches */}
+        {/* Center/Right: Sub-tabs */}
         <div className="flex items-center gap-1.5 overflow-x-auto py-0.5">
           <button
             type="button"
             onClick={() => setActiveSubTab('data-analysis')}
-            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'data-analysis'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white hover:bg-slate-100 text-slate-900 border border-slate-200/80'
             }`}
           >
             <BarChart2 className="w-3.5 h-3.5" />
-            <span>Data and analysis</span>
+            <span className={activeSubTab === 'data-analysis' ? 'text-white' : 'text-slate-900'}>Data and analysis</span>
             {activeSubTab === 'data-analysis' && <Check className="w-3 h-3 ml-0.5" />}
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSubTab('sim-model-1')}
-            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'sim-model-1'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white hover:bg-slate-100 text-slate-900 border border-slate-200/80'
             }`}
           >
             <LineChartIcon className="w-3.5 h-3.5" />
-            <span>Portfolio stimulation Model 1</span>
+            <span className={activeSubTab === 'sim-model-1' ? 'text-white' : 'text-slate-900'}>Portfolio simulation Model 1</span>
             {activeSubTab === 'sim-model-1' && <Check className="w-3 h-3 ml-0.5" />}
           </button>
 
           <button
             type="button"
             onClick={() => setActiveSubTab('sim-model-2')}
-            className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'sim-model-2'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-blue-600 text-white shadow-xs'
+                : 'bg-white hover:bg-slate-100 text-slate-900 border border-slate-200/80'
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
-            <span>Portfolio stimulation Model 2</span>
+            <span className={activeSubTab === 'sim-model-2' ? 'text-white' : 'text-slate-900'}>Portfolio simulation Model 2</span>
             {activeSubTab === 'sim-model-2' && <Check className="w-3 h-3 ml-0.5" />}
           </button>
         </div>
@@ -362,10 +363,10 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             type="button"
             size="sm"
             onClick={() => setIsExecutionModalOpen(true)}
-            className="h-8 px-3 text-xs font-mono font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg gap-1.5 shadow-2xs"
+            className="h-8.5 px-3.5 text-xs font-mono font-semibold bg-slate-900 hover:bg-slate-800 text-white rounded-lg gap-1.5 shadow-xs transition-colors"
           >
-            <Lock className="w-3.5 h-3.5" />
-            <span>Restrictions &amp; Trade Limits</span>
+            <Lock className="w-3.5 h-3.5 text-blue-400" />
+            <span>Restrictions &amp; Limits</span>
           </Button>
         </div>
 
@@ -373,7 +374,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
       {/* Success Notification Banner */}
       {publishSuccessNotice && (
-        <div className="px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in">
+        <div className="px-3.5 py-2.5 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 shadow-2xs animate-in fade-in">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
             <span>{publishSuccessNotice}</span>
@@ -384,140 +385,140 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
         </div>
       )}
 
-      {/* Sub-Header Tag: "Current portfolio and market" */}
+      {/* Current Context Tag without redundant explanatory sentence */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-0.5 bg-white border border-border rounded-lg text-xs font-mono font-bold text-foreground shadow-2xs flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <span>Current portfolio and market</span>
-          </span>
-          <span className="text-[11px] font-mono text-muted-foreground">
-            {activeSubTab === 'data-analysis' ? 'Live Data Feed & Predictive AI Risk Analysis' : 'Interactive Factor Allocation & Benchmark Simulation Sandbox'}
+          <span className="px-2.5 py-1 bg-white border border-slate-200/80 rounded-lg text-xs font-mono font-semibold text-slate-900 shadow-2xs flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-blue-500" />
+            <span>Current Portfolio &amp; Market Dynamics</span>
           </span>
         </div>
       </div>
 
       {/* =========================================================================
-          MAIN 2-COLUMN VIEWPORT MATCHING WIREFRAME
-          Left: 3 Stacked Cards (Market stats / Portfolio monitoring)
+          MAIN 2-COLUMN VIEWPORT (Resizable Split)
+          Left: 3 Stacked Metric Cards
           Right: Dynamic Canvas (Data & Analysis OR Portfolio Simulation 3x3 Grid)
          ========================================================================= */}
-      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
-        
-        {/* =========================================================================
-            LEFT COLUMN: 3 STACKED CARDS MATCHING WIREFRAME
-            Card 1: Market stats / Portfolio monitoring
-            Card 2: Market stats (Factor Loadings / Volatility)
-            Card 3: Market stats (Asset Distribution & Liquidity)
-           ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0 space-y-3">
+      <div className="flex-1 min-h-0 border border-slate-200/80 rounded-2xl bg-white shadow-xs overflow-hidden flex flex-col relative">
+        <ResizableSplit
+          direction="horizontal"
+          initialSizes={[33, 67]}
+          minSizes={[22, 35]}
+          storageKey="allocation_optimizer_view_split"
+          className="h-full"
+        >
+          {/* =========================================================================
+              LEFT COLUMN: 3 Stacked Cards
+             ========================================================================= */}
+          <div className="border-r border-slate-200/80 p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/50 overflow-y-auto min-h-0 space-y-3 h-full">
           
           {/* Card 1: Market stats or Portfolio monitoring */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          <div className="rounded-xl border border-slate-200/80 bg-white p-3.5 shadow-xs space-y-3">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-blue-600" />
+                <span className="font-mono text-xs font-bold text-slate-900 tracking-tight">
                   {activeSubTab === 'data-analysis' ? 'Market stats (Index & Rates)' : 'Portfolio monitoring (Live)'}
                 </span>
               </div>
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-300 text-[9px] font-mono">
+              <Badge variant="outline" className="bg-slate-50 text-slate-700 border-slate-200 text-[10px] font-mono font-medium">
                 {activeSubTab === 'data-analysis' ? 'S&P 500: 5,852.4' : 'Sharpe 2.84'}
               </Badge>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
-                <span className="text-[9px] uppercase text-muted-foreground block">1-Year Return</span>
+              <div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                <span className="text-[9px] uppercase text-slate-500 block">1-Year Return</span>
                 <span className="text-sm font-bold text-emerald-600">+22.4%</span>
-                <span className="text-[9px] text-muted-foreground block">+4.2% vs Benchmark</span>
+                <span className="text-[9px] text-emerald-700 block">+4.2% vs BM</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
-                <span className="text-[9px] uppercase text-muted-foreground block">95% Daily VaR</span>
-                <span className="text-sm font-bold text-foreground">1.14%</span>
-                <span className="text-[9px] text-emerald-600 block">Below 1.25% Cap</span>
+              <div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                <span className="text-[9px] uppercase text-slate-500 block">95% Daily VaR</span>
+                <span className="text-sm font-bold text-slate-800">1.14%</span>
+                <span className="text-[9px] text-slate-500 block">&lt;1.25% Cap</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
-                <span className="text-[9px] uppercase text-muted-foreground block">Net Beta Tilt</span>
-                <span className="text-sm font-bold text-foreground">0.008</span>
-                <span className="text-[9px] text-emerald-600 block">Market Neutral</span>
+              <div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                <span className="text-[9px] uppercase text-slate-500 block">Net Beta Tilt</span>
+                <span className="text-sm font-bold text-slate-800">0.008</span>
+                <span className="text-[9px] text-blue-600 block">Neutral</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
-                <span className="text-[9px] uppercase text-muted-foreground block">VIX Implied Vol</span>
-                <span className="text-sm font-bold text-purple-700">14.82</span>
-                <span className="text-[9px] text-muted-foreground block">Skew: 2.4σ Rich</span>
+              <div className="bg-slate-50/80 p-2.5 rounded-lg border border-slate-200/60 shadow-2xs">
+                <span className="text-[9px] uppercase text-slate-500 block">VIX Implied Vol</span>
+                <span className="text-sm font-bold text-slate-800">14.82</span>
+                <span className="text-[9px] text-slate-500 block">Skew 2.4σ</span>
               </div>
             </div>
           </div>
 
-          {/* Card 2: Market stats (Factor & Sector Dynamics) */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          {/* Card 2: Factor Loadings */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-3.5 shadow-xs space-y-2.5">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-blue-600" />
+                <span className="font-mono text-xs font-bold text-slate-900 tracking-tight">
                   Market stats (Factor Loadings)
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-muted-foreground">Barra GEM3</span>
+              <span className="text-[10px] font-mono text-slate-500">Barra GEM3</span>
             </div>
 
             <div className="space-y-1.5 text-xs font-mono">
               {[
                 { factor: 'Momentum Factor', score: '+1.84σ', color: 'text-emerald-600', fill: '85%' },
-                { factor: 'Volatility Skew Premia', score: '+2.40σ', color: 'text-purple-600', fill: '92%' },
-                { factor: 'Value vs Growth Spread', score: '-0.38σ', color: 'text-amber-600', fill: '40%' },
-                { factor: 'Quality & Balance Sheet', score: '+1.12σ', color: 'text-blue-600', fill: '68%' },
+                { factor: 'Volatility Skew Premia', score: '+2.40σ', color: 'text-emerald-600', fill: '92%' },
+                { factor: 'Value vs Growth Spread', score: '-0.38σ', color: 'text-rose-600', fill: '40%' },
+                { factor: 'Quality & Balance Sheet', score: '+1.12σ', color: 'text-emerald-600', fill: '68%' },
               ].map((f, idx) => (
-                <div key={idx} className="bg-slate-50 p-1.5 rounded-lg border border-border/60 space-y-1">
+                <div key={idx} className="bg-slate-50/80 p-2 rounded-lg border border-slate-200/50 shadow-2xs space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
-                    <span className="text-foreground font-medium">{f.factor}</span>
+                    <span className="text-slate-700 font-medium">{f.factor}</span>
                     <span className={`font-bold ${f.color}`}>{f.score}</span>
                   </div>
-                  <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
-                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: f.fill }} />
+                  <div className="w-full bg-slate-200/70 h-1.5 rounded-full overflow-hidden">
+                    <div className="bg-blue-600 h-full rounded-full" style={{ width: f.fill }} />
                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Card 3: Market stats (Asset Allocation & Liquidity) */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          {/* Card 3: Asset Allocation & Liquidity */}
+          <div className="rounded-xl border border-slate-200/80 bg-white p-3.5 shadow-xs space-y-2.5">
+            <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-purple-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-blue-600" />
+                <span className="font-mono text-xs font-bold text-slate-900 tracking-tight">
                   Market stats (Liquidity &amp; Asset Split)
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-emerald-700 font-bold">100% Allocated</span>
+              <span className="text-[10px] font-mono text-blue-700 font-semibold">100% Allocated</span>
             </div>
 
-            <div className="space-y-1.5 text-xs font-mono">
+            <div className="space-y-2 text-xs font-mono">
               <div className="grid grid-cols-3 gap-1.5 text-center">
-                <div className="bg-emerald-50/80 p-1.5 rounded border border-emerald-200">
-                  <span className="text-[9px] uppercase text-emerald-800 block">Equities</span>
-                  <span className="text-xs font-bold text-emerald-950">58.0%</span>
+                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60 shadow-2xs">
+                  <span className="text-[9px] uppercase text-slate-500 block">Equities</span>
+                  <span className="text-xs font-bold text-slate-900">58.0%</span>
                 </div>
-                <div className="bg-purple-50/80 p-1.5 rounded border border-purple-200">
-                  <span className="text-[9px] uppercase text-purple-800 block">Options/Var</span>
-                  <span className="text-xs font-bold text-purple-950">24.0%</span>
+                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60 shadow-2xs">
+                  <span className="text-[9px] uppercase text-slate-500 block">Options/Var</span>
+                  <span className="text-xs font-bold text-slate-900">24.0%</span>
                 </div>
-                <div className="bg-blue-50/80 p-1.5 rounded border border-blue-200">
-                  <span className="text-[9px] uppercase text-blue-800 block">UST / Cash</span>
-                  <span className="text-xs font-bold text-blue-950">18.0%</span>
+                <div className="bg-slate-50 p-2 rounded-lg border border-slate-200/60 shadow-2xs">
+                  <span className="text-[9px] uppercase text-slate-500 block">UST / Cash</span>
+                  <span className="text-xs font-bold text-slate-900">18.0%</span>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60 text-[10.5px] text-muted-foreground space-y-0.5">
+              <div className="bg-slate-50/80 p-2 rounded-lg border border-slate-200/50 shadow-2xs text-[10.5px] text-slate-600 space-y-1">
                 <div className="flex items-center justify-between">
                   <span>ADV Liquidity Utilization:</span>
-                  <strong className="text-foreground font-mono">2.1% (Cap &lt;2.5%)</strong>
+                  <strong className="text-slate-900 font-mono">2.1% (Cap &lt;2.5%)</strong>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Slippage Model Impact:</span>
-                  <strong className="text-emerald-600 font-mono">0.18 bps</strong>
+                  <strong className="text-slate-800 font-mono">0.18 bps</strong>
                 </div>
               </div>
             </div>
@@ -526,23 +527,23 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
         </div>
 
         {/* =========================================================================
-            RIGHT AREA - VIEW 1: DATA AND ANALYSIS (Image 1)
+            RIGHT AREA - VIEW 1: DATA AND ANALYSIS
            ========================================================================= */}
         {activeSubTab === 'data-analysis' && (
-          <div className="lg:col-span-8 p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3">
+          <div className="p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3 h-full">
             
-            {/* Top 4 Mini Pill Buttons matching wireframe sketch */}
-            <div className="flex items-center justify-between pb-1 border-b border-border/70">
+            {/* Top Timeframe Filters */}
+            <div className="flex items-center justify-between pb-1">
               <div className="flex items-center gap-1.5">
                 {(['1D', '1W', '1M', '1Y'] as const).map((t) => (
                   <button
                     key={t}
                     type="button"
                     onClick={() => setSelectedTimeframe(t)}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold transition-all border ${
+                    className={`px-3 py-1 rounded-lg text-xs font-mono font-medium transition-all ${
                       selectedTimeframe === t
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
-                        : 'bg-white text-muted-foreground hover:bg-slate-50 border-border'
+                        ? 'bg-blue-600 text-white shadow-xs'
+                        : 'bg-slate-100 hover:bg-slate-200 text-slate-600 border border-slate-200/60'
                     }`}
                   >
                     {t}
@@ -550,12 +551,12 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+              <div className="flex items-center gap-3 text-xs font-mono text-slate-600">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block" />
                   Portfolio Trajectory
                 </span>
-                <span className="flex items-center gap-1">
+                <span className="flex items-center gap-1.5">
                   <span className="w-2.5 h-0.5 bg-slate-400 inline-block" />
                   S&amp;P 500 Baseline
                 </span>
@@ -563,23 +564,23 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             </div>
 
             {/* Main Interactive Growth / Trajectory Line Chart */}
-            <div className="h-56 sm:h-64 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+            <div className="h-56 sm:h-64 w-full bg-slate-50/40 p-2.5 rounded-xl border border-slate-200/80 shadow-xs">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={dataAnalysisChartData}>
                   <defs>
                     <linearGradient id="dataAnalysisGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#059669" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#059669" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="#2563eb" stopOpacity={0.25} />
+                      <stop offset="95%" stopColor="#2563eb" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                   <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
                   <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 130]} />
-                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }} />
                   <Area 
                     type="monotone" 
                     dataKey="nav" 
-                    stroke="#059669" 
+                    stroke="#2563eb" 
                     strokeWidth={2.5} 
                     fillOpacity={1} 
                     fill="url(#dataAnalysisGrad)" 
@@ -598,40 +599,32 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               </ResponsiveContainer>
             </div>
 
-            {/* AI Suggestion Box (Green styled container matching the wireframe in Image 1) */}
-            <div className="rounded-xl border-2 border-emerald-400 bg-emerald-50/80 p-3 shadow-2xs space-y-2.5">
-              <div className="flex items-center gap-2 text-emerald-950 font-mono text-xs font-bold">
-                <Sparkles className="w-4 h-4 text-emerald-700" />
-                <span>Ai suggestion on how it might change, compare and for cast, risk coming, montoring etc,</span>
+            {/* AI Suggestion Box */}
+            <div className="rounded-xl border border-slate-200/80 bg-white p-4 shadow-xs space-y-3">
+              <div className="flex items-center gap-2 text-slate-900 font-mono text-xs font-bold">
+                <Sparkles className="w-4 h-4 text-blue-600" />
+                <span>Forecast &amp; Model Intelligence</span>
               </div>
 
-              {/* 4 Distinct Detailed Bullet Lines matching the sketch */}
-              <div className="space-y-2 font-sans text-xs text-emerald-950 bg-white/80 p-3 rounded-lg border border-emerald-200 shadow-2xs">
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="space-y-2.5 font-sans text-xs text-slate-700 bg-slate-50/60 p-3.5 rounded-lg border border-slate-200/60">
+                <div className="flex items-start gap-2">
+                  <ChevronRight className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
-                    <strong>Regime Shift &amp; Volatility Forecast:</strong> Neural factor surface projects a 78% probability of volatility compression into upcoming macro rate decision. Implied skew curve is expected to flatten by 1.8 vol points across mega-cap tech index options.
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                  <p className="leading-relaxed">
-                    <strong>Comparative Model Performance:</strong> Model 1 (+22.5% cumulative alpha) outpaces passive benchmark by 16.4% while maintaining strict factor beta neutrality (0.008) and lower maximum drawdown (-3.8% vs -8.2%).
-                  </p>
-                </div>
-
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
-                  <p className="leading-relaxed">
-                    <strong>Proactive Risk &amp; Concentration Warning:</strong> Semiconductor GICS exposure currently sits at 13.8% (approaching the 15.0% mandate cap). Recommend staging pre-trade collar hedge to lock in unrealized gamma gains before earnings.
+                    <strong className="text-slate-900 font-medium">Volatility Regimes:</strong> Factor surface projects a 78% probability of volatility compression into upcoming macro rate decision. Implied skew is modeled to flatten by 1.8 vol points across mega-cap tech index options.
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <ChevronRight className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
-                    <strong>Live Telemetry &amp; Anti-Hallucination Monitoring:</strong> All sub-agent scratchpads refreshed 38s ago against live OPRA and NY4 tick logs. Confidence score is mathematically grounded at 99.8% with zero memory drift.
+                    <strong className="text-slate-900 font-medium">Model 1 Performance:</strong> Cumulative alpha (<span className="text-emerald-600 font-semibold font-mono">+22.5%</span>) outpaces passive benchmark by <span className="text-emerald-600 font-semibold font-mono">+16.4%</span> with factor beta neutrality (0.008) and lower maximum drawdown (<span className="text-rose-600 font-semibold font-mono">-3.8%</span> vs <span className="text-rose-600 font-semibold font-mono">-8.2%</span>).
+                  </p>
+                </div>
+
+                <div className="flex items-start gap-2">
+                  <ChevronRight className="w-3.5 h-3.5 text-blue-600 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed">
+                    <strong className="text-slate-900 font-medium">Sector Exposure:</strong> Semiconductor exposure sits at 13.8% against the 15.0% mandate ceiling. Pre-trade collar hedge staged to protect unrealized gamma before earnings.
                   </p>
                 </div>
               </div>
@@ -641,47 +634,47 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
         )}
 
         {/* =========================================================================
-            RIGHT AREA - VIEW 2 & 3: PORTFOLIO STIMULATION MODEL 1 & MODEL 2 (Image 2)
+            RIGHT AREA - VIEW 2 & 3: PORTFOLIO SIMULATION MODEL 1 & MODEL 2
            ========================================================================= */}
         {(activeSubTab === 'sim-model-1' || activeSubTab === 'sim-model-2') && (
-          <div className="lg:col-span-8 p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3">
+          <div className="p-3 sm:p-4 flex flex-col justify-between overflow-y-auto min-h-0 space-y-3 h-full">
             
-            {/* Top 4 Mini Pill Buttons matching wireframe sketch */}
-            <div className="flex items-center justify-between pb-1 border-b border-border/70">
+            {/* Top Metric Cards with soft shadows */}
+            <div className="flex items-center justify-between pb-1">
               <div className="flex items-center gap-1.5">
                 {[
-                  { label: 'Expected Sharpe', val: activeSubTab === 'sim-model-1' ? '2.84' : '3.12' },
-                  { label: 'Simulated 95% VaR', val: activeSubTab === 'sim-model-1' ? '1.14%' : '0.98%' },
-                  { label: 'Alpha Outperformance', val: activeSubTab === 'sim-model-1' ? '+5.6%' : '+7.2%' },
-                  { label: 'Max Drawdown', val: activeSubTab === 'sim-model-1' ? '-3.8%' : '-2.4%' },
+                  { label: 'Expected Sharpe', val: activeSubTab === 'sim-model-1' ? '2.84' : '3.12', color: 'text-slate-900' },
+                  { label: 'Simulated 95% VaR', val: activeSubTab === 'sim-model-1' ? '1.14%' : '0.98%', color: 'text-slate-900' },
+                  { label: 'Alpha Outperformance', val: activeSubTab === 'sim-model-1' ? '+5.6%' : '+7.2%', color: 'text-emerald-600 font-bold' },
+                  { label: 'Max Drawdown', val: activeSubTab === 'sim-model-1' ? '-3.8%' : '-2.4%', color: 'text-rose-600 font-bold' },
                 ].map((p, pIdx) => (
-                  <div key={pIdx} className="px-2.5 py-1 rounded-lg bg-slate-50 border border-border text-center">
-                    <span className="text-[8px] font-mono uppercase text-muted-foreground block">{p.label}</span>
-                    <span className="text-[11px] font-mono font-bold text-foreground block">{p.val}</span>
+                  <div key={pIdx} className="px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/70 shadow-2xs text-center">
+                    <span className="text-[8px] font-mono uppercase text-slate-500 block">{p.label}</span>
+                    <span className={`text-[11px] font-mono ${p.color} block`}>{p.val}</span>
                   </div>
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="flex items-center gap-1 text-slate-700">
+              <div className="flex items-center gap-3 text-xs font-mono">
+                <span className="flex items-center gap-1.5 text-slate-600">
                   <span className="w-2.5 h-0.5 bg-slate-800 inline-block" />
                   Base Model
                 </span>
-                <span className="flex items-center gap-1 text-red-600 font-bold">
-                  <span className="w-2.5 h-0.5 bg-red-500 inline-block" />
+                <span className="flex items-center gap-1.5 text-blue-600 font-semibold">
+                  <span className="w-2.5 h-0.5 bg-blue-600 inline-block" />
                   {activeSubTab === 'sim-model-1' ? 'Model 1 Simulation' : 'Model 2 Simulation'}
                 </span>
               </div>
             </div>
 
-            {/* Dual Comparison Chart (Base vs Red Line Simulation matching Image 2 sketch) */}
-            <div className="h-44 sm:h-52 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+            {/* Dual Comparison Chart (Base vs Blue Simulation Line) */}
+            <div className="h-44 sm:h-52 w-full bg-slate-50/40 p-2.5 rounded-xl border border-slate-200/80 shadow-xs">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={activeSubTab === 'sim-model-1' ? model1SimChartData : model2SimChartData}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                   <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
                   <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 136]} />
-                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.05)' }} />
                   <Line 
                     type="monotone" 
                     dataKey="baseModel" 
@@ -693,20 +686,19 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                   <Line 
                     type="monotone" 
                     dataKey="simulatedModel" 
-                    stroke="#ef4444" 
+                    stroke="#2563eb" 
                     strokeWidth={2.5} 
-                    dot={{ r: 3, fill: '#ef4444' }} 
+                    dot={{ r: 3, fill: '#2563eb' }} 
                     name="Simulated Model Trajectory" 
                   />
                 </LineChart>
               </ResponsiveContainer>
             </div>
 
-            {/* 3x3 Grid of 9 Factors & Asset Allocation Cards (Green background, red outline styling matching Image 2 sketch) */}
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono text-emerald-950 font-bold px-0.5">
-                <span>Factors, Assets &amp; Strategic Hypothesis Matrix (3x3 Grid):</span>
-                <span className="text-[10px] text-muted-foreground font-normal">Click any card to inspect hypothesis</span>
+            {/* 3x3 Grid of 9 Factors & Asset Allocation Cards */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-mono text-slate-800 font-semibold px-0.5">
+                <span>Factors &amp; Hypothesis Matrix</span>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
@@ -717,26 +709,26 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                     <div
                       key={card.id}
                       onClick={() => setSelectedGridCard(card.id)}
-                      className={`p-2.5 rounded-xl border-2 transition-all cursor-pointer shadow-2xs space-y-1 bg-emerald-50/75 ${
+                      className={`p-3 rounded-xl transition-all cursor-pointer shadow-xs space-y-1.5 ${
                         isSelected
-                          ? 'border-red-500 ring-2 ring-red-400/30 bg-emerald-100/90'
-                          : 'border-red-300 hover:border-red-400 hover:bg-emerald-100/60'
+                          ? 'border-2 border-blue-600 bg-blue-50/40 ring-2 ring-blue-500/20 shadow-sm'
+                          : 'border border-slate-200/80 bg-white hover:border-slate-300 hover:shadow-sm'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs font-mono text-red-700 truncate">
+                        <span className="font-semibold text-xs font-mono text-slate-900 truncate">
                           {card.title}
                         </span>
-                        <span className="px-1 py-0.2 bg-white/90 text-emerald-800 text-[8px] font-mono font-bold rounded border border-emerald-300">
+                        <span className="px-1.5 py-0.5 bg-slate-100 text-slate-600 text-[9px] font-mono font-medium rounded-md">
                           {card.status}
                         </span>
                       </div>
 
-                      <div className="text-[11px] font-mono font-semibold text-emerald-950 truncate">
+                      <div className="text-[11px] font-mono font-bold text-slate-800 truncate">
                         {card.metric}
                       </div>
 
-                      <div className="text-[9.5px] font-sans text-emerald-800 line-clamp-1">
+                      <div className="text-[10px] font-sans text-slate-500 line-clamp-1">
                         {card.subtext}
                       </div>
                     </div>
@@ -745,30 +737,30 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               </div>
             </div>
 
-            {/* Bottom Row inside View 2: Deploy portfolio fit and hypothesis Button */}
+            {/* Bottom Row: Deploy Action */}
             <div className="pt-2 flex items-center justify-end">
               <Button
                 type="button"
                 onClick={() => setIsExecutionModalOpen(true)}
-                className="h-10 px-5 bg-white hover:bg-emerald-50 text-emerald-900 border-2 border-emerald-600 rounded-xl font-mono text-xs font-bold gap-2 shadow-xs transition-all hover:scale-[1.01]"
+                className="h-9.5 px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-mono text-xs font-semibold gap-2 shadow-xs transition-all hover:scale-[1.01]"
               >
-                <Sparkles className="w-4 h-4 text-emerald-600" />
-                <span>Deploy portfolio fit and hypothesis</span>
+                <Sparkles className="w-4 h-4 text-white" />
+                <span>Deploy Portfolio Fit &amp; Hypothesis</span>
               </Button>
             </div>
 
           </div>
         )}
 
+        </ResizableSplit>
       </div>
 
       {/* =========================================================================
-          BOTTOM PROMPT BAR (Across All Views) MATCHING WIREFRAME
-          "prompt bar to understand and audit previous workflows that were done and make things portfolio fit analysis..."
+          BOTTOM PROMPT BAR
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
+      <div className="bg-white border border-slate-200/80 rounded-xl p-2.5 sm:p-3 shadow-xs space-y-2 shrink-0">
         <form onSubmit={handlePromptSubmit} className="flex items-center gap-2">
-          <div className="relative flex-1 flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-xl transition-all">
+          <div className="relative flex-1 flex items-center bg-white border border-slate-200 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-500/20 rounded-xl transition-all shadow-2xs">
             <span className="pl-3.5 pr-1.5 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1.5">
               <Terminal className="w-4 h-4 text-blue-600" />
             </span>
@@ -776,25 +768,25 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               type="text"
               value={promptBarText}
               onChange={(e) => setPromptBarText(e.target.value)}
-              placeholder="prompt bar to understand and audit previous workflows that were done and make things portfolio fit analysis..."
-              className="w-full py-2 pl-1 pr-10 text-xs sm:text-sm font-mono text-foreground placeholder:text-muted-foreground/80 bg-transparent focus:outline-hidden"
+              placeholder="Enter portfolio analysis query or command..."
+              className="w-full py-2 pl-1 pr-10 text-xs sm:text-sm font-mono text-slate-900 placeholder:text-slate-400 bg-transparent focus:outline-hidden"
             />
           </div>
           <Button
             type="submit"
             disabled={isPromptRunning || !promptBarText.trim()}
-            className="h-10 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
+            className="h-10 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-mono rounded-xl font-semibold gap-1.5 shadow-xs shrink-0"
           >
             {isPromptRunning ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-            <span>Analyze Portfolio Fit</span>
+            <span>Analyze</span>
           </Button>
         </form>
 
         {/* Prompt Output Card */}
         {promptResult && (
-          <div className="p-3 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
-            <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-slate-400 text-[11px]">
-              <span className="text-emerald-400 font-bold"># PORTFOLIO FIT INTELLIGENCE RESPONSE</span>
+          <div className="p-3.5 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs space-y-2 shadow-md animate-in fade-in">
+            <div className="flex items-center justify-between pb-1 text-slate-400 text-[11px]">
+              <span className="text-blue-400 font-bold"># PORTFOLIO FIT INTELLIGENCE RESPONSE</span>
               <button
                 type="button"
                 onClick={() => setPromptResult(null)}
@@ -811,43 +803,33 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
       </div>
 
       {/* =========================================================================
-          TRADE EXECUTION & RISK RESTRICTIONS MODAL (Image 3)
-          - Header: Trade execution
-          - Top right: mark in some format (e.g. SEC 15c3-5 / FIX 4.4)
-          - Time and other parameters: Autonomy / Human / Gateway
-          - Risk Management: Max risk index / Max sector exposure / Max single asset
-          - Action: Publish limits and trade
+          TRADE EXECUTION & RISK RESTRICTIONS MODAL
          ========================================================================= */}
       {isExecutionModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#f2eae1] text-slate-900 border-2 border-stone-300 rounded-3xl shadow-2xl w-full max-w-xl p-6 sm:p-7 space-y-5 animate-in zoom-in-95 font-mono">
+        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-white text-slate-900 border border-slate-200 rounded-2xl shadow-xl w-full max-w-xl p-6 space-y-5 animate-in zoom-in-95 font-mono">
             
-            {/* Header matching Image 3 sketch */}
-            <div className="flex items-start justify-between border-b border-stone-300/80 pb-3">
+            {/* Header */}
+            <div className="flex items-start justify-between">
               <div>
-                <h3 className="text-base sm:text-lg font-bold font-mono tracking-tight text-slate-950">
-                  Trade execution
+                <h3 className="text-base sm:text-lg font-bold font-mono tracking-tight text-slate-900">
+                  Trade Execution
                 </h3>
-                <p className="text-xs text-stone-600 font-sans mt-0.5">
-                  Algorithmic routing constraints and pre-trade regulatory restrictions
-                </p>
               </div>
 
-              {/* Top right: "mark in some format" */}
               <div className="text-right">
-                <span className="px-2.5 py-1 rounded-lg bg-stone-200/90 border border-stone-400 text-[10px] font-mono font-bold text-slate-800">
+                <span className="px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-[10px] font-mono font-semibold text-slate-700">
                   SEC 15c3-5 / FIX 4.4 DMA
                 </span>
-                <span className="text-[9px] text-stone-500 block mt-0.5">mark in some format</span>
               </div>
             </div>
 
             <form onSubmit={handlePublishLimitsAndTrade} className="space-y-4">
               
-              {/* Section 1: Time and other parameters to be added (Rows with Autonomy, Human, Gateway buttons) */}
-              <div className="space-y-3">
-                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  Time and other parameters to be added
+              {/* Section 1: Execution Parameters */}
+              <div className="space-y-3 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/70 shadow-2xs">
+                <div className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Execution Parameters
                 </div>
 
                 {/* Row 1: Time / TWAP execution window + [Autonomy] Button */}
@@ -857,18 +839,18 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={executionTimeParam}
                       onChange={(e) => setExecutionTimeParam(e.target.value)}
-                      placeholder="e.g. TWAP 09:30 - 16:00 EST / 45-min interval"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      placeholder="TWAP 09:30 - 16:00 EST / 45-min interval"
+                      className="h-9.5 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900 focus-visible:ring-blue-500"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setAutonomyMode(autonomyMode === 'Autonomous' ? 'Semi-Autonomous' : 'Autonomous')}
-                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                    className={`h-9.5 px-3.5 rounded-lg text-xs font-mono font-semibold shrink-0 border-slate-200 ${
                       autonomyMode === 'Autonomous'
-                        ? 'bg-stone-900 text-white hover:bg-stone-800'
-                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                        ? 'bg-blue-600 text-white hover:bg-blue-700'
+                        : 'bg-white text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     Autonomy ({autonomyMode})
@@ -882,18 +864,18 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={humanSupervisor}
                       onChange={(e) => setHumanSupervisor(e.target.value)}
-                      placeholder="e.g. Alexander Vance (PM) & Risk Officer"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      placeholder="Alexander Vance (PM) & Risk Officer"
+                      className="h-9.5 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900 focus-visible:ring-blue-500"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setHumanApprovalRequired(!humanApprovalRequired)}
-                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                    className={`h-9.5 px-3.5 rounded-lg text-xs font-mono font-semibold shrink-0 border-slate-200 ${
                       humanApprovalRequired
-                        ? 'bg-purple-700 text-white hover:bg-purple-800'
-                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                        ? 'bg-slate-900 text-white hover:bg-slate-800'
+                        : 'bg-white text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     Human ({humanApprovalRequired ? 'Dual Sign-off' : 'Auto'})
@@ -907,30 +889,30 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={gatewayParam}
                       onChange={(e) => setGatewayParam(e.target.value)}
-                      placeholder="e.g. NY4 FIX 4.4 Ultra-Low Latency DMA"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      placeholder="NY4 FIX 4.4 Ultra-Low Latency DMA"
+                      className="h-9.5 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900 focus-visible:ring-blue-500"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setGatewayProtocol(gatewayProtocol === 'DMA FIX' ? 'Smart Router' : 'DMA FIX')}
-                    className="h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 bg-stone-900 text-white hover:bg-stone-800 border-stone-300"
+                    className="h-9.5 px-3.5 rounded-lg text-xs font-mono font-semibold shrink-0 bg-slate-900 text-white hover:bg-slate-800 border-slate-200"
                   >
                     Gateway ({gatewayProtocol})
                   </Button>
                 </div>
               </div>
 
-              {/* Section 2: Risk Management Restrictions (Image 3) */}
-              <div className="space-y-3 pt-2 border-t border-stone-300/80">
-                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
-                  Risk Management
+              {/* Section 2: Risk Management Restrictions */}
+              <div className="space-y-3 bg-slate-50/80 p-3.5 rounded-xl border border-slate-200/70 shadow-2xs">
+                <div className="text-xs font-bold text-slate-800 uppercase tracking-wider">
+                  Risk Management Limits
                 </div>
 
                 {/* Maximum risk index */}
                 <div className="flex items-center justify-between gap-4">
-                  <label className="text-xs font-mono font-medium text-slate-900 flex-1">
+                  <label className="text-xs font-mono font-medium text-slate-700 flex-1">
                     Maximum risk index
                   </label>
                   <div className="w-48 sm:w-56">
@@ -938,20 +920,17 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={maxRiskIndex}
                       onChange={(e) => setMaxRiskIndex(e.target.value)}
-                      placeholder="e.g. 1.25% 1-Day VaR 95%"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      placeholder="1.25% 1-Day VaR 95%"
+                      className="h-9 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900"
                     />
                   </div>
                 </div>
 
-                {/* Max sector exposure: Share of NAV in one GICS sector */}
+                {/* Max sector exposure */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
-                    <div className="text-xs font-mono font-medium text-slate-900">
+                    <div className="text-xs font-mono font-medium text-slate-700">
                       Max sector exposure
-                    </div>
-                    <div className="text-[10px] text-stone-600 font-sans">
-                      Share of NAV in one GICS sector
                     </div>
                   </div>
                   <div className="w-48 sm:w-56">
@@ -959,20 +938,17 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={maxSectorExposure}
                       onChange={(e) => setMaxSectorExposure(e.target.value)}
-                      placeholder="e.g. 15.0% Share of NAV"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      placeholder="15.0% Share of NAV"
+                      className="h-9 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900"
                     />
                   </div>
                 </div>
 
-                {/* Max single asset exposure: Share of NAV in one asset */}
+                {/* Max single asset exposure */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
-                    <div className="text-xs font-mono font-medium text-slate-900">
+                    <div className="text-xs font-mono font-medium text-slate-700">
                       Max single asset exposure
-                    </div>
-                    <div className="text-[10px] text-stone-600 font-sans">
-                      Share of NAV in one stock / instrument
                     </div>
                   </div>
                   <div className="w-48 sm:w-56">
@@ -980,28 +956,28 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       type="text"
                       value={maxSingleAssetExposure}
                       onChange={(e) => setMaxSingleAssetExposure(e.target.value)}
-                      placeholder="e.g. 5.0% Single Asset NAV"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      placeholder="5.0% Single Asset NAV"
+                      className="h-9 text-xs font-mono bg-white border-slate-200 rounded-lg text-slate-900"
                     />
                   </div>
                 </div>
               </div>
 
-              {/* Bottom Action Buttons: Cancel and "Publish limits and trade" */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-300/80">
+              {/* Bottom Action Buttons */}
+              <div className="flex items-center justify-end gap-2.5 pt-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsExecutionModalOpen(false)}
-                  className="h-10 px-4 text-xs font-mono border-stone-300 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
+                  className="h-9.5 px-4 text-xs font-mono border-slate-200 bg-white hover:bg-slate-50 text-slate-700 rounded-lg"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="h-10 px-6 text-xs font-mono font-bold bg-stone-900 hover:bg-stone-800 text-white rounded-xl shadow-xs transition-all hover:scale-[1.01]"
+                  className="h-9.5 px-6 text-xs font-mono font-semibold bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow-xs transition-all"
                 >
-                  Publish limits and trade
+                  Publish Limits &amp; Trade
                 </Button>
               </div>
 
