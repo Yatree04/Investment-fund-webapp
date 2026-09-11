@@ -104,13 +104,13 @@ export const SidePanel: React.FC<SidePanelProps> = ({
       {/* Mobile Backdrop */}
       {isOpenMobile && (
         <div 
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden backdrop-blur-xs"
+          className="fixed inset-0 bg-secondary/40 z-40 lg:hidden backdrop-blur-xs"
           onClick={onCloseMobile}
         />
       )}
 
       <aside
-        className={`fixed lg:static top-0 left-0 bottom-0 z-40 bg-white border-r border-border flex flex-col justify-between transition-all duration-200 ease-in-out shrink-0 select-none ${
+        className={`fixed lg:static top-0 left-0 bottom-0 z-40 bg-sidebar text-sidebar-foreground border-r border-sidebar-border flex flex-col justify-between transition-all duration-200 ease-in-out shrink-0 select-none ${
           isOpenMobile 
             ? 'translate-x-0 w-64' 
             : '-translate-x-full lg:translate-x-0 ' + (isCollapsed ? 'w-14' : 'w-60')
@@ -142,7 +142,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
               <button
                 onClick={onToggleCollapse}
                 title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-                className={`hidden lg:flex p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-slate-50 transition-colors ${
+                className={`hidden lg:flex p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors ${
                   isCollapsed ? 'hidden' : 'flex'
                 }`}
                 aria-label={isCollapsed ? 'Expand navigation' : 'Collapse navigation'}
@@ -168,7 +168,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
               <button
                 onClick={onToggleCollapse}
                 title="Expand sidebar"
-                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-slate-50 transition-colors"
+                className="p-1.5 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
                 aria-label="Expand navigation"
               >
                 <ChevronRight className="w-4 h-4 text-primary" />
@@ -199,11 +199,11 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                       : 'gap-3 px-3 py-2.5 text-left'
                   } ${
                     isActive
-                      ? 'bg-primary text-primary-foreground font-semibold shadow-xs'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'
+                      ? 'bg-sidebar-primary text-sidebar-primary-foreground font-semibold'
+                      : 'text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-sidebar-primary-foreground' : 'text-sidebar-foreground'}`} />
                   {!isCollapsed && <span className="truncate">{item.label}</span>}
                 </button>
               );
@@ -216,14 +216,14 @@ export const SidePanel: React.FC<SidePanelProps> = ({
             - Settings
             - Yatri Patel / Portfolio Manager avatar row
         */}
-        <div className={`border-t border-border shrink-0 bg-white ${isCollapsed ? 'p-2 space-y-2' : 'p-3 space-y-2'}`}>
+        <div className={`border-t border-border shrink-0 bg-sidebar ${isCollapsed ? 'p-2 space-y-2' : 'p-3 space-y-2'}`}>
           {!isCollapsed ? (
             <div className="space-y-1.5" ref={portfolioMenuRef}>
               {/* Switch portfolio button */}
               <div className="relative">
                 <button
                   onClick={() => setIsPortfolioMenuOpen(!isPortfolioMenuOpen)}
-                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-foreground bg-white hover:bg-slate-50 rounded-md border border-border transition-colors"
+                  className="w-full flex items-center justify-between px-3 py-2 text-xs font-medium text-foreground bg-card hover:bg-muted rounded-md border border-border transition-colors"
                 >
                   <span className="truncate">Switch portfolio</span>
                   <ChevronUp className={`w-4 h-4 text-muted-foreground transition-transform ${isPortfolioMenuOpen ? 'rotate-180' : ''}`} />
@@ -231,7 +231,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
 
                 {/* Portfolio selector popover */}
                 {isPortfolioMenuOpen && (
-                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-white border border-border rounded-lg shadow-lg p-1.5 z-50 animate-in fade-in-50 space-y-1">
+                  <div className="absolute bottom-full left-0 right-0 mb-1 bg-popover border border-border rounded-lg shadow-lg p-1.5 z-50 animate-in fade-in-50 space-y-1">
                     <div className="px-2 py-1 text-[10px] font-mono text-muted-foreground uppercase tracking-wider">
                       Available Funds
                     </div>
@@ -244,8 +244,8 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                         }}
                         className={`w-full flex items-center justify-between px-2 py-1.5 rounded text-xs text-left transition-colors ${
                           f.id === selectedFundId 
-                            ? 'bg-primary/10 text-primary font-semibold' 
-                            : 'hover:bg-slate-50 text-foreground'
+                            ? 'bg-sidebar-accent text-sidebar-accent-foreground font-semibold' 
+                            : 'hover:bg-muted text-foreground'
                         }`}
                       >
                         <div className="truncate">
@@ -272,7 +272,7 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                   Portfolio Manager
               */}
               <div className="pt-2 border-t border-border flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center shrink-0 font-bold text-xs font-mono">
+                <div className="w-8 h-8 rounded-full bg-sidebar-accent text-sidebar-accent-foreground border border-border flex items-center justify-center shrink-0 font-bold text-xs font-mono">
                   YP
                 </div>
                 <div className="overflow-hidden min-w-0">
@@ -290,13 +290,13 @@ export const SidePanel: React.FC<SidePanelProps> = ({
               <button
                 onClick={onOpenSettings}
                 title="Settings"
-                className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-slate-50"
+                className="p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-muted"
               >
                 <Settings className="w-4 h-4" />
               </button>
               <div 
                 title="Yatri Patel (Portfolio Manager)"
-                className="w-8 h-8 rounded-full bg-primary/15 text-primary flex items-center justify-center font-bold text-xs font-mono"
+                className="w-8 h-8 rounded-full bg-sidebar-accent text-sidebar-accent-foreground border border-border flex items-center justify-center font-bold text-xs font-mono"
               >
                 YP
               </div>

@@ -201,22 +201,22 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-5">
       {/* Dimmed backdrop */}
       <div 
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-150"
+        className="fixed inset-0 bg-secondary/40 backdrop-blur-xs transition-opacity animate-in fade-in duration-150"
         onClick={onClose}
       />
 
       {/* Main Command Modal Card matching wireframe image */}
-      <Card className="relative w-full max-w-2xl bg-white border-2 border-blue-400/60 rounded-2xl shadow-2xl z-10 flex flex-col max-h-[88vh] overflow-hidden animate-in zoom-in-95 duration-150 p-0 gap-0">
+      <Card className="relative w-full max-w-2xl bg-popover border-2 border-primary/60 rounded-2xl shadow-2xl z-10 flex flex-col max-h-[88vh] overflow-hidden animate-in zoom-in-95 duration-150 p-0 gap-0">
         
         {/* =========================================================================
             HEADER BAR: Clean & minimal matching wireframe
             Left: "parent agent called" rounded pill
             Right: Version History dropdown & Circular Close button
            ========================================================================= */}
-        <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-border bg-white gap-2">
+        <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-border bg-card gap-2">
           {/* Top Left: "parent agent called" wireframe pill */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-blue-400/60 bg-white text-blue-700 font-mono text-xs font-semibold shadow-2xs">
-            <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/60 bg-card text-accent-foreground font-mono text-xs font-semibold shadow-2xs">
+            <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
             <span>parent agent called</span>
           </div>
 
@@ -229,44 +229,44 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => setShowVersionHistory(!showVersionHistory)}
-                className="h-7 text-[11px] font-mono gap-1 px-2.5 border-border bg-white hover:bg-slate-50 text-foreground shadow-none"
+                className="h-7 text-[11px] font-mono gap-1 px-2.5 border-border bg-card hover:bg-muted text-foreground shadow-none"
                 title="View agent version history"
               >
-                <History className="w-3 h-3 text-blue-600" />
+                <History className="w-3 h-3 text-primary" />
                 <span>Version History</span>
                 <ChevronDown className="w-2.5 h-2.5 text-muted-foreground" />
               </Button>
 
               {/* Version History & Diagnostics Popover */}
               {showVersionHistory && (
-                <div className="absolute right-0 top-full mt-1.5 w-72 bg-white border border-border rounded-xl shadow-xl z-50 p-3 text-xs animate-in fade-in-50">
+                <div className="absolute right-0 top-full mt-1.5 w-72 bg-popover border border-border rounded-xl shadow-xl z-50 p-3 text-xs animate-in fade-in-50">
                   <div className="flex items-center justify-between pb-2 border-b border-border mb-2.5">
                     <span className="font-bold text-foreground font-mono">Agent Environment</span>
-                    <Badge variant="outline" className="text-[9px] bg-white text-emerald-700 border-emerald-300">
+                    <Badge variant="outline" className="text-[9px] bg-card text-foreground border-border">
                       LIVE
                     </Badge>
                   </div>
 
                   {/* Sub-tabs for detailed inspection */}
-                  <div className="flex items-center gap-1 mb-2.5 p-0.5 bg-white border border-border rounded-lg text-[10px] font-mono">
+                  <div className="flex items-center gap-1 mb-2.5 p-0.5 bg-card border border-border rounded-lg text-[10px] font-mono">
                     <button
                       type="button"
                       onClick={() => setHistoryTab('versions')}
-                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'versions' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'}`}
+                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'versions' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
                     >
                       Versions
                     </button>
                     <button
                       type="button"
                       onClick={() => setHistoryTab('logs')}
-                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'logs' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'}`}
+                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'logs' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
                     >
                       Parent Logs
                     </button>
                     <button
                       type="button"
                       onClick={() => setHistoryTab('merge')}
-                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'merge' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'}`}
+                      className={`flex-1 py-1 rounded-md transition-colors ${historyTab === 'merge' ? 'bg-primary text-primary-foreground font-bold shadow-2xs' : 'text-muted-foreground hover:text-foreground hover:bg-muted'}`}
                     >
                       Merge Props
                     </button>
@@ -287,8 +287,8 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                           }}
                           className={`p-2 rounded-lg cursor-pointer border transition-colors ${
                             v.current
-                              ? 'bg-blue-50/70 border-blue-400/60 text-foreground'
-                              : 'bg-white border-border hover:bg-slate-50 text-muted-foreground'
+                              ? 'bg-accent/70 border-primary/60 text-foreground'
+                              : 'bg-card border-border hover:bg-muted text-muted-foreground'
                           }`}
                         >
                           <div className="flex items-center justify-between font-mono font-bold text-[11px]">
@@ -302,28 +302,28 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                   )}
 
                   {historyTab === 'logs' && (
-                    <div className="space-y-1 text-[10px] font-mono leading-relaxed text-muted-foreground max-h-48 overflow-y-auto p-1 bg-white">
-                      <p><span className="text-blue-600">[10:42:01.002]</span> Orchestrator loop initialized.</p>
-                      <p><span className="text-blue-600">[10:42:01.034]</span> Subscribed to NY4 pricing feed.</p>
-                      <p><span className="text-emerald-600">[10:42:01.120]</span> Dispatched sub-agent DAG task.</p>
-                      <p><span className="text-emerald-600">[10:42:01.214]</span> DAG execution branch merged.</p>
-                      <p><span className="text-blue-600">[10:42:01.240]</span> 4/4 compliance gates cleared.</p>
+                    <div className="space-y-1 text-[10px] font-mono leading-relaxed text-muted-foreground max-h-48 overflow-y-auto p-1 bg-card">
+                      <p><span className="text-primary">[10:42:01.002]</span> Orchestrator loop initialized.</p>
+                      <p><span className="text-primary">[10:42:01.034]</span> Subscribed to NY4 pricing feed.</p>
+                      <p><span className="text-chart-4">[10:42:01.120]</span> Dispatched sub-agent DAG task.</p>
+                      <p><span className="text-chart-4">[10:42:01.214]</span> DAG execution branch merged.</p>
+                      <p><span className="text-primary">[10:42:01.240]</span> 4/4 compliance gates cleared.</p>
                     </div>
                   )}
 
                   {historyTab === 'merge' && (
                     <div className="space-y-1.5 text-[10px] font-mono max-h-48 overflow-y-auto p-1">
-                      <div className="p-1.5 rounded bg-white border border-border">
+                      <div className="p-1.5 rounded bg-card border border-border">
                         <span className="text-muted-foreground block text-[9px]">Policy:</span>
                         <span className="font-semibold text-foreground">Factor Covariance Union</span>
                       </div>
-                      <div className="p-1.5 rounded bg-white border border-border">
+                      <div className="p-1.5 rounded bg-card border border-border">
                         <span className="text-muted-foreground block text-[9px]">Conflict Rule:</span>
                         <span className="font-semibold text-foreground">Highest Sharpe Weighting</span>
                       </div>
-                      <div className="p-1.5 rounded bg-white border border-border">
+                      <div className="p-1.5 rounded bg-card border border-border">
                         <span className="text-muted-foreground block text-[9px]">Gate Constraint:</span>
-                        <span className="font-semibold text-emerald-600">Daily VaR &lt; 1.50%</span>
+                        <span className="font-semibold text-chart-4">Daily VaR &lt; 1.50%</span>
                       </div>
                     </div>
                   )}
@@ -335,7 +335,7 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
             <button
               type="button"
               onClick={onClose}
-              className="w-7 h-7 rounded-full border border-border bg-white flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 transition-colors"
+              className="w-7 h-7 rounded-full border border-border bg-card flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               aria-label="Close"
               title="Close frame"
             >
@@ -349,13 +349,13 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
             Right: "prompt" blue bubble
             Below: "Agent response" large rounded container
            ========================================================================= */}
-        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 min-h-[300px] max-h-[500px] flex-1 bg-white">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4 min-h-[300px] max-h-[500px] flex-1 bg-card">
           {messages.map((msg) => {
             if (msg.sender === 'user') {
               // Right-aligned blue pill matching wireframe [ prompt ]
               return (
                 <div key={msg.id} className="flex flex-col items-end my-2">
-                  <div className="bg-blue-600 hover:bg-blue-700 transition-colors text-white font-mono rounded-2xl px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-medium shadow-xs max-w-[85%] text-right">
+                  <div className="bg-primary hover:bg-primary transition-colors text-primary-foreground font-mono rounded-2xl px-4 sm:px-5 py-2.5 text-xs sm:text-sm font-medium shadow-xs max-w-[85%] text-right">
                     {msg.text}
                   </div>
                 </div>
@@ -366,8 +366,8 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
             return (
               <div key={msg.id} className="flex flex-col items-start my-2 w-full">
                 {/* Large rounded box with clean wireframe border */}
-                <div className="w-full rounded-2xl border-2 border-blue-400/50 bg-white p-4 sm:p-5 text-xs sm:text-sm font-mono leading-relaxed transition-all shadow-xs space-y-3">
-                  <div className="font-semibold text-blue-600 text-xs font-mono">
+                <div className="w-full rounded-2xl border-2 border-primary/50 bg-card p-4 sm:p-5 text-xs sm:text-sm font-mono leading-relaxed transition-all shadow-xs space-y-3">
+                  <div className="font-semibold text-primary text-xs font-mono">
                     Agent response
                   </div>
 
@@ -379,9 +379,9 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                   {msg.metrics && msg.metrics.length > 0 && (
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-border">
                       {msg.metrics.map((m, i) => (
-                        <div key={i} className="p-2 rounded-lg bg-white border border-border text-[11px] shadow-2xs">
+                        <div key={i} className="p-2 rounded-lg bg-card border border-border text-[11px] shadow-2xs">
                           <span className="text-[10px] text-muted-foreground block">{m.label}</span>
-                          <span className={`font-bold font-mono text-xs ${m.positive ? 'text-emerald-700' : 'text-foreground'}`}>
+                          <span className={`font-bold font-mono text-xs ${m.positive ? 'text-foreground' : 'text-foreground'}`}>
                             {m.value}
                           </span>
                         </div>
@@ -392,13 +392,13 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                   {/* Actions row */}
                   <div className="pt-2 border-t border-border/60 flex items-center justify-between text-[11px] text-muted-foreground">
                     <span className="flex items-center gap-1">
-                      <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                      <ShieldCheck className="w-3.5 h-3.5 text-chart-4" />
                       <span>Risk Gates Verified</span>
                     </span>
                     <button
                       type="button"
                       onClick={() => handleSendQuery('Rebalance portfolio now')}
-                      className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-0.5"
+                      className="text-primary hover:text-accent-foreground font-semibold flex items-center gap-0.5"
                     >
                       <span>Simulate in OMS</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
@@ -410,7 +410,7 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
           })}
 
           {isProcessing && (
-            <div className="flex items-center gap-2 text-xs font-mono text-blue-600 py-2 px-1">
+            <div className="flex items-center gap-2 text-xs font-mono text-primary py-2 px-1">
               <RefreshCw className="w-3.5 h-3.5 animate-spin" />
               <span>Parent Agent evaluating portfolio parameters and compiling response...</span>
             </div>
@@ -422,7 +422,7 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
         {/* =========================================================================
             BOTTOM INPUT BAR: Matching wireframe [ Type here             ↗ ]
            ========================================================================= */}
-        <div className="p-3 sm:p-4 border-t border-border bg-white">
+        <div className="p-3 sm:p-4 border-t border-border bg-card">
           <form onSubmit={handleSubmit} className="relative flex items-center gap-2">
             <div className="relative flex-1 flex items-center">
               <Input
@@ -431,15 +431,15 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 placeholder="Type here"
-                className="w-full font-mono text-xs sm:text-sm h-10 pl-3.5 pr-10 bg-white border-2 border-blue-400/50 rounded-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-blue-400 shadow-2xs"
+                className="w-full font-mono text-xs sm:text-sm h-10 pl-3.5 pr-10 bg-card border-2 border-primary/50 rounded-xl text-foreground placeholder:text-muted-foreground focus-visible:ring-1 focus-visible:ring-ring shadow-2xs"
               />
               <button
                 type="submit"
                 disabled={!inputText.trim() || isProcessing}
-                className="absolute right-2 p-1.5 rounded-lg text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-950/50 disabled:opacity-40 transition-colors"
+                className="absolute right-2 p-1.5 rounded-lg text-primary hover:bg-accent dark:hover:bg-muted/50 disabled:opacity-40 transition-colors"
                 title="Submit command"
               >
-                <ArrowUpRight className="w-4 h-4 text-blue-600" />
+                <ArrowUpRight className="w-4 h-4 text-primary" />
               </button>
             </div>
 
@@ -447,7 +447,7 @@ export const AgentCommandModal: React.FC<AgentCommandModalProps> = ({
               type="submit"
               disabled={!inputText.trim() || isProcessing}
               size="default"
-              className="h-10 px-4 shrink-0 font-mono font-medium rounded-xl bg-blue-600 hover:bg-blue-700 text-white gap-1.5"
+              className="h-10 px-4 shrink-0 font-mono font-medium rounded-xl bg-primary hover:bg-primary text-primary-foreground gap-1.5"
             >
               <span>Send</span>
               <Send className="w-3.5 h-3.5" />

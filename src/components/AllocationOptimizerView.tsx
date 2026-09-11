@@ -276,7 +276,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
   };
 
   return (
-    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-slate-50/50 p-2 sm:p-3">
+    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-muted/50 p-2 sm:p-3">
       
       {/* =========================================================================
           TOP COMMAND & HEADER BAR MATCHING SKETCH
@@ -284,13 +284,13 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           - Sub-bar: [Current portfolio and market]
           - Right Tabs: [Data and analysis] [Portfolio stimulation Model 1] [Portfolio stimulation Model 2]
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
+      <div className="bg-card border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
         
         {/* Left: /agent bar */}
         <div className="flex items-center gap-2 flex-1 max-w-md">
-          <div className="relative w-full flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-lg transition-all">
-            <span className="pl-3 pr-1 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+          <div className="relative w-full flex items-center bg-muted hover:bg-card border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-ring/30 rounded-lg transition-all">
+            <span className="pl-3 pr-1 text-primary font-mono text-xs font-semibold flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
             </span>
             <input
               type="text"
@@ -303,7 +303,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             <button
               type="button"
               onClick={handlePromptSubmit}
-              className="absolute right-2 p-1 rounded text-blue-600 hover:bg-blue-50"
+              className="absolute right-2 p-1 rounded text-primary hover:bg-accent"
               title="Execute /agent search"
             >
               <Search className="w-3.5 h-3.5" />
@@ -318,8 +318,8 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             onClick={() => setActiveSubTab('data-analysis')}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'data-analysis'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-chart-4 text-secondary font-bold border-chart-4 shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted/50 border-border'
             }`}
           >
             <BarChart2 className="w-3.5 h-3.5" />
@@ -332,8 +332,8 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             onClick={() => setActiveSubTab('sim-model-1')}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'sim-model-1'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-chart-4 text-secondary font-bold border-chart-4 shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted/50 border-border'
             }`}
           >
             <LineChartIcon className="w-3.5 h-3.5" />
@@ -346,8 +346,8 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             onClick={() => setActiveSubTab('sim-model-2')}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1.5 ${
               activeSubTab === 'sim-model-2'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-800 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-chart-4 text-secondary font-bold border-chart-4 shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted/50 border-border'
             }`}
           >
             <Zap className="w-3.5 h-3.5" />
@@ -362,7 +362,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             type="button"
             size="sm"
             onClick={() => setIsExecutionModalOpen(true)}
-            className="h-8 px-3 text-xs font-mono font-bold bg-purple-600 hover:bg-purple-700 text-white rounded-lg gap-1.5 shadow-2xs"
+            className="h-8 px-3 text-xs font-mono font-bold bg-chart-2 hover:bg-chart-2 text-secondary rounded-lg gap-1.5 shadow-2xs"
           >
             <Lock className="w-3.5 h-3.5" />
             <span>Restrictions &amp; Trade Limits</span>
@@ -373,12 +373,12 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
       {/* Success Notification Banner */}
       {publishSuccessNotice && (
-        <div className="px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in">
+        <div className="px-3 py-2 bg-muted border border-border text-foreground rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in">
           <div className="flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+            <CheckCircle2 className="w-4 h-4 text-chart-4" />
             <span>{publishSuccessNotice}</span>
           </div>
-          <Badge className="bg-emerald-600 text-white text-[10px] font-mono">
+          <Badge className="bg-chart-4 text-secondary text-[10px] font-mono">
             PUBLISHED &amp; ROUTED
           </Badge>
         </div>
@@ -387,8 +387,8 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
       {/* Sub-Header Tag: "Current portfolio and market" */}
       <div className="flex items-center justify-between px-1">
         <div className="flex items-center gap-2">
-          <span className="px-2.5 py-0.5 bg-white border border-border rounded-lg text-xs font-mono font-bold text-foreground shadow-2xs flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="px-2.5 py-0.5 bg-card border border-border rounded-lg text-xs font-mono font-bold text-foreground shadow-2xs flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-chart-4 animate-pulse" />
             <span>Current portfolio and market</span>
           </span>
           <span className="text-[11px] font-mono text-muted-foreground">
@@ -402,7 +402,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           Left: 3 Stacked Cards (Market stats / Portfolio monitoring)
           Right: Dynamic Canvas (Data & Analysis OR Portfolio Simulation 3x3 Grid)
          ========================================================================= */}
-      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
+      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-card shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
         
         {/* =========================================================================
             LEFT COLUMN: 3 STACKED CARDS MATCHING WIREFRAME
@@ -410,52 +410,52 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             Card 2: Market stats (Factor Loadings / Volatility)
             Card 3: Market stats (Asset Distribution & Liquidity)
            ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0 space-y-3">
+        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-muted/40 overflow-y-auto min-h-0 space-y-3">
           
           {/* Card 1: Market stats or Portfolio monitoring */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          <div className="rounded-xl border-2 border-border bg-card p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-1.5">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-chart-4" />
+                <span className="font-mono text-xs font-bold text-foreground uppercase tracking-tight">
                   {activeSubTab === 'data-analysis' ? 'Market stats (Index & Rates)' : 'Portfolio monitoring (Live)'}
                 </span>
               </div>
-              <Badge variant="outline" className="bg-emerald-50 text-emerald-800 border-emerald-300 text-[9px] font-mono">
+              <Badge variant="outline" className="bg-muted text-foreground border-border text-[9px] font-mono">
                 {activeSubTab === 'data-analysis' ? 'S&P 500: 5,852.4' : 'Sharpe 2.84'}
               </Badge>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+              <div className="bg-muted p-2 rounded-lg border border-border/60">
                 <span className="text-[9px] uppercase text-muted-foreground block">1-Year Return</span>
-                <span className="text-sm font-bold text-emerald-600">+22.4%</span>
+                <span className="text-sm font-bold text-chart-4">+22.4%</span>
                 <span className="text-[9px] text-muted-foreground block">+4.2% vs Benchmark</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+              <div className="bg-muted p-2 rounded-lg border border-border/60">
                 <span className="text-[9px] uppercase text-muted-foreground block">95% Daily VaR</span>
                 <span className="text-sm font-bold text-foreground">1.14%</span>
-                <span className="text-[9px] text-emerald-600 block">Below 1.25% Cap</span>
+                <span className="text-[9px] text-chart-4 block">Below 1.25% Cap</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+              <div className="bg-muted p-2 rounded-lg border border-border/60">
                 <span className="text-[9px] uppercase text-muted-foreground block">Net Beta Tilt</span>
                 <span className="text-sm font-bold text-foreground">0.008</span>
-                <span className="text-[9px] text-emerald-600 block">Market Neutral</span>
+                <span className="text-[9px] text-chart-4 block">Market Neutral</span>
               </div>
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60">
+              <div className="bg-muted p-2 rounded-lg border border-border/60">
                 <span className="text-[9px] uppercase text-muted-foreground block">VIX Implied Vol</span>
-                <span className="text-sm font-bold text-purple-700">14.82</span>
+                <span className="text-sm font-bold text-foreground">14.82</span>
                 <span className="text-[9px] text-muted-foreground block">Skew: 2.4σ Rich</span>
               </div>
             </div>
           </div>
 
           {/* Card 2: Market stats (Factor & Sector Dynamics) */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          <div className="rounded-xl border-2 border-border bg-card p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-1.5">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-blue-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-primary" />
+                <span className="font-mono text-xs font-bold text-foreground uppercase tracking-tight">
                   Market stats (Factor Loadings)
                 </span>
               </div>
@@ -464,18 +464,18 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
             <div className="space-y-1.5 text-xs font-mono">
               {[
-                { factor: 'Momentum Factor', score: '+1.84σ', color: 'text-emerald-600', fill: '85%' },
-                { factor: 'Volatility Skew Premia', score: '+2.40σ', color: 'text-purple-600', fill: '92%' },
-                { factor: 'Value vs Growth Spread', score: '-0.38σ', color: 'text-amber-600', fill: '40%' },
-                { factor: 'Quality & Balance Sheet', score: '+1.12σ', color: 'text-blue-600', fill: '68%' },
+                { factor: 'Momentum Factor', score: '+1.84σ', color: 'text-chart-4', fill: '85%' },
+                { factor: 'Volatility Skew Premia', score: '+2.40σ', color: 'text-chart-2', fill: '92%' },
+                { factor: 'Value vs Growth Spread', score: '-0.38σ', color: 'text-destructive', fill: '40%' },
+                { factor: 'Quality & Balance Sheet', score: '+1.12σ', color: 'text-primary', fill: '68%' },
               ].map((f, idx) => (
-                <div key={idx} className="bg-slate-50 p-1.5 rounded-lg border border-border/60 space-y-1">
+                <div key={idx} className="bg-muted p-1.5 rounded-lg border border-border/60 space-y-1">
                   <div className="flex items-center justify-between text-[11px]">
                     <span className="text-foreground font-medium">{f.factor}</span>
                     <span className={`font-bold ${f.color}`}>{f.score}</span>
                   </div>
-                  <div className="w-full bg-slate-200 h-1 rounded-full overflow-hidden">
-                    <div className="bg-emerald-500 h-full rounded-full" style={{ width: f.fill }} />
+                  <div className="w-full bg-muted h-1 rounded-full overflow-hidden">
+                    <div className="bg-chart-4 h-full rounded-full" style={{ width: f.fill }} />
                   </div>
                 </div>
               ))}
@@ -483,41 +483,41 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           </div>
 
           {/* Card 3: Market stats (Asset Allocation & Liquidity) */}
-          <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2">
-            <div className="flex items-center justify-between border-b border-emerald-100 pb-1.5">
+          <div className="rounded-xl border-2 border-border bg-card p-3 shadow-2xs space-y-2">
+            <div className="flex items-center justify-between border-b border-border pb-1.5">
               <div className="flex items-center gap-1.5">
-                <div className="w-2 h-2 rounded-full bg-purple-500" />
-                <span className="font-mono text-xs font-bold text-emerald-950 uppercase tracking-tight">
+                <div className="w-2 h-2 rounded-full bg-chart-2" />
+                <span className="font-mono text-xs font-bold text-foreground uppercase tracking-tight">
                   Market stats (Liquidity &amp; Asset Split)
                 </span>
               </div>
-              <span className="text-[10px] font-mono text-emerald-700 font-bold">100% Allocated</span>
+              <span className="text-[10px] font-mono text-foreground font-bold">100% Allocated</span>
             </div>
 
             <div className="space-y-1.5 text-xs font-mono">
               <div className="grid grid-cols-3 gap-1.5 text-center">
-                <div className="bg-emerald-50/80 p-1.5 rounded border border-emerald-200">
-                  <span className="text-[9px] uppercase text-emerald-800 block">Equities</span>
-                  <span className="text-xs font-bold text-emerald-950">58.0%</span>
+                <div className="bg-muted/80 p-1.5 rounded border border-border">
+                  <span className="text-[9px] uppercase text-foreground block">Equities</span>
+                  <span className="text-xs font-bold text-foreground">58.0%</span>
                 </div>
-                <div className="bg-purple-50/80 p-1.5 rounded border border-purple-200">
-                  <span className="text-[9px] uppercase text-purple-800 block">Options/Var</span>
-                  <span className="text-xs font-bold text-purple-950">24.0%</span>
+                <div className="bg-muted/80 p-1.5 rounded border border-border">
+                  <span className="text-[9px] uppercase text-foreground block">Options/Var</span>
+                  <span className="text-xs font-bold text-foreground">24.0%</span>
                 </div>
-                <div className="bg-blue-50/80 p-1.5 rounded border border-blue-200">
-                  <span className="text-[9px] uppercase text-blue-800 block">UST / Cash</span>
-                  <span className="text-xs font-bold text-blue-950">18.0%</span>
+                <div className="bg-accent/80 p-1.5 rounded border border-border">
+                  <span className="text-[9px] uppercase text-accent-foreground block">UST / Cash</span>
+                  <span className="text-xs font-bold text-accent-foreground">18.0%</span>
                 </div>
               </div>
 
-              <div className="bg-slate-50 p-2 rounded-lg border border-border/60 text-[10.5px] text-muted-foreground space-y-0.5">
+              <div className="bg-muted p-2 rounded-lg border border-border/60 text-[10.5px] text-muted-foreground space-y-0.5">
                 <div className="flex items-center justify-between">
                   <span>ADV Liquidity Utilization:</span>
                   <strong className="text-foreground font-mono">2.1% (Cap &lt;2.5%)</strong>
                 </div>
                 <div className="flex items-center justify-between">
                   <span>Slippage Model Impact:</span>
-                  <strong className="text-emerald-600 font-mono">0.18 bps</strong>
+                  <strong className="text-chart-4 font-mono">0.18 bps</strong>
                 </div>
               </div>
             </div>
@@ -541,8 +541,8 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                     onClick={() => setSelectedTimeframe(t)}
                     className={`px-3 py-1 rounded-lg text-xs font-mono font-semibold transition-all border ${
                       selectedTimeframe === t
-                        ? 'bg-slate-900 text-white border-slate-900 shadow-2xs'
-                        : 'bg-white text-muted-foreground hover:bg-slate-50 border-border'
+                        ? 'bg-secondary text-primary-foreground border-secondary shadow-2xs'
+                        : 'bg-card text-muted-foreground hover:bg-muted border-border'
                     }`}
                   >
                     {t}
@@ -552,34 +552,34 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
               <div className="flex items-center gap-2 text-xs font-mono text-muted-foreground">
                 <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-600 inline-block" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-chart-4 inline-block" />
                   Portfolio Trajectory
                 </span>
                 <span className="flex items-center gap-1">
-                  <span className="w-2.5 h-0.5 bg-slate-400 inline-block" />
+                  <span className="w-2.5 h-0.5 bg-muted inline-block" />
                   S&amp;P 500 Baseline
                 </span>
               </div>
             </div>
 
             {/* Main Interactive Growth / Trajectory Line Chart */}
-            <div className="h-56 sm:h-64 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+            <div className="h-56 sm:h-64 w-full bg-muted/50 p-2 rounded-xl border border-border/80 shadow-2xs">
               <ResponsiveContainer width="100%" height="100%">
                 <AreaChart data={dataAnalysisChartData}>
                   <defs>
                     <linearGradient id="dataAnalysisGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#059669" stopOpacity={0.35} />
-                      <stop offset="95%" stopColor="#059669" stopOpacity={0.0} />
+                      <stop offset="5%" stopColor="var(--chart-4)" stopOpacity={0.35} />
+                      <stop offset="95%" stopColor="var(--chart-4)" stopOpacity={0.0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
-                  <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 130]} />
-                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'var(--font-mono)' }} stroke="var(--muted-foreground)" />
+                  <YAxis tick={{ fontSize: 10, fontFamily: 'var(--font-mono)' }} stroke="var(--muted-foreground)" domain={[95, 130]} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'var(--font-mono)', borderRadius: '8px' }} />
                   <Area 
                     type="monotone" 
                     dataKey="nav" 
-                    stroke="#059669" 
+                    stroke="var(--chart-4)" 
                     strokeWidth={2.5} 
                     fillOpacity={1} 
                     fill="url(#dataAnalysisGrad)" 
@@ -588,7 +588,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                   <Line 
                     type="monotone" 
                     dataKey="benchmark" 
-                    stroke="#64748b" 
+                    stroke="var(--muted-foreground)" 
                     strokeWidth={1.75} 
                     strokeDasharray="4 4" 
                     dot={false} 
@@ -599,37 +599,37 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
             </div>
 
             {/* AI Suggestion Box (Green styled container matching the wireframe in Image 1) */}
-            <div className="rounded-xl border-2 border-emerald-400 bg-emerald-50/80 p-3 shadow-2xs space-y-2.5">
-              <div className="flex items-center gap-2 text-emerald-950 font-mono text-xs font-bold">
-                <Sparkles className="w-4 h-4 text-emerald-700" />
+            <div className="rounded-xl border-2 border-chart-4 bg-muted/80 p-3 shadow-2xs space-y-2.5">
+              <div className="flex items-center gap-2 text-foreground font-mono text-xs font-bold">
+                <Sparkles className="w-4 h-4 text-foreground" />
                 <span>Ai suggestion on how it might change, compare and for cast, risk coming, montoring etc,</span>
               </div>
 
               {/* 4 Distinct Detailed Bullet Lines matching the sketch */}
-              <div className="space-y-2 font-sans text-xs text-emerald-950 bg-white/80 p-3 rounded-lg border border-emerald-200 shadow-2xs">
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+              <div className="space-y-2 font-sans text-xs text-foreground bg-card/80 p-3 rounded-lg border border-border shadow-2xs">
+                <div className="flex items-start gap-2 border-b border-border pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-chart-4 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
                     <strong>Regime Shift &amp; Volatility Forecast:</strong> Neural factor surface projects a 78% probability of volatility compression into upcoming macro rate decision. Implied skew curve is expected to flatten by 1.8 vol points across mega-cap tech index options.
                   </p>
                 </div>
 
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 border-b border-border pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-chart-4 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
                     <strong>Comparative Model Performance:</strong> Model 1 (+22.5% cumulative alpha) outpaces passive benchmark by 16.4% while maintaining strict factor beta neutrality (0.008) and lower maximum drawdown (-3.8% vs -8.2%).
                   </p>
                 </div>
 
-                <div className="flex items-start gap-2 border-b border-emerald-100 pb-1.5">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 border-b border-border pb-1.5">
+                  <ChevronRight className="w-3.5 h-3.5 text-chart-4 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
                     <strong>Proactive Risk &amp; Concentration Warning:</strong> Semiconductor GICS exposure currently sits at 13.8% (approaching the 15.0% mandate cap). Recommend staging pre-trade collar hedge to lock in unrealized gamma gains before earnings.
                   </p>
                 </div>
 
                 <div className="flex items-start gap-2">
-                  <ChevronRight className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                  <ChevronRight className="w-3.5 h-3.5 text-chart-4 shrink-0 mt-0.5" />
                   <p className="leading-relaxed">
                     <strong>Live Telemetry &amp; Anti-Hallucination Monitoring:</strong> All sub-agent scratchpads refreshed 38s ago against live OPRA and NY4 tick logs. Confidence score is mathematically grounded at 99.8% with zero memory drift.
                   </p>
@@ -655,7 +655,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                   { label: 'Alpha Outperformance', val: activeSubTab === 'sim-model-1' ? '+5.6%' : '+7.2%' },
                   { label: 'Max Drawdown', val: activeSubTab === 'sim-model-1' ? '-3.8%' : '-2.4%' },
                 ].map((p, pIdx) => (
-                  <div key={pIdx} className="px-2.5 py-1 rounded-lg bg-slate-50 border border-border text-center">
+                  <div key={pIdx} className="px-2.5 py-1 rounded-lg bg-muted border border-border text-center">
                     <span className="text-[8px] font-mono uppercase text-muted-foreground block">{p.label}</span>
                     <span className="text-[11px] font-mono font-bold text-foreground block">{p.val}</span>
                   </div>
@@ -663,29 +663,29 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               </div>
 
               <div className="flex items-center gap-2 text-xs font-mono">
-                <span className="flex items-center gap-1 text-slate-700">
-                  <span className="w-2.5 h-0.5 bg-slate-800 inline-block" />
+                <span className="flex items-center gap-1 text-muted-foreground">
+                  <span className="w-2.5 h-0.5 bg-secondary inline-block" />
                   Base Model
                 </span>
-                <span className="flex items-center gap-1 text-red-600 font-bold">
-                  <span className="w-2.5 h-0.5 bg-red-500 inline-block" />
+                <span className="flex items-center gap-1 text-destructive font-bold">
+                  <span className="w-2.5 h-0.5 bg-destructive inline-block" />
                   {activeSubTab === 'sim-model-1' ? 'Model 1 Simulation' : 'Model 2 Simulation'}
                 </span>
               </div>
             </div>
 
             {/* Dual Comparison Chart (Base vs Red Line Simulation matching Image 2 sketch) */}
-            <div className="h-44 sm:h-52 w-full bg-slate-50/50 p-2 rounded-xl border border-border/80 shadow-2xs">
+            <div className="h-44 sm:h-52 w-full bg-muted/50 p-2 rounded-xl border border-border/80 shadow-2xs">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={activeSubTab === 'sim-model-1' ? model1SimChartData : model2SimChartData}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
-                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" />
-                  <YAxis tick={{ fontSize: 10, fontFamily: 'monospace' }} stroke="#64748b" domain={[95, 136]} />
-                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace', borderRadius: '8px' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="time" tick={{ fontSize: 10, fontFamily: 'var(--font-mono)' }} stroke="var(--muted-foreground)" />
+                  <YAxis tick={{ fontSize: 10, fontFamily: 'var(--font-mono)' }} stroke="var(--muted-foreground)" domain={[95, 136]} />
+                  <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'var(--font-mono)', borderRadius: '8px' }} />
                   <Line 
                     type="monotone" 
                     dataKey="baseModel" 
-                    stroke="#1e293b" 
+                    stroke="var(--secondary)" 
                     strokeWidth={2} 
                     dot={false} 
                     name="Base Portfolio Model" 
@@ -693,9 +693,9 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                   <Line 
                     type="monotone" 
                     dataKey="simulatedModel" 
-                    stroke="#ef4444" 
+                    stroke="var(--chart-5)" 
                     strokeWidth={2.5} 
-                    dot={{ r: 3, fill: '#ef4444' }} 
+                    dot={{ r: 3, fill: 'var(--chart-5)' }} 
                     name="Simulated Model Trajectory" 
                   />
                 </LineChart>
@@ -704,7 +704,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
             {/* 3x3 Grid of 9 Factors & Asset Allocation Cards (Green background, red outline styling matching Image 2 sketch) */}
             <div className="space-y-1.5">
-              <div className="flex items-center justify-between text-[11px] font-mono text-emerald-950 font-bold px-0.5">
+              <div className="flex items-center justify-between text-[11px] font-mono text-foreground font-bold px-0.5">
                 <span>Factors, Assets &amp; Strategic Hypothesis Matrix (3x3 Grid):</span>
                 <span className="text-[10px] text-muted-foreground font-normal">Click any card to inspect hypothesis</span>
               </div>
@@ -717,26 +717,26 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                     <div
                       key={card.id}
                       onClick={() => setSelectedGridCard(card.id)}
-                      className={`p-2.5 rounded-xl border-2 transition-all cursor-pointer shadow-2xs space-y-1 bg-emerald-50/75 ${
+                      className={`p-2.5 rounded-xl border-2 transition-all cursor-pointer shadow-2xs space-y-1 bg-muted/75 ${
                         isSelected
-                          ? 'border-red-500 ring-2 ring-red-400/30 bg-emerald-100/90'
-                          : 'border-red-300 hover:border-red-400 hover:bg-emerald-100/60'
+                          ? 'border-destructive ring-2 ring-destructive/30 bg-muted/90'
+                          : 'border-border hover:border-destructive hover:bg-muted/60'
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="font-bold text-xs font-mono text-red-700 truncate">
+                        <span className="font-bold text-xs font-mono text-foreground truncate">
                           {card.title}
                         </span>
-                        <span className="px-1 py-0.2 bg-white/90 text-emerald-800 text-[8px] font-mono font-bold rounded border border-emerald-300">
+                        <span className="px-1 py-0.2 bg-card/90 text-foreground text-[8px] font-mono font-bold rounded border border-border">
                           {card.status}
                         </span>
                       </div>
 
-                      <div className="text-[11px] font-mono font-semibold text-emerald-950 truncate">
+                      <div className="text-[11px] font-mono font-semibold text-foreground truncate">
                         {card.metric}
                       </div>
 
-                      <div className="text-[9.5px] font-sans text-emerald-800 line-clamp-1">
+                      <div className="text-[9.5px] font-sans text-foreground line-clamp-1">
                         {card.subtext}
                       </div>
                     </div>
@@ -750,9 +750,9 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               <Button
                 type="button"
                 onClick={() => setIsExecutionModalOpen(true)}
-                className="h-10 px-5 bg-white hover:bg-emerald-50 text-emerald-900 border-2 border-emerald-600 rounded-xl font-mono text-xs font-bold gap-2 shadow-xs transition-all hover:scale-[1.01]"
+                className="h-10 px-5 bg-card hover:bg-muted text-foreground border-2 border-chart-4 rounded-xl font-mono text-xs font-bold gap-2 shadow-xs transition-all hover:scale-[1.01]"
               >
-                <Sparkles className="w-4 h-4 text-emerald-600" />
+                <Sparkles className="w-4 h-4 text-chart-4" />
                 <span>Deploy portfolio fit and hypothesis</span>
               </Button>
             </div>
@@ -766,11 +766,11 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           BOTTOM PROMPT BAR (Across All Views) MATCHING WIREFRAME
           "prompt bar to understand and audit previous workflows that were done and make things portfolio fit analysis..."
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
+      <div className="bg-card border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
         <form onSubmit={handlePromptSubmit} className="flex items-center gap-2">
-          <div className="relative flex-1 flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-xl transition-all">
-            <span className="pl-3.5 pr-1.5 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1.5">
-              <Terminal className="w-4 h-4 text-blue-600" />
+          <div className="relative flex-1 flex items-center bg-muted hover:bg-card border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-ring/30 rounded-xl transition-all">
+            <span className="pl-3.5 pr-1.5 text-primary font-mono text-xs font-semibold flex items-center gap-1.5">
+              <Terminal className="w-4 h-4 text-primary" />
             </span>
             <input
               type="text"
@@ -783,7 +783,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           <Button
             type="submit"
             disabled={isPromptRunning || !promptBarText.trim()}
-            className="h-10 px-4 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
+            className="h-10 px-4 bg-chart-4 hover:bg-chart-4 text-secondary text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
           >
             {isPromptRunning ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             <span>Analyze Portfolio Fit</span>
@@ -792,18 +792,18 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
 
         {/* Prompt Output Card */}
         {promptResult && (
-          <div className="p-3 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
-            <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-slate-400 text-[11px]">
-              <span className="text-emerald-400 font-bold"># PORTFOLIO FIT INTELLIGENCE RESPONSE</span>
+          <div className="p-3 bg-secondary text-secondary-foreground rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
+            <div className="flex items-center justify-between pb-1 border-b border-secondary text-muted-foreground text-[11px]">
+              <span className="text-chart-4 font-bold"># PORTFOLIO FIT INTELLIGENCE RESPONSE</span>
               <button
                 type="button"
                 onClick={() => setPromptResult(null)}
-                className="text-slate-400 hover:text-white"
+                className="text-muted-foreground hover:text-primary-foreground"
               >
                 ✕ Close
               </button>
             </div>
-            <pre className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-slate-200">
+            <pre className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-secondary-foreground">
               {promptResult}
             </pre>
           </div>
@@ -819,26 +819,26 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
           - Action: Publish limits and trade
          ========================================================================= */}
       {isExecutionModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#f2eae1] text-slate-900 border-2 border-stone-300 rounded-3xl shadow-2xl w-full max-w-xl p-6 sm:p-7 space-y-5 animate-in zoom-in-95 font-mono">
+        <div className="fixed inset-0 z-50 bg-secondary/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-card text-foreground border-2 border-border rounded-3xl shadow-2xl w-full max-w-xl p-6 sm:p-7 space-y-5 animate-in zoom-in-95 font-mono">
             
             {/* Header matching Image 3 sketch */}
-            <div className="flex items-start justify-between border-b border-stone-300/80 pb-3">
+            <div className="flex items-start justify-between border-b border-border/80 pb-3">
               <div>
-                <h3 className="text-base sm:text-lg font-bold font-mono tracking-tight text-slate-950">
+                <h3 className="text-base sm:text-lg font-bold font-mono tracking-tight text-foreground">
                   Trade execution
                 </h3>
-                <p className="text-xs text-stone-600 font-sans mt-0.5">
+                <p className="text-xs text-muted-foreground font-sans mt-0.5">
                   Algorithmic routing constraints and pre-trade regulatory restrictions
                 </p>
               </div>
 
               {/* Top right: "mark in some format" */}
               <div className="text-right">
-                <span className="px-2.5 py-1 rounded-lg bg-stone-200/90 border border-stone-400 text-[10px] font-mono font-bold text-slate-800">
+                <span className="px-2.5 py-1 rounded-lg bg-muted/90 border border-border text-[10px] font-mono font-bold text-foreground">
                   SEC 15c3-5 / FIX 4.4 DMA
                 </span>
-                <span className="text-[9px] text-stone-500 block mt-0.5">mark in some format</span>
+                <span className="text-[9px] text-muted-foreground block mt-0.5">mark in some format</span>
               </div>
             </div>
 
@@ -846,7 +846,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               
               {/* Section 1: Time and other parameters to be added (Rows with Autonomy, Human, Gateway buttons) */}
               <div className="space-y-3">
-                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                <div className="text-xs font-bold text-foreground uppercase tracking-wider">
                   Time and other parameters to be added
                 </div>
 
@@ -858,17 +858,17 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={executionTimeParam}
                       onChange={(e) => setExecutionTimeParam(e.target.value)}
                       placeholder="e.g. TWAP 09:30 - 16:00 EST / 45-min interval"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      className="h-10 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground focus-visible:ring-border"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setAutonomyMode(autonomyMode === 'Autonomous' ? 'Semi-Autonomous' : 'Autonomous')}
-                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-border ${
                       autonomyMode === 'Autonomous'
-                        ? 'bg-stone-900 text-white hover:bg-stone-800'
-                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                        ? 'bg-secondary text-primary-foreground hover:bg-secondary'
+                        : 'bg-card text-foreground hover:bg-muted'
                     }`}
                   >
                     Autonomy ({autonomyMode})
@@ -883,17 +883,17 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={humanSupervisor}
                       onChange={(e) => setHumanSupervisor(e.target.value)}
                       placeholder="e.g. Alexander Vance (PM) & Risk Officer"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      className="h-10 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground focus-visible:ring-border"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setHumanApprovalRequired(!humanApprovalRequired)}
-                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-stone-300 ${
+                    className={`h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 border-border ${
                       humanApprovalRequired
-                        ? 'bg-purple-700 text-white hover:bg-purple-800'
-                        : 'bg-white text-slate-900 hover:bg-stone-100'
+                        ? 'bg-chart-2 text-secondary hover:bg-chart-2'
+                        : 'bg-card text-foreground hover:bg-muted'
                     }`}
                   >
                     Human ({humanApprovalRequired ? 'Dual Sign-off' : 'Auto'})
@@ -908,14 +908,14 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={gatewayParam}
                       onChange={(e) => setGatewayParam(e.target.value)}
                       placeholder="e.g. NY4 FIX 4.4 Ultra-Low Latency DMA"
-                      className="h-10 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900 focus-visible:ring-stone-400"
+                      className="h-10 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground focus-visible:ring-border"
                     />
                   </div>
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setGatewayProtocol(gatewayProtocol === 'DMA FIX' ? 'Smart Router' : 'DMA FIX')}
-                    className="h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 bg-stone-900 text-white hover:bg-stone-800 border-stone-300"
+                    className="h-10 px-4 rounded-xl text-xs font-mono font-bold shrink-0 bg-secondary text-primary-foreground hover:bg-secondary border-border"
                   >
                     Gateway ({gatewayProtocol})
                   </Button>
@@ -923,14 +923,14 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
               </div>
 
               {/* Section 2: Risk Management Restrictions (Image 3) */}
-              <div className="space-y-3 pt-2 border-t border-stone-300/80">
-                <div className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+              <div className="space-y-3 pt-2 border-t border-border/80">
+                <div className="text-xs font-bold text-foreground uppercase tracking-wider">
                   Risk Management
                 </div>
 
                 {/* Maximum risk index */}
                 <div className="flex items-center justify-between gap-4">
-                  <label className="text-xs font-mono font-medium text-slate-900 flex-1">
+                  <label className="text-xs font-mono font-medium text-foreground flex-1">
                     Maximum risk index
                   </label>
                   <div className="w-48 sm:w-56">
@@ -939,7 +939,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={maxRiskIndex}
                       onChange={(e) => setMaxRiskIndex(e.target.value)}
                       placeholder="e.g. 1.25% 1-Day VaR 95%"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      className="h-9 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground"
                     />
                   </div>
                 </div>
@@ -947,10 +947,10 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                 {/* Max sector exposure: Share of NAV in one GICS sector */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
-                    <div className="text-xs font-mono font-medium text-slate-900">
+                    <div className="text-xs font-mono font-medium text-foreground">
                       Max sector exposure
                     </div>
-                    <div className="text-[10px] text-stone-600 font-sans">
+                    <div className="text-[10px] text-muted-foreground font-sans">
                       Share of NAV in one GICS sector
                     </div>
                   </div>
@@ -960,7 +960,7 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={maxSectorExposure}
                       onChange={(e) => setMaxSectorExposure(e.target.value)}
                       placeholder="e.g. 15.0% Share of NAV"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      className="h-9 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground"
                     />
                   </div>
                 </div>
@@ -968,10 +968,10 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                 {/* Max single asset exposure: Share of NAV in one asset */}
                 <div className="flex items-center justify-between gap-4">
                   <div className="flex-1">
-                    <div className="text-xs font-mono font-medium text-slate-900">
+                    <div className="text-xs font-mono font-medium text-foreground">
                       Max single asset exposure
                     </div>
-                    <div className="text-[10px] text-stone-600 font-sans">
+                    <div className="text-[10px] text-muted-foreground font-sans">
                       Share of NAV in one stock / instrument
                     </div>
                   </div>
@@ -981,25 +981,25 @@ export const AllocationOptimizerView: React.FC<AllocationOptimizerViewProps> = (
                       value={maxSingleAssetExposure}
                       onChange={(e) => setMaxSingleAssetExposure(e.target.value)}
                       placeholder="e.g. 5.0% Single Asset NAV"
-                      className="h-9 text-xs font-mono bg-white/90 border-stone-300 rounded-xl text-slate-900"
+                      className="h-9 text-xs font-mono bg-card/90 border-border rounded-xl text-foreground"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Bottom Action Buttons: Cancel and "Publish limits and trade" */}
-              <div className="flex items-center justify-end gap-3 pt-3 border-t border-stone-300/80">
+              <div className="flex items-center justify-end gap-3 pt-3 border-t border-border/80">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => setIsExecutionModalOpen(false)}
-                  className="h-10 px-4 text-xs font-mono border-stone-300 bg-white/80 hover:bg-white text-slate-800 rounded-xl"
+                  className="h-10 px-4 text-xs font-mono border-border bg-card/80 hover:bg-card text-foreground rounded-xl"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
-                  className="h-10 px-6 text-xs font-mono font-bold bg-stone-900 hover:bg-stone-800 text-white rounded-xl shadow-xs transition-all hover:scale-[1.01]"
+                  className="h-10 px-6 text-xs font-mono font-bold bg-secondary hover:bg-secondary text-primary-foreground rounded-xl shadow-xs transition-all hover:scale-[1.01]"
                 >
                   Publish limits and trade
                 </Button>

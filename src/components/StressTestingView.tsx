@@ -108,7 +108,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
         </div>
         <div className="flex items-center gap-2 font-mono text-xs">
           <span className="text-muted-foreground">Baseline Daily VaR (95%):</span>
-          <span className="bg-white px-2.5 py-1 rounded text-primary font-bold border border-border">
+          <span className="bg-card px-2.5 py-1 rounded text-primary font-bold border border-border">
             {fund.var95Pct}% ($
             {((fund.aumMillions * fund.var95Pct) / 100).toFixed(1)}M)
           </span>
@@ -133,10 +133,10 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
                     <span
                       className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-bold tracking-wider ${
                         sc.severity === 'Severe'
-                          ? 'bg-rose-500/10 text-rose-700 border border-rose-500/30'
+                          ? 'bg-chart-5/10 text-foreground border border-chart-5/30'
                           : sc.severity === 'High'
-                          ? 'bg-amber-500/10 text-amber-700 border border-amber-500/30'
-                          : 'bg-white text-muted-foreground border border-border'
+                          ? 'bg-chart-3/10 text-foreground border border-chart-3/30'
+                          : 'bg-card text-muted-foreground border border-border'
                       }`}
                     >
                       {sc.severity} Severity
@@ -147,16 +147,16 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
                   <h4 className="text-sm font-bold text-foreground">{sc.name}</h4>
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{sc.description}</p>
 
-                  <div className="mt-4 p-2.5 bg-white rounded-md border border-border font-mono">
+                  <div className="mt-4 p-2.5 bg-card rounded-md border border-border font-mono">
                     <div className="flex justify-between items-center text-xs">
                       <span className="text-muted-foreground">P&amp;L Drawdown:</span>
-                      <span className={`font-bold ${isNegative ? 'text-rose-500' : 'text-emerald-500'}`}>
+                      <span className={`font-bold ${isNegative ? 'text-chart-5' : 'text-chart-4'}`}>
                         {sc.pnlImpactM > 0 ? `+$${sc.pnlImpactM}M` : `-$${Math.abs(sc.pnlImpactM)}M`}
                       </span>
                     </div>
                     <div className="flex justify-between items-center text-xs mt-1">
                       <span className="text-muted-foreground">NAV Impact:</span>
-                      <span className={`font-semibold ${isNegative ? 'text-rose-500' : 'text-emerald-500'}`}>
+                      <span className={`font-semibold ${isNegative ? 'text-chart-5' : 'text-chart-4'}`}>
                         {sc.navImpactPct > 0 ? `+${sc.navImpactPct}%` : `${sc.navImpactPct}%`}
                       </span>
                     </div>
@@ -165,7 +165,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
 
                 <button
                   onClick={() => handleApplyPreset(sc)}
-                  className="mt-4 w-full py-1.5 rounded-md text-xs font-medium bg-white hover:bg-slate-50 text-primary border border-border transition flex items-center justify-center gap-1.5 shadow-xs font-semibold"
+                  className="mt-4 w-full py-1.5 rounded-md text-xs font-medium bg-card hover:bg-muted text-primary border border-border transition flex items-center justify-center gap-1.5 shadow-xs font-semibold"
                 >
                   Apply &amp; Calibrate
                   <ArrowRight className="w-3.5 h-3.5" />
@@ -202,7 +202,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             <div>
               <div className="flex justify-between text-xs font-mono mb-1">
                 <span className="text-foreground">Equity Market Shock (S&amp;P 500 / Global Equities):</span>
-                <span className={`font-bold ${equityShock < 0 ? 'text-rose-500' : equityShock > 0 ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                <span className={`font-bold ${equityShock < 0 ? 'text-chart-5' : equityShock > 0 ? 'text-chart-4' : 'text-muted-foreground'}`}>
                   {equityShock > 0 ? `+${equityShock}%` : `${equityShock}%`}
                 </span>
               </div>
@@ -221,7 +221,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             <div>
               <div className="flex justify-between text-xs font-mono mb-1">
                 <span className="text-foreground">Parallel Yield Curve Shift (Interest Rates):</span>
-                <span className={`font-bold ${ratesShockBps > 0 ? 'text-primary' : ratesShockBps < 0 ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                <span className={`font-bold ${ratesShockBps > 0 ? 'text-primary' : ratesShockBps < 0 ? 'text-chart-4' : 'text-muted-foreground'}`}>
                   {ratesShockBps > 0 ? `+${ratesShockBps} bps` : `${ratesShockBps} bps`}
                 </span>
               </div>
@@ -240,7 +240,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             <div>
               <div className="flex justify-between text-xs font-mono mb-1">
                 <span className="text-foreground">Implied Volatility Index Surge (VIX Points):</span>
-                <span className={`font-bold ${vixShock > 15 ? 'text-rose-500' : 'text-muted-foreground'}`}>
+                <span className={`font-bold ${vixShock > 15 ? 'text-chart-5' : 'text-muted-foreground'}`}>
                   +{vixShock} pts
                 </span>
               </div>
@@ -259,7 +259,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             <div>
               <div className="flex justify-between text-xs font-mono mb-1">
                 <span className="text-foreground">USD Dollar Index Movement (DXY):</span>
-                <span className={`font-bold ${fxShock < 0 ? 'text-rose-500' : fxShock > 0 ? 'text-emerald-500' : 'text-muted-foreground'}`}>
+                <span className={`font-bold ${fxShock < 0 ? 'text-chart-5' : fxShock > 0 ? 'text-chart-4' : 'text-muted-foreground'}`}>
                   {fxShock > 0 ? `+${fxShock}%` : `${fxShock}%`}
                 </span>
               </div>
@@ -276,17 +276,17 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
           </div>
 
           {/* Dynamic Impact Display */}
-          <div className="mt-6 p-4 bg-white rounded-lg border border-border grid grid-cols-3 gap-4 font-mono text-center">
+          <div className="mt-6 p-4 bg-card rounded-lg border border-border grid grid-cols-3 gap-4 font-mono text-center">
             <div>
               <span className="text-[11px] text-muted-foreground block font-sans">Simulated P&amp;L</span>
-              <span className={`text-base font-bold ${simulatedPnlMillions < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+              <span className={`text-base font-bold ${simulatedPnlMillions < 0 ? 'text-chart-5' : 'text-chart-4'}`}>
                 {simulatedPnlMillions > 0 ? `+$${simulatedPnlMillions}M` : `-$${Math.abs(simulatedPnlMillions)}M`}
               </span>
             </div>
 
             <div>
               <span className="text-[11px] text-muted-foreground block font-sans">Simulated NAV Impact</span>
-              <span className={`text-base font-bold ${simulatedNavImpactPct < 0 ? 'text-rose-500' : 'text-emerald-500'}`}>
+              <span className={`text-base font-bold ${simulatedNavImpactPct < 0 ? 'text-chart-5' : 'text-chart-4'}`}>
                 {simulatedNavImpactPct > 0 ? `+${simulatedNavImpactPct}%` : `${simulatedNavImpactPct}%`}
               </span>
             </div>
@@ -322,7 +322,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
             </p>
 
             <div className="space-y-3">
-              <div className="p-3 bg-white rounded-lg border border-border">
+              <div className="p-3 bg-card rounded-lg border border-border">
                 <div className="flex justify-between items-start">
                   <span className="text-xs font-bold text-foreground">1. Tail-Risk Volatility Convexity</span>
                   <Badge variant="outline" className="text-[10px] font-mono bg-primary/10 text-primary border-primary/25 font-semibold">
@@ -340,8 +340,8 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
                 >
                   {hedgeQueued === 'Tail-Risk Convexity Call Hedge' ? (
                     <>
-                      <CheckCircle2 className="w-3 h-3 text-emerald-700" />
-                      <span className="text-emerald-700 font-semibold">Order Routed to Blotter</span>
+                      <CheckCircle2 className="w-3 h-3 text-foreground" />
+                      <span className="text-foreground font-semibold">Order Routed to Blotter</span>
                     </>
                   ) : (
                     'Queue Hedge Order'
@@ -349,10 +349,10 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
                 </Button>
               </div>
 
-              <div className="p-3 bg-white rounded-lg border border-border">
+              <div className="p-3 bg-card rounded-lg border border-border">
                 <div className="flex justify-between items-start">
                   <span className="text-xs font-bold text-foreground">2. Duration Neutralization</span>
-                  <Badge variant="outline" className="text-[10px] font-mono bg-emerald-500/10 text-emerald-700 border-emerald-500/30 font-semibold">
+                  <Badge variant="outline" className="text-[10px] font-mono bg-chart-4/10 text-foreground border-chart-4/30 font-semibold">
                     Yield Hedge
                   </Badge>
                 </div>
@@ -367,8 +367,8 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
                 >
                   {hedgeQueued === '10Y Duration Neutralizer' ? (
                     <>
-                      <CheckCircle2 className="w-3 h-3 text-emerald-700" />
-                      <span className="text-emerald-700 font-semibold">Order Routed to Blotter</span>
+                      <CheckCircle2 className="w-3 h-3 text-foreground" />
+                      <span className="text-foreground font-semibold">Order Routed to Blotter</span>
                     </>
                   ) : (
                     'Queue Hedge Order'
@@ -379,7 +379,7 @@ export const StressTestingView: React.FC<StressTestingViewProps> = ({
           </div>
 
           <div className="mt-4 pt-3 border-t border-border text-[11px] text-muted-foreground">
-            Real-time compliance checks: <span className="text-emerald-500 font-mono font-semibold">PASSED</span>
+            Real-time compliance checks: <span className="text-chart-4 font-mono font-semibold">PASSED</span>
           </div>
         </div>
       </div>

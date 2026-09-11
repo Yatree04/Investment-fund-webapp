@@ -20,7 +20,7 @@ export const TopTickerStrip: React.FC<TopTickerStripProps> = ({
   ];
 
   return (
-    <div className="w-full bg-white border-b border-border px-3 sm:px-4 py-1.5 flex items-center justify-between text-xs font-mono select-none overflow-x-auto no-scrollbar gap-4 shrink-0">
+    <div className="w-full bg-card border-b border-border px-3 sm:px-4 py-1.5 flex items-center justify-between text-xs font-mono select-none overflow-x-auto no-scrollbar gap-4 shrink-0">
       <div className="flex items-center gap-4 sm:gap-6 shrink-0">
         {/* Mobile menu trigger */}
         {onOpenMobileMenu && (
@@ -38,8 +38,8 @@ export const TopTickerStrip: React.FC<TopTickerStripProps> = ({
         )}
 
         {/* Live status badge */}
-        <div className="flex items-center gap-1.5 text-emerald-600 font-bold shrink-0">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+        <div className="flex items-center gap-1.5 text-chart-4 font-bold shrink-0">
+          <span className="w-2 h-2 rounded-full bg-chart-4 animate-pulse" />
           <span className="tracking-wide text-[11px]">LIVE</span>
         </div>
 
@@ -52,10 +52,10 @@ export const TopTickerStrip: React.FC<TopTickerStripProps> = ({
               className="flex items-center gap-1.5 cursor-pointer hover:opacity-80 transition-opacity"
             >
               <span className="font-semibold text-foreground">{t.symbol}</span>
-              <span className={`text-[11px] font-medium ${t.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
+              <span className={`text-[11px] font-medium ${t.isUp ? 'text-chart-4' : 'text-chart-5'}`}>
                 {t.change}
               </span>
-              <span className={`text-[11px] flex items-center ${t.isUp ? 'text-emerald-600' : 'text-rose-600'}`}>
+              <span className={`text-[11px] flex items-center ${t.isUp ? 'text-chart-4' : 'text-chart-5'}`}>
                 {t.isUp ? '▲' : '▼'}{t.price}
               </span>
             </div>
@@ -64,8 +64,8 @@ export const TopTickerStrip: React.FC<TopTickerStripProps> = ({
       </div>
 
       {/* Risk Alert matching screenshot */}
-      <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-500 font-medium text-[11px] shrink-0 truncate">
-        <AlertTriangle className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+      <div className="flex items-center gap-1.5 text-destructive dark:text-destructive font-medium text-[11px] shrink-0 truncate">
+        <AlertTriangle className="w-3.5 h-3.5 text-destructive shrink-0" />
         <span className="truncate">RISK ALERT: NVDA position exceeds +15% concentration bound</span>
       </div>
     </div>

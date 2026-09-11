@@ -85,7 +85,7 @@ export const TeamUpdatesChat: React.FC = () => {
   };
 
   return (
-    <div className="bg-white border border-border rounded-lg p-2.5 shadow-xs flex flex-col justify-between transition-colors">
+    <div className="bg-card border border-border rounded-lg p-2.5 shadow-xs flex flex-col justify-between transition-colors">
       {/* Header */}
       <div className="flex items-center justify-between pb-2 border-b border-border mb-2">
         <div className="flex items-center gap-1.5">
@@ -93,7 +93,7 @@ export const TeamUpdatesChat: React.FC = () => {
           <h3 className="text-xs font-bold text-foreground tracking-tight">Team updates</h3>
         </div>
         <div className="flex items-center gap-1.5 text-[10px] font-mono text-muted-foreground">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-chart-4 animate-pulse" />
           <span>4 Analysts Active</span>
         </div>
       </div>
@@ -116,7 +116,7 @@ export const TeamUpdatesChat: React.FC = () => {
               className={`max-w-[88%] rounded-lg px-2.5 py-1 text-xs leading-snug transition-all ${
                 msg.isSelf
                   ? 'bg-primary text-primary-foreground font-medium rounded-br-xs shadow-xs'
-                  : 'bg-white text-foreground border border-border rounded-bl-xs'
+                  : 'bg-card text-foreground border border-border rounded-bl-xs'
               }`}
             >
               {msg.text}
@@ -128,7 +128,7 @@ export const TeamUpdatesChat: React.FC = () => {
 
       {/* Bottom Input Field: "Text here" + ↗ arrow send button matching wireframe */}
       <div className="pt-1.5 border-t border-border">
-        <div className="flex items-center gap-1.5 bg-white border border-border rounded-md px-2 py-1 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+        <div className="flex items-center gap-1.5 bg-card border border-border rounded-md px-2 py-1 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
           <input
             type="text"
             value={inputVal}
@@ -141,7 +141,7 @@ export const TeamUpdatesChat: React.FC = () => {
             onClick={handleSend}
             disabled={!inputVal.trim()}
             title="Send Update (Enter)"
-            className="p-0.5 rounded text-primary hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-transparent transition-colors shrink-0"
+            className="p-0.5 rounded text-primary hover:bg-muted disabled:opacity-40 disabled:hover:bg-transparent transition-colors shrink-0"
           >
             <ArrowUpRight className="w-3.5 h-3.5" />
           </button>

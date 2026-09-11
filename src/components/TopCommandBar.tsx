@@ -69,7 +69,7 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border-b border-border px-3 sm:px-4 py-2 flex items-center justify-between gap-3 relative select-none shrink-0 z-20">
+    <div className="w-full bg-card border-b border-border px-3 sm:px-4 py-2 flex items-center justify-between gap-3 relative select-none shrink-0 z-20">
       {/* Left side: Mobile hamburger + /agent bar matching wireframe */}
       <div className="flex items-center gap-2 flex-1 max-w-xl">
         {/* Mobile menu toggle */}
@@ -77,7 +77,7 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
           variant="outline"
           size="icon"
           onClick={onToggleMobileSidePanel}
-          className="lg:hidden h-8 w-8 shrink-0 bg-white hover:bg-slate-50"
+          className="lg:hidden h-8 w-8 shrink-0 bg-card hover:bg-muted"
           aria-label="Toggle Side Panel"
         >
           <Menu className="w-4 h-4" />
@@ -85,9 +85,9 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
 
         {/* /agent bar matching wireframe: [ /agent bar                   ↗ ] */}
         <div className="relative w-full group">
-          <div className="relative flex items-center bg-white border border-blue-400/60 hover:border-blue-500 focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/40 rounded-lg shadow-2xs transition-all">
-            <span className="pl-3 pr-1 text-blue-600 font-mono text-xs font-semibold select-none flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+          <div className="relative flex items-center bg-card border border-primary/60 hover:border-primary focus-within:border-primary focus-within:ring-1 focus-within:ring-ring/40 rounded-lg shadow-2xs transition-all">
+            <span className="pl-3 pr-1 text-primary font-mono text-xs font-semibold select-none flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
             </span>
 
             <input
@@ -104,10 +104,10 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
             <button
               type="button"
               onClick={() => onOpenAgentModal && onOpenAgentModal(topInput)}
-              className="absolute right-2 p-1 rounded hover:bg-blue-50 dark:hover:bg-blue-950/50 text-blue-600 transition-colors"
+              className="absolute right-2 p-1 rounded hover:bg-accent dark:hover:bg-muted/50 text-primary transition-colors"
               title="Open Agent Command Terminal"
             >
-              <ArrowUpRight className="w-4 h-4 text-blue-600" />
+              <ArrowUpRight className="w-4 h-4 text-primary" />
             </button>
           </div>
         </div>
@@ -120,16 +120,16 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
           variant="outline"
           size="sm"
           onClick={onExportStatus}
-          className="font-mono text-xs gap-1.5 h-8 border-border bg-white hover:bg-slate-50 text-foreground shadow-2xs"
+          className="font-mono text-xs gap-1.5 h-8 border-border bg-card hover:bg-muted text-foreground shadow-2xs"
         >
           {exportSuccess ? (
             <>
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-              <span className="text-emerald-700 font-semibold">Exported!</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-foreground" />
+              <span className="text-foreground font-semibold">Exported!</span>
             </>
           ) : (
             <>
-              <Download className="w-3.5 h-3.5 text-blue-600 group-hover:translate-y-0.5 transition-transform" />
+              <Download className="w-3.5 h-3.5 text-primary group-hover:translate-y-0.5 transition-transform" />
               <span>Live Status export</span>
             </>
           )}
@@ -142,7 +142,7 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
             size="icon"
             onClick={() => setIsProfileOpen(!isProfileOpen)}
             title="User Profile & Settings"
-            className="h-8 w-8 p-0 rounded-lg border-border bg-white hover:bg-slate-50"
+            className="h-8 w-8 p-0 rounded-lg border-border bg-card hover:bg-muted"
           >
             <div className="w-4 h-4 rounded-full border-2 border-primary flex items-center justify-center">
               <div className="w-1.5 h-1.5 rounded-full bg-primary" />
@@ -150,7 +150,7 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
           </Button>
 
           {isProfileOpen && (
-            <Card className="absolute right-0 top-full mt-1.5 w-60 shadow-xl z-50 p-3 text-xs animate-in fade-in-50 bg-white text-foreground border border-border">
+            <Card className="absolute right-0 top-full mt-1.5 w-60 shadow-xl z-50 p-3 text-xs animate-in fade-in-50 bg-popover text-popover-foreground border border-border">
               <div className="flex items-center gap-2.5 pb-2.5 border-b border-border">
                 <Avatar className="h-8 w-8 bg-primary/15 text-primary">
                   <AvatarFallback className="bg-primary/10 text-primary font-bold text-xs font-mono">AV</AvatarFallback>
@@ -167,7 +167,7 @@ export const TopCommandBar: React.FC<TopCommandBarProps> = ({
                 </div>
                 <div className="flex justify-between">
                   <span>Environment:</span>
-                  <span className="text-emerald-700 font-semibold">Live Production</span>
+                  <span className="text-foreground font-semibold">Live Production</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Agent Core:</span>

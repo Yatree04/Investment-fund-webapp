@@ -175,7 +175,7 @@ const INITIAL_WORKSPACE_MODELS: WorkspaceModel[] = [
     varLimit: 1.25,
     expectedSharpe: 1.84,
     expectedReturn: 13.8,
-    color: '#2563eb', // Blue
+    color: 'var(--primary)', // Blue
     nodes: DEFAULT_CORE_NODES,
   },
   {
@@ -189,7 +189,7 @@ const INITIAL_WORKSPACE_MODELS: WorkspaceModel[] = [
     varLimit: 1.05,
     expectedSharpe: 2.15,
     expectedReturn: 15.6,
-    color: '#10b981', // Emerald
+    color: 'var(--chart-4)', // Emerald
     nodes: [
       {
         id: 'node-stat-parent',
@@ -286,7 +286,7 @@ class DeltaNeutralGate(TerminalGate):
     varLimit: 1.40,
     expectedSharpe: 1.95,
     expectedReturn: 14.2,
-    color: '#8b5cf6', // Purple
+    color: 'var(--chart-2)', // Purple
     nodes: [
       {
         id: 'node-macro-parent',
@@ -502,7 +502,7 @@ export const AgentWorkspaceView: React.FC<AgentWorkspaceViewProps> = ({
         id: `model-${Date.now()}`,
         name: `${activeModel.name} (Copy)`,
         version: 'v1.1-copy',
-        color: '#6366f1',
+        color: 'var(--primary)',
       };
     } else if (type === 'template') {
       newModel = {
@@ -516,7 +516,7 @@ export const AgentWorkspaceView: React.FC<AgentWorkspaceViewProps> = ({
         varLimit: 0.95,
         expectedSharpe: 2.22,
         expectedReturn: 16.4,
-        color: '#ec4899',
+        color: 'var(--chart-5)',
         nodes: [
           {
             id: `node-vol-parent-${Date.now()}`,
@@ -552,7 +552,7 @@ class VolSkewAgent(QuantParentAgent):
         varLimit: 1.25,
         expectedSharpe: 1.75,
         expectedReturn: 13.0,
-        color: '#64748b',
+        color: 'var(--muted-foreground)',
         nodes: [
           {
             id: `node-draft-parent-${Date.now()}`,
@@ -606,7 +606,7 @@ class VolSkewAgent(QuantParentAgent):
       varLimit: Number((Math.min(modA.varLimit || 1.25, modB.varLimit || 1.25) * 0.92).toFixed(2)),
       expectedSharpe: Number((Math.max(modA.expectedSharpe || 1.84, modB.expectedSharpe || 1.84) + 0.18).toFixed(2)),
       expectedReturn: Number((Math.max(modA.expectedReturn || 13.8, modB.expectedReturn || 13.8) + 1.4).toFixed(1)),
-      color: '#059669', // Emerald
+      color: 'var(--chart-4)', // Emerald
       nodes: [
         ...modA.nodes.filter(n => n.type === 'parent'),
         ...modB.nodes.filter(n => n.type === 'subagent' || n.type === 'data'),
@@ -704,18 +704,18 @@ class VolSkewAgent(QuantParentAgent):
   });
 
   return (
-    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-white">
+    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-card">
       
       {/* Top Workspace Header with Multi-Model Tabs and Model Handling Section */}
       <div className="flex flex-wrap items-center justify-between gap-2 pb-1.5 border-b border-border shrink-0">
         
         {/* Left: View Title */}
         <div className="flex items-center gap-2">
-          <Bot className="w-4 h-4 text-blue-600" />
+          <Bot className="w-4 h-4 text-primary" />
           <span className="text-sm font-bold text-foreground font-mono tracking-tight">
             Agent Builder / Workspace
           </span>
-          <Badge variant="outline" className="text-[10px] font-mono bg-slate-50 text-slate-700 border-border">
+          <Badge variant="outline" className="text-[10px] font-mono bg-muted text-muted-foreground border-border">
             DAG Architecture
           </Badge>
         </div>
@@ -735,13 +735,13 @@ class VolSkewAgent(QuantParentAgent):
                 }}
                 className={`group flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono cursor-pointer transition-all border shrink-0 ${
                   isActive
-                    ? 'bg-white text-foreground border-blue-500 ring-2 ring-blue-400/20 shadow-2xs font-bold'
-                    : 'bg-slate-50 hover:bg-slate-100 text-muted-foreground border-border'
+                    ? 'bg-card text-foreground border-primary ring-2 ring-ring/20 shadow-2xs font-bold'
+                    : 'bg-muted hover:bg-muted text-muted-foreground border-border'
                 }`}
               >
                 <span 
                   className="w-2 h-2 rounded-full shrink-0" 
-                  style={{ backgroundColor: mod.color || '#3b82f6' }} 
+                  style={{ backgroundColor: mod.color || 'var(--primary)' }} 
                 />
                 <span className="truncate max-w-[140px]">{mod.name}</span>
                 <span className="text-[9px] px-1 py-0.2 rounded bg-border/60 text-muted-foreground">
@@ -752,7 +752,7 @@ class VolSkewAgent(QuantParentAgent):
                   <button
                     type="button"
                     onClick={(e) => handleCloseTab(mod.id, e)}
-                    className="opacity-0 group-hover:opacity-100 hover:text-red-500 p-0.5 rounded transition-opacity"
+                    className="opacity-0 group-hover:opacity-100 hover:text-destructive p-0.5 rounded transition-opacity"
                     title="Close model tab"
                   >
                     <X className="w-2.5 h-2.5" />
@@ -767,22 +767,22 @@ class VolSkewAgent(QuantParentAgent):
             <button
               type="button"
               onClick={() => setIsNewModelMenuOpen(!isNewModelMenuOpen)}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-mono text-muted-foreground hover:text-foreground bg-slate-50 hover:bg-slate-100 border border-dashed border-border transition-all shrink-0"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-mono text-muted-foreground hover:text-foreground bg-muted hover:bg-muted border border-dashed border-border transition-all shrink-0"
               title="Add or Ideate on New Model"
             >
-              <Plus className="w-3 h-3 text-blue-600" />
+              <Plus className="w-3 h-3 text-primary" />
               <span>New Model</span>
               <ChevronDown className="w-2.5 h-2.5 ml-0.5" />
             </button>
 
             {isNewModelMenuOpen && (
-              <div className="absolute left-0 mt-1 w-56 bg-white border border-border rounded-xl shadow-lg z-40 p-1 font-mono text-xs animate-in fade-in">
+              <div className="absolute left-0 mt-1 w-56 bg-popover border border-border rounded-xl shadow-lg z-40 p-1 font-mono text-xs animate-in fade-in">
                 <button
                   type="button"
                   onClick={() => handleCreateNewModel('blank')}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2 text-foreground"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-muted flex items-center gap-2 text-foreground"
                 >
-                  <Plus className="w-3.5 h-3.5 text-blue-600" />
+                  <Plus className="w-3.5 h-3.5 text-primary" />
                   <div>
                     <span className="font-semibold block">Blank Model</span>
                     <span className="text-[10px] text-muted-foreground block">Empty canvas to design DAG</span>
@@ -791,9 +791,9 @@ class VolSkewAgent(QuantParentAgent):
                 <button
                   type="button"
                   onClick={() => handleCreateNewModel('clone')}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2 text-foreground"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-muted flex items-center gap-2 text-foreground"
                 >
-                  <Copy className="w-3.5 h-3.5 text-emerald-600" />
+                  <Copy className="w-3.5 h-3.5 text-chart-4" />
                   <div>
                     <span className="font-semibold block">Clone Active Model</span>
                     <span className="text-[10px] text-muted-foreground block">Duplicate {activeModel.name}</span>
@@ -802,9 +802,9 @@ class VolSkewAgent(QuantParentAgent):
                 <button
                   type="button"
                   onClick={() => handleCreateNewModel('template')}
-                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center gap-2 text-foreground"
+                  className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-muted flex items-center gap-2 text-foreground"
                 >
-                  <Sparkles className="w-3.5 h-3.5 text-pink-600" />
+                  <Sparkles className="w-3.5 h-3.5 text-chart-5" />
                   <div>
                     <span className="font-semibold block">Volatility Skew Arb</span>
                     <span className="text-[10px] text-muted-foreground block">From Research Node idea</span>
@@ -825,10 +825,10 @@ class VolSkewAgent(QuantParentAgent):
               setRightTab('sandbox');
               setSandboxInitialMode('compare');
             }}
-            className="h-7 px-2.5 text-xs font-mono text-blue-700 bg-blue-50/50 hover:bg-blue-100/60 border-blue-200 rounded-lg gap-1 shadow-2xs"
+            className="h-7 px-2.5 text-xs font-mono text-accent-foreground bg-accent/50 hover:bg-accent/60 border-border rounded-lg gap-1 shadow-2xs"
             title="Compare two models side-by-side in the Sandbox"
           >
-            <ArrowLeftRight className="w-3 h-3 text-blue-600" />
+            <ArrowLeftRight className="w-3 h-3 text-primary" />
             <span>Compare in Sandbox</span>
           </Button>
 
@@ -840,14 +840,14 @@ class VolSkewAgent(QuantParentAgent):
               setRightTab('sandbox');
               setSandboxInitialMode('merge');
             }}
-            className="h-7 px-2.5 text-xs font-mono text-emerald-700 bg-emerald-50/50 hover:bg-emerald-100/60 border-emerald-200 rounded-lg gap-1 shadow-2xs"
+            className="h-7 px-2.5 text-xs font-mono text-foreground bg-muted/50 hover:bg-muted/60 border-border rounded-lg gap-1 shadow-2xs"
             title="Merge two models into a unified strategy in Sandbox"
           >
-            <GitMerge className="w-3 h-3 text-emerald-600" />
+            <GitMerge className="w-3 h-3 text-chart-4" />
             <span>Merge Models</span>
           </Button>
 
-          <Badge variant="outline" className="text-[10px] font-mono bg-white text-foreground border-border hidden sm:inline-flex">
+          <Badge variant="outline" className="text-[10px] font-mono bg-card text-foreground border-border hidden sm:inline-flex">
             Sharpe: {activeModel.expectedSharpe || 1.84} · VaR: {activeModel.varLimit || 1.25}%
           </Badge>
         </div>
@@ -856,16 +856,16 @@ class VolSkewAgent(QuantParentAgent):
 
       {/* AI Strategy Experimentation Notice Banner (When experimenting from Market Fund Manager) */}
       {activeModel.originStrategy && (
-        <div className="px-3 py-2 bg-blue-50/70 border border-blue-200 rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs font-mono shrink-0 animate-in fade-in">
+        <div className="px-3 py-2 bg-accent/70 border border-border rounded-xl flex flex-wrap items-center justify-between gap-2 text-xs font-mono shrink-0 animate-in fade-in">
           <div className="flex items-center gap-2">
-            <span className="p-1 rounded-md bg-blue-600 text-white">
+            <span className="p-1 rounded-md bg-primary text-primary-foreground">
               <Sparkles className="w-3.5 h-3.5" />
             </span>
             <div>
-              <span className="text-blue-900 font-bold block">
+              <span className="text-accent-foreground font-bold block">
                 Experimenting with Strategy Idea: {activeModel.originStrategy}
               </span>
-              <span className="text-[11px] text-blue-700 font-sans">
+              <span className="text-[11px] text-accent-foreground font-sans">
                 {activeModel.description}
               </span>
             </div>
@@ -873,7 +873,7 @@ class VolSkewAgent(QuantParentAgent):
 
           <div className="flex items-center gap-2">
             {activeModel.ideaBenefits?.map((b, idx) => (
-              <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-white text-blue-800 font-bold border border-blue-200 shadow-2xs">
+              <span key={idx} className="text-[10px] px-2 py-0.5 rounded bg-card text-accent-foreground font-bold border border-border shadow-2xs">
                 {b}
               </span>
             ))}
@@ -884,7 +884,7 @@ class VolSkewAgent(QuantParentAgent):
                 setRightTab('sandbox');
                 setSandboxInitialMode('single');
               }}
-              className="h-6 text-[11px] font-mono bg-blue-600 hover:bg-blue-700 text-white rounded-md px-2.5 gap-1"
+              className="h-6 text-[11px] font-mono bg-primary hover:bg-primary text-primary-foreground rounded-md px-2.5 gap-1"
             >
               <TestTube className="w-3 h-3" />
               <span>Backtest Live</span>
@@ -894,7 +894,7 @@ class VolSkewAgent(QuantParentAgent):
       )}
 
       {/* Main 3-Column Container matching wireframe sketch */}
-      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-card shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         
         {/* =========================================================================
             LEFT COLUMN: REPOSITORY (Images 1-4)
@@ -902,7 +902,7 @@ class VolSkewAgent(QuantParentAgent):
             - Filter buttons: [ All ] [ Code bases ] [ sub agents ] [ templates ]
             - Vertical list of items
            ========================================================================= */}
-        <div className="lg:col-span-3 border-r border-border p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
+        <div className="lg:col-span-3 border-r border-border p-3 flex flex-col justify-between bg-card min-h-0 overflow-hidden">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             <div className="mb-2 shrink-0 flex items-center justify-between">
               <h2 className="text-xs font-bold text-foreground tracking-tight font-mono">
@@ -920,8 +920,8 @@ class VolSkewAgent(QuantParentAgent):
                 onClick={() => setRepoFilter('all')}
                 className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
                   repoFilter === 'all'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                    ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                    : 'bg-card text-foreground border-border hover:bg-muted'
                 }`}
               >
                 All
@@ -931,8 +931,8 @@ class VolSkewAgent(QuantParentAgent):
                 onClick={() => setRepoFilter('codebases')}
                 className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
                   repoFilter === 'codebases'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                    ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                    : 'bg-card text-foreground border-border hover:bg-muted'
                 }`}
               >
                 Code bases
@@ -942,8 +942,8 @@ class VolSkewAgent(QuantParentAgent):
                 onClick={() => setRepoFilter('subagents')}
                 className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
                   repoFilter === 'subagents'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                    ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                    : 'bg-card text-foreground border-border hover:bg-muted'
                 }`}
               >
                 sub agents
@@ -953,8 +953,8 @@ class VolSkewAgent(QuantParentAgent):
                 onClick={() => setRepoFilter('templates')}
                 className={`py-1 px-2 rounded-lg text-[11px] font-mono transition-all border ${
                   repoFilter === 'templates'
-                    ? 'bg-blue-500 text-white font-bold border-blue-500 shadow-2xs'
-                    : 'bg-white text-foreground border-border hover:bg-slate-50'
+                    ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                    : 'bg-card text-foreground border-border hover:bg-muted'
                 }`}
               >
                 templates
@@ -974,8 +974,8 @@ class VolSkewAgent(QuantParentAgent):
                     }}
                     className={`p-2.5 rounded-xl border text-left cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-blue-50 border-blue-500 shadow-2xs'
-                        : 'bg-white hover:bg-slate-50 border-border'
+                        ? 'bg-accent border-primary shadow-2xs'
+                        : 'bg-card hover:bg-muted border-border'
                     }`}
                   >
                     <span className="text-xs font-semibold text-foreground font-mono block">
@@ -995,7 +995,7 @@ class VolSkewAgent(QuantParentAgent):
             <Button
               variant="outline"
               size="sm"
-              className="w-full text-[11px] font-mono text-foreground hover:bg-slate-50 h-8 gap-1 border-border bg-white"
+              className="w-full text-[11px] font-mono text-foreground hover:bg-muted h-8 gap-1 border-border bg-card"
               onClick={() => {
                 const newNode: AgentNode = {
                   id: `node-${Date.now().toString().slice(-3)}`,
@@ -1036,19 +1036,19 @@ class VolSkewAgent(QuantParentAgent):
             - Middle: Interactive Node DAG (or Code view if "code" is active)
             - Bottom: Model Idea / workspace ideator prompt and edit bar
            ========================================================================= */}
-        <div className="lg:col-span-5 flex flex-col justify-between border-r border-border bg-white p-3 min-h-0 overflow-hidden">
+        <div className="lg:col-span-5 flex flex-col justify-between border-r border-border bg-card p-3 min-h-0 overflow-hidden">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             {/* Top Bar matching sketch: "matrix / Node / code" + "Version 1 ▼" */}
             <div className="flex flex-wrap items-center justify-between gap-2 mb-2 pb-2 border-b border-border shrink-0">
               
               {/* Mode switch container: [ matrix / Node / code ] */}
-              <div className="flex items-center px-2.5 py-1 rounded-xl border border-border bg-white font-mono text-xs shadow-2xs">
+              <div className="flex items-center px-2.5 py-1 rounded-xl border border-border bg-card font-mono text-xs shadow-2xs">
                 <button
                   type="button"
                   onClick={() => setViewMode('matrix')}
                   className={`px-1.5 py-0.5 rounded transition-all ${
                     viewMode === 'matrix'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-foreground hover:text-primary'
                   }`}
                 >
@@ -1060,7 +1060,7 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setViewMode('Node')}
                   className={`px-1.5 py-0.5 rounded transition-all ${
                     viewMode === 'Node'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-foreground hover:text-primary'
                   }`}
                 >
@@ -1072,7 +1072,7 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setViewMode('code')}
                   className={`px-1.5 py-0.5 rounded transition-all ${
                     viewMode === 'code'
-                      ? 'bg-emerald-100 text-emerald-800 font-bold border border-emerald-300'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-foreground hover:text-primary'
                   }`}
                 >
@@ -1086,14 +1086,14 @@ class VolSkewAgent(QuantParentAgent):
                   variant="outline"
                   size="sm"
                   onClick={() => setIsVersionDropdownOpen(!isVersionDropdownOpen)}
-                  className="h-7 text-xs font-mono gap-1 text-foreground px-2.5 bg-white hover:bg-slate-50 border-border rounded-lg shadow-2xs"
+                  className="h-7 text-xs font-mono gap-1 text-foreground px-2.5 bg-card hover:bg-muted border-border rounded-lg shadow-2xs"
                 >
                   <span>{selectedVersion}</span>
                   <ChevronDown className="w-3 h-3 text-muted-foreground" />
                 </Button>
 
                 {isVersionDropdownOpen && (
-                  <div className="absolute right-0 mt-1 w-56 bg-white border border-border rounded-xl shadow-lg z-30 p-1 font-mono text-xs animate-in fade-in">
+                  <div className="absolute right-0 mt-1 w-56 bg-popover border border-border rounded-xl shadow-lg z-30 p-1 font-mono text-xs animate-in fade-in">
                     {[
                       'Version 1 (Production Core)',
                       'Version 1.1 (Low Latency DMA)',
@@ -1106,12 +1106,12 @@ class VolSkewAgent(QuantParentAgent):
                           setSelectedVersion(v.split(' (')[0]);
                           setIsVersionDropdownOpen(false);
                         }}
-                        className={`w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-slate-50 flex items-center justify-between ${
-                          selectedVersion === v.split(' (')[0] ? 'text-blue-600 font-bold bg-blue-50' : 'text-foreground'
+                        className={`w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-muted flex items-center justify-between ${
+                          selectedVersion === v.split(' (')[0] ? 'text-primary font-bold bg-accent' : 'text-foreground'
                         }`}
                       >
                         <span>{v}</span>
-                        {selectedVersion === v.split(' (')[0] && <Check className="w-3 h-3 text-blue-600" />}
+                        {selectedVersion === v.split(' (')[0] && <Check className="w-3 h-3 text-primary" />}
                       </button>
                     ))}
                   </div>
@@ -1121,7 +1121,7 @@ class VolSkewAgent(QuantParentAgent):
 
             {/* Interactive Canvas View (when "Node" is active) */}
             {viewMode === 'Node' && (
-              <div className="relative w-full flex-1 min-h-[260px] rounded-xl border border-border bg-white overflow-hidden p-2 select-none flex items-center justify-center">
+              <div className="relative w-full flex-1 min-h-[260px] rounded-xl border border-border bg-card overflow-hidden p-2 select-none flex items-center justify-center">
                 {/* SVG Connections matching sketch topology */}
                 <svg className="absolute inset-0 w-full h-full pointer-events-none z-0">
                   <defs>
@@ -1134,7 +1134,7 @@ class VolSkewAgent(QuantParentAgent):
                       markerHeight="6"
                       orient="auto-start-reverse"
                     >
-                      <path d="M 0 1 L 8 5 L 0 9 z" fill="#1e293b" opacity="0.9" />
+                      <path d="M 0 1 L 8 5 L 0 9 z" fill="var(--secondary)" opacity="0.9" />
                     </marker>
                   </defs>
 
@@ -1142,7 +1142,7 @@ class VolSkewAgent(QuantParentAgent):
                   <path
                     d="M 140 120 C 165 95, 175 60, 205 50"
                     fill="none"
-                    stroke="#1e293b"
+                    stroke="var(--secondary)"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
@@ -1151,7 +1151,7 @@ class VolSkewAgent(QuantParentAgent):
                   <path
                     d="M 140 150 C 165 175, 170 215, 195 220"
                     fill="none"
-                    stroke="#1e293b"
+                    stroke="var(--secondary)"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
@@ -1160,7 +1160,7 @@ class VolSkewAgent(QuantParentAgent):
                   <path
                     d="M 305 60 C 335 75, 350 105, 375 130"
                     fill="none"
-                    stroke="#1e293b"
+                    stroke="var(--secondary)"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
@@ -1169,7 +1169,7 @@ class VolSkewAgent(QuantParentAgent):
                   <path
                     d="M 300 220 C 335 200, 350 165, 375 145"
                     fill="none"
-                    stroke="#1e293b"
+                    stroke="var(--secondary)"
                     strokeWidth="1.75"
                     markerEnd="url(#arrow)"
                   />
@@ -1183,22 +1183,22 @@ class VolSkewAgent(QuantParentAgent):
                       onClick={() => setSelectedNodeId(activeModel.nodes[0].id)}
                       className={`absolute left-2 top-[60px] w-[138px] h-[115px] p-2 rounded-2xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[0].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
+                          ? 'bg-card border-primary ring-2 ring-ring/30'
+                          : 'bg-card hover:bg-muted border-border'
                       }`}
                     >
                       <div className="space-y-1">
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-blue-600 font-bold">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-primary font-bold">
                             {activeModel.nodes[0].type}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleManualNodeRefresh(e, 'node-1')}
                             title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-muted text-foreground border border-border text-[8px] font-mono font-bold hover:bg-muted"
                           >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-1' ? 'animate-spin text-emerald-600' : ''}`} />
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-1' ? 'animate-spin text-chart-4' : ''}`} />
                             <span>{nodeCountdowns['node-1'] || 42}s</span>
                           </button>
                         </div>
@@ -1208,7 +1208,7 @@ class VolSkewAgent(QuantParentAgent):
                       </div>
                       <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
                         <span>Lat: {activeModel.nodes[0].latency}</span>
-                        <span className="text-emerald-600 font-semibold">Grounded</span>
+                        <span className="text-chart-4 font-semibold">Grounded</span>
                       </div>
                     </div>
                   )}
@@ -1219,22 +1219,22 @@ class VolSkewAgent(QuantParentAgent):
                       onClick={() => setSelectedNodeId(activeModel.nodes[1].id)}
                       className={`absolute left-[195px] top-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[1].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
+                          ? 'bg-card border-primary ring-2 ring-ring/30'
+                          : 'bg-card hover:bg-muted border-border'
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-purple-600 font-bold block">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-chart-2 font-bold block">
                             {activeModel.nodes[1].type}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleManualNodeRefresh(e, 'node-2')}
                             title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-purple-50 text-purple-700 border border-purple-200 text-[8px] font-mono font-bold hover:bg-purple-100"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-muted text-foreground border border-border text-[8px] font-mono font-bold hover:bg-muted"
                           >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-2' ? 'animate-spin text-purple-600' : ''}`} />
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-2' ? 'animate-spin text-chart-2' : ''}`} />
                             <span>{nodeCountdowns['node-2'] || 36}s</span>
                           </button>
                         </div>
@@ -1244,7 +1244,7 @@ class VolSkewAgent(QuantParentAgent):
                       </div>
                       <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
                         <span>{activeModel.nodes[1].latency}</span>
-                        <span className="text-purple-600 font-semibold">Synced</span>
+                        <span className="text-chart-2 font-semibold">Synced</span>
                       </div>
                     </div>
                   )}
@@ -1255,22 +1255,22 @@ class VolSkewAgent(QuantParentAgent):
                       onClick={() => setSelectedNodeId(activeModel.nodes[2].id)}
                       className={`absolute left-[190px] bottom-[10px] w-[125px] h-[82px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[2].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
+                          ? 'bg-card border-primary ring-2 ring-ring/30'
+                          : 'bg-card hover:bg-muted border-border'
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-emerald-600 font-bold block">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-chart-4 font-bold block">
                             {activeModel.nodes[2].type}
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleManualNodeRefresh(e, 'node-3')}
                             title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-emerald-50 text-emerald-700 border border-emerald-200 text-[8px] font-mono font-bold hover:bg-emerald-100"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-muted text-foreground border border-border text-[8px] font-mono font-bold hover:bg-muted"
                           >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-3' ? 'animate-spin text-emerald-600' : ''}`} />
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-3' ? 'animate-spin text-chart-4' : ''}`} />
                             <span>{nodeCountdowns['node-3'] || 58}s</span>
                           </button>
                         </div>
@@ -1280,7 +1280,7 @@ class VolSkewAgent(QuantParentAgent):
                       </div>
                       <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
                         <span>{activeModel.nodes[2].latency}</span>
-                        <span className="text-emerald-600 font-semibold">L2 Validated</span>
+                        <span className="text-chart-4 font-semibold">L2 Validated</span>
                       </div>
                     </div>
                   )}
@@ -1291,22 +1291,22 @@ class VolSkewAgent(QuantParentAgent):
                       onClick={() => setSelectedNodeId(activeModel.nodes[3].id)}
                       className={`absolute right-2 top-[75px] w-[128px] h-[92px] p-2 rounded-xl border-2 transition-all cursor-pointer z-10 flex flex-col justify-between shadow-2xs ${
                         selectedNodeId === activeModel.nodes[3].id
-                          ? 'bg-white border-blue-500 ring-2 ring-blue-400/30'
-                          : 'bg-white hover:bg-slate-50 border-border'
+                          ? 'bg-card border-primary ring-2 ring-ring/30'
+                          : 'bg-card hover:bg-muted border-border'
                       }`}
                     >
                       <div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-mono uppercase tracking-wider text-amber-600 font-bold block">
+                          <span className="text-[9px] font-mono uppercase tracking-wider text-destructive font-bold block">
                             Terminal Gate
                           </span>
                           <button
                             type="button"
                             onClick={(e) => handleManualNodeRefresh(e, 'node-4')}
                             title="Anti-Hallucination Refresh countdown"
-                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200 text-[8px] font-mono font-bold hover:bg-amber-100"
+                            className="flex items-center gap-0.5 px-1 py-0.2 rounded bg-muted text-foreground border border-border text-[8px] font-mono font-bold hover:bg-muted"
                           >
-                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-4' ? 'animate-spin text-amber-600' : ''}`} />
+                            <RotateCw className={`w-2.5 h-2.5 ${refreshingNodeId === 'node-4' ? 'animate-spin text-destructive' : ''}`} />
                             <span>{nodeCountdowns['node-4'] || 24}s</span>
                           </button>
                         </div>
@@ -1316,7 +1316,7 @@ class VolSkewAgent(QuantParentAgent):
                       </div>
                       <div className="text-[8px] font-mono text-muted-foreground border-t border-border pt-0.5 flex items-center justify-between">
                         <span>SEC 15c3-5</span>
-                        <span className="text-emerald-700 font-bold">PASS</span>
+                        <span className="text-foreground font-bold">PASS</span>
                       </div>
                     </div>
                   )}
@@ -1326,12 +1326,12 @@ class VolSkewAgent(QuantParentAgent):
 
             {/* Code View mode */}
             {viewMode === 'code' && (
-              <div className="w-full flex-1 min-h-[260px] rounded-xl border border-border bg-slate-900 text-slate-100 font-mono text-xs p-3 overflow-y-auto space-y-1">
-                <div className="flex items-center justify-between pb-1.5 border-b border-slate-800 text-slate-400 text-[11px]">
+              <div className="w-full flex-1 min-h-[260px] rounded-xl border border-border bg-secondary text-secondary-foreground font-mono text-xs p-3 overflow-y-auto space-y-1">
+                <div className="flex items-center justify-between pb-1.5 border-b border-secondary text-muted-foreground text-[11px]">
                   <span># {selectedNode.name} Implementation ({activeModel.name})</span>
-                  <span className="text-emerald-400">Python 3.11 · Compiled</span>
+                  <span className="text-chart-4">Python 3.11 · Compiled</span>
                 </div>
-                <pre className="pt-2 text-[11px] leading-relaxed overflow-x-auto text-slate-200">
+                <pre className="pt-2 text-[11px] leading-relaxed overflow-x-auto text-secondary-foreground">
                   {selectedNode.codeSnippet}
                 </pre>
               </div>
@@ -1339,7 +1339,7 @@ class VolSkewAgent(QuantParentAgent):
 
             {/* Matrix View mode */}
             {viewMode === 'matrix' && (
-              <div className="w-full flex-1 min-h-[260px] rounded-xl border border-border bg-white p-3 overflow-y-auto font-mono text-xs space-y-2">
+              <div className="w-full flex-1 min-h-[260px] rounded-xl border border-border bg-card p-3 overflow-y-auto font-mono text-xs space-y-2">
                 <div className="flex items-center justify-between pb-1 border-b border-border">
                   <span className="font-bold text-foreground">Cross-Agent Factor Covariance Matrix</span>
                   <span className="text-[10px] text-muted-foreground">Barra Multi-Asset Model</span>
@@ -1347,7 +1347,7 @@ class VolSkewAgent(QuantParentAgent):
                 <div className="overflow-x-auto">
                   <table className="w-full text-center border-collapse text-[10px]">
                     <thead>
-                      <tr className="border-b border-border bg-slate-50">
+                      <tr className="border-b border-border bg-muted">
                         <th className="p-1.5 text-left">Agent Node</th>
                         <th className="p-1.5">Alpha Beta</th>
                         <th className="p-1.5">Momentum</th>
@@ -1358,23 +1358,23 @@ class VolSkewAgent(QuantParentAgent):
                     <tbody className="divide-y divide-border">
                       <tr>
                         <td className="p-1.5 text-left font-semibold text-foreground">Research Judgement</td>
-                        <td className="p-1.5 text-blue-600 font-bold">1.00</td>
+                        <td className="p-1.5 text-primary font-bold">1.00</td>
                         <td className="p-1.5">0.42</td>
-                        <td className="p-1.5 text-emerald-700">0.12</td>
+                        <td className="p-1.5 text-foreground">0.12</td>
                         <td className="p-1.5">0.88</td>
                       </tr>
                       <tr>
                         <td className="p-1.5 text-left font-semibold text-foreground">Market Trend Referral</td>
                         <td className="p-1.5">0.42</td>
-                        <td className="p-1.5 text-blue-600 font-bold">1.00</td>
+                        <td className="p-1.5 text-primary font-bold">1.00</td>
                         <td className="p-1.5">0.68</td>
                         <td className="p-1.5">0.94</td>
                       </tr>
                       <tr>
                         <td className="p-1.5 text-left font-semibold text-foreground">Data &amp; Factor Store</td>
-                        <td className="p-1.5 text-emerald-700">0.12</td>
+                        <td className="p-1.5 text-foreground">0.12</td>
                         <td className="p-1.5">0.68</td>
-                        <td className="p-1.5 text-blue-600 font-bold">1.00</td>
+                        <td className="p-1.5 text-primary font-bold">1.00</td>
                         <td className="p-1.5">0.99</td>
                       </tr>
                     </tbody>
@@ -1392,7 +1392,7 @@ class VolSkewAgent(QuantParentAgent):
           <div className="pt-2 border-t border-border mt-2 shrink-0 space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-foreground font-mono flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
                 Model Ideator &amp; Architecture Engine
               </span>
               <span className="text-[10px] font-mono text-muted-foreground">
@@ -1412,7 +1412,7 @@ class VolSkewAgent(QuantParentAgent):
                   key={chip}
                   type="button"
                   onClick={() => setIdeaPrompt(`Apply ${chip} with strict risk constraints on ${activeModel.name}.`)}
-                  className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-slate-50 hover:bg-blue-50 text-slate-700 hover:text-blue-700 border border-border transition-all"
+                  className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-muted hover:bg-accent text-muted-foreground hover:text-accent-foreground border border-border transition-all"
                 >
                   + {chip}
                 </button>
@@ -1427,7 +1427,7 @@ class VolSkewAgent(QuantParentAgent):
                   value={ideaPrompt}
                   onChange={(e) => setIdeaPrompt(e.target.value)}
                   placeholder="Ideate or modify model architecture, agent weights, or parameters..."
-                  className="w-full h-8 pl-2.5 pr-8 text-xs font-mono rounded-lg border border-border bg-white text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                  className="w-full h-8 pl-2.5 pr-8 text-xs font-mono rounded-lg border border-border bg-card text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 />
               </div>
               <Button
@@ -1435,7 +1435,7 @@ class VolSkewAgent(QuantParentAgent):
                 size="sm"
                 onClick={handleSynthesizeIdea}
                 disabled={isSynthesizing}
-                className="h-8 px-3 font-mono text-xs bg-blue-600 hover:bg-blue-700 text-white rounded-lg gap-1 shrink-0 font-semibold shadow-2xs"
+                className="h-8 px-3 font-mono text-xs bg-primary hover:bg-primary text-primary-foreground rounded-lg gap-1 shrink-0 font-semibold shadow-2xs"
               >
                 <Sparkles className={`w-3 h-3 ${isSynthesizing ? 'animate-spin' : ''}`} />
                 <span>{isSynthesizing ? 'Synthesizing...' : 'Ideate & Apply'}</span>
@@ -1443,7 +1443,7 @@ class VolSkewAgent(QuantParentAgent):
             </div>
 
             {ideatorOutput && (
-              <div className="p-2 rounded-lg bg-emerald-50 border border-emerald-200 text-[10px] font-mono text-emerald-900 whitespace-pre-line animate-in fade-in">
+              <div className="p-2 rounded-lg bg-muted border border-border text-[10px] font-mono text-foreground whitespace-pre-line animate-in fade-in">
                 {ideatorOutput}
               </div>
             )}
@@ -1456,7 +1456,7 @@ class VolSkewAgent(QuantParentAgent):
             - Content updates dynamically per active tab
             - In Sandbox mode: Supports Single Model, Compare Models, and Merge Models
            ========================================================================= */}
-        <div className="lg:col-span-4 p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
+        <div className="lg:col-span-4 p-3 flex flex-col justify-between bg-card min-h-0 overflow-hidden">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             
             {/* Top Tabs matching sketch */}
@@ -1467,7 +1467,7 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setRightTab('agent')}
                   className={`px-2 py-1 rounded-md transition-all ${
                     rightTab === 'agent'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -1478,7 +1478,7 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setRightTab('instructions')}
                   className={`px-2 py-1 rounded-md transition-all ${
                     rightTab === 'instructions'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -1489,7 +1489,7 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setRightTab('code')}
                   className={`px-2 py-1 rounded-md transition-all ${
                     rightTab === 'code'
-                      ? 'bg-slate-100 text-foreground font-bold border border-border'
+                      ? 'bg-muted text-foreground font-bold border border-border'
                       : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
@@ -1500,8 +1500,8 @@ class VolSkewAgent(QuantParentAgent):
                   onClick={() => setRightTab('sandbox')}
                   className={`px-2 py-1 rounded-md transition-all flex items-center gap-1 ${
                     rightTab === 'sandbox'
-                      ? 'bg-blue-600 text-white font-bold border border-blue-600 shadow-2xs'
-                      : 'text-blue-600 hover:text-blue-700'
+                      ? 'bg-primary text-primary-foreground font-bold border border-primary shadow-2xs'
+                      : 'text-primary hover:text-accent-foreground'
                   }`}
                 >
                   <TestTube className="w-3 h-3" />
@@ -1513,7 +1513,7 @@ class VolSkewAgent(QuantParentAgent):
               <button
                 type="button"
                 onClick={() => setIsAuditModalOpen(true)}
-                className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-emerald-300 text-emerald-700 bg-emerald-50 hover:bg-emerald-100 transition-all shrink-0 flex items-center gap-1"
+                className="text-[10px] font-mono px-2 py-0.5 rounded-full border border-border text-foreground bg-muted hover:bg-muted transition-all shrink-0 flex items-center gap-1"
               >
                 <ShieldCheck className="w-3 h-3" />
                 <span>audit</span>
@@ -1542,9 +1542,9 @@ class VolSkewAgent(QuantParentAgent):
               <div className="flex-1 min-h-0 overflow-y-auto font-mono text-xs space-y-2">
                 <div className="flex items-center justify-between pb-1 border-b border-border">
                   <span className="text-muted-foreground">Source: {selectedNode.name}.py</span>
-                  <Badge variant="outline" className="text-[10px] bg-slate-50">FIX 4.4 Engine</Badge>
+                  <Badge variant="outline" className="text-[10px] bg-muted">FIX 4.4 Engine</Badge>
                 </div>
-                <div className="p-2.5 rounded-xl bg-slate-900 text-slate-100 text-[11px] leading-relaxed overflow-x-auto">
+                <div className="p-2.5 rounded-xl bg-secondary text-secondary-foreground text-[11px] leading-relaxed overflow-x-auto">
                   <pre>{selectedNode.codeSnippet}</pre>
                 </div>
               </div>
@@ -1559,7 +1559,7 @@ class VolSkewAgent(QuantParentAgent):
                     value={agentInstructionsText}
                     onChange={(e) => setAgentInstructionsText(e.target.value)}
                     rows={8}
-                    className="w-full text-xs font-mono p-2.5 rounded-xl border border-border bg-white text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                    className="w-full text-xs font-mono p-2.5 rounded-xl border border-border bg-card text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                   />
                 </div>
 
@@ -1567,7 +1567,7 @@ class VolSkewAgent(QuantParentAgent):
                   <label className="text-[11px] text-muted-foreground block">Allocated API Tools:</label>
                   <div className="flex flex-wrap gap-1">
                     {selectedNode.tools.map((t, idx) => (
-                      <span key={idx} className="px-2 py-0.5 rounded-md bg-slate-50 border border-border text-[10px]">
+                      <span key={idx} className="px-2 py-0.5 rounded-md bg-muted border border-border text-[10px]">
                         {t}
                       </span>
                     ))}
@@ -1590,7 +1590,7 @@ class VolSkewAgent(QuantParentAgent):
                       type="text"
                       value={agentNameInput}
                       onChange={(e) => setAgentNameInput(e.target.value)}
-                      className="w-full font-mono text-xs font-bold border border-border rounded-lg px-2 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                      className="w-full font-mono text-xs font-bold border border-border rounded-lg px-2 py-1.5 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring"
                     />
                   </div>
 
@@ -1603,7 +1603,7 @@ class VolSkewAgent(QuantParentAgent):
                       value={agentInputsText}
                       onChange={(e) => setAgentInputsText(e.target.value)}
                       rows={2}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
+                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring resize-none"
                     />
                   </div>
 
@@ -1616,7 +1616,7 @@ class VolSkewAgent(QuantParentAgent):
                       value={agentDescText}
                       onChange={(e) => setAgentDescText(e.target.value)}
                       rows={3}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
+                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring resize-none"
                     />
                   </div>
 
@@ -1629,7 +1629,7 @@ class VolSkewAgent(QuantParentAgent):
                       type="text"
                       value={agentOutputLinkText}
                       onChange={(e) => setAgentOutputLinkText(e.target.value)}
-                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring"
                     />
                   </div>
 
@@ -1642,7 +1642,7 @@ class VolSkewAgent(QuantParentAgent):
                       value={agentInstructionsText}
                       onChange={(e) => setAgentInstructionsText(e.target.value)}
                       rows={3}
-                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500 resize-none"
+                      className="w-full font-mono text-xs border border-border rounded-lg p-2 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring resize-none"
                     />
                   </div>
 
@@ -1654,7 +1654,7 @@ class VolSkewAgent(QuantParentAgent):
                     <select
                       value={selectedProperty}
                       onChange={(e) => setSelectedProperty(e.target.value)}
-                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1.5 text-foreground bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                      className="w-full font-mono text-xs border border-border rounded-lg px-2 py-1.5 text-foreground bg-card focus:outline-hidden focus:ring-1 focus:ring-ring"
                     >
                       <option value="Highest Sharpe Weighting">Highest Sharpe Weighting</option>
                       <option value="Factor Neutral Union">Factor Neutral Union</option>
@@ -1670,7 +1670,7 @@ class VolSkewAgent(QuantParentAgent):
                     </label>
                     <div className="flex flex-wrap gap-1">
                       {selectedNode.tools.map((t, idx) => (
-                        <Badge key={idx} variant="outline" className="text-[10px] font-mono bg-slate-50 border-border">
+                        <Badge key={idx} variant="outline" className="text-[10px] font-mono bg-muted border-border">
                           {t}
                         </Badge>
                       ))}
@@ -1683,9 +1683,9 @@ class VolSkewAgent(QuantParentAgent):
                   <Button
                     type="button"
                     onClick={() => setIsPromptModalOpen(true)}
-                    className="w-full font-mono text-xs h-9 bg-white hover:bg-slate-50 text-foreground border border-border rounded-xl font-semibold shadow-2xs gap-1.5"
+                    className="w-full font-mono text-xs h-9 bg-card hover:bg-muted text-foreground border border-border rounded-xl font-semibold shadow-2xs gap-1.5"
                   >
-                    <Send className="w-3.5 h-3.5 text-blue-600" />
+                    <Send className="w-3.5 h-3.5 text-primary" />
                     <span>Prompt the selected agent/subagent</span>
                   </Button>
                 </div>
@@ -1699,11 +1699,11 @@ class VolSkewAgent(QuantParentAgent):
 
       {/* PROMPT TEST MODAL */}
       {isPromptModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <Card className="w-full max-w-lg border border-border bg-white shadow-2xl rounded-2xl animate-in zoom-in-95 p-4 space-y-3 font-mono">
+        <div className="fixed inset-0 z-50 bg-secondary/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <Card className="w-full max-w-lg border border-border bg-card shadow-2xl rounded-2xl animate-in zoom-in-95 p-4 space-y-3 font-mono">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <div className="flex items-center gap-2">
-                <Bot className="w-4 h-4 text-blue-600" />
+                <Bot className="w-4 h-4 text-primary" />
                 <span className="font-bold text-xs text-foreground">
                   Prompt Agent: {selectedNode.name} ({activeModel.name})
                 </span>
@@ -1725,12 +1725,12 @@ class VolSkewAgent(QuantParentAgent):
                 value={promptQuery}
                 onChange={(e) => setPromptQuery(e.target.value)}
                 rows={3}
-                className="w-full text-xs font-mono p-2.5 rounded-xl border border-border bg-white text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                className="w-full text-xs font-mono p-2.5 rounded-xl border border-border bg-card text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
               />
             </div>
 
             {promptResponse && (
-              <div className="p-3 rounded-xl bg-slate-50 border border-border text-[11px] leading-relaxed whitespace-pre-line text-foreground">
+              <div className="p-3 rounded-xl bg-muted border border-border text-[11px] leading-relaxed whitespace-pre-line text-foreground">
                 {promptResponse}
               </div>
             )}
@@ -1743,7 +1743,7 @@ class VolSkewAgent(QuantParentAgent):
                   setRightTab('sandbox');
                   setSandboxInitialMode('single');
                 }}
-                className="text-xs text-blue-600 hover:underline flex items-center gap-1"
+                className="text-xs text-primary hover:underline flex items-center gap-1"
               >
                 <TestTube className="w-3.5 h-3.5" />
                 <span>Open in Backtest Sandbox</span>
@@ -1753,7 +1753,7 @@ class VolSkewAgent(QuantParentAgent):
                 type="button"
                 onClick={handleRunAgentPrompt}
                 disabled={isPromptRunning}
-                className="font-mono text-xs h-8 bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 gap-1.5"
+                className="font-mono text-xs h-8 bg-primary hover:bg-primary text-primary-foreground rounded-lg px-4 gap-1.5"
               >
                 <Send className={`w-3 h-3 ${isPromptRunning ? 'animate-spin' : ''}`} />
                 <span>{isPromptRunning ? 'Executing...' : 'Send Prompt'}</span>
@@ -1765,11 +1765,11 @@ class VolSkewAgent(QuantParentAgent):
 
       {/* AGENT AUDIT MODAL */}
       {isAuditModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-          <Card className="w-full max-w-lg border border-border bg-white shadow-2xl rounded-2xl animate-in zoom-in-95 p-4 space-y-3 font-mono">
+        <div className="fixed inset-0 z-50 bg-secondary/40 backdrop-blur-xs flex items-center justify-center p-4">
+          <Card className="w-full max-w-lg border border-border bg-card shadow-2xl rounded-2xl animate-in zoom-in-95 p-4 space-y-3 font-mono">
             <div className="flex items-center justify-between pb-2 border-b border-border">
               <div className="flex items-center gap-2">
-                <ShieldCheck className="w-5 h-5 text-emerald-600" />
+                <ShieldCheck className="w-5 h-5 text-chart-4" />
                 <span className="text-xs font-bold text-foreground">
                   Agent Audit &amp; Safety Compliance Log
                 </span>
@@ -1784,25 +1784,25 @@ class VolSkewAgent(QuantParentAgent):
             </div>
 
             <div className="space-y-2 text-xs">
-              <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-card border border-border flex items-center justify-between">
                 <span className="text-muted-foreground">Target Model / Agent:</span>
                 <span className="font-bold text-foreground">{activeModel.name} · {selectedNode.name}</span>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-card border border-border flex items-center justify-between">
                 <span className="text-muted-foreground">SEC Rule 15c3-5 DMA Gate:</span>
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300">
+                <Badge variant="outline" className="bg-muted text-foreground border-border">
                   PASSED (0.04ms)
                 </Badge>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-card border border-border flex items-center justify-between">
                 <span className="text-muted-foreground">Execution Latency SLA (&lt;25ms):</span>
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300">
+                <Badge variant="outline" className="bg-muted text-foreground border-border">
                   {selectedNode.latency} (COMPLIANT)
                 </Badge>
               </div>
-              <div className="p-2 rounded-lg bg-white border border-border flex items-center justify-between">
+              <div className="p-2 rounded-lg bg-card border border-border flex items-center justify-between">
                 <span className="text-muted-foreground">Pre-Trade VaR Impact Limit:</span>
-                <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-300">
+                <Badge variant="outline" className="bg-muted text-foreground border-border">
                   {activeModel.varLimit || 1.14}% / 1.50% MAX
                 </Badge>
               </div>
@@ -1812,7 +1812,7 @@ class VolSkewAgent(QuantParentAgent):
               <Button
                 size="sm"
                 onClick={() => setIsAuditModalOpen(false)}
-                className="h-8 text-xs font-mono bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4"
+                className="h-8 text-xs font-mono bg-primary hover:bg-primary text-primary-foreground rounded-lg px-4"
               >
                 Close Audit
               </Button>

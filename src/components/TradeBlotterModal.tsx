@@ -65,10 +65,10 @@ export const TradeBlotterModal: React.FC<TradeBlotterModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+    <div className="fixed inset-0 z-50 bg-secondary/40 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
       <Card className="rounded-xl w-full max-w-4xl max-h-[85vh] flex flex-col overflow-hidden shadow-xl p-0 gap-0">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-border bg-white">
+        <div className="flex items-center justify-between p-4 border-b border-border bg-card">
           <div className="flex items-center gap-2.5">
             <ClipboardList className="w-5 h-5 text-primary" />
             <div>
@@ -168,7 +168,7 @@ export const TradeBlotterModal: React.FC<TradeBlotterModalProps> = ({
                 </tr>
               ) : (
                 filteredOrders.map((ord) => (
-                  <tr key={ord.id} className="hover:bg-slate-50 transition-colors">
+                  <tr key={ord.id} className="hover:bg-muted transition-colors">
                     <td className="py-2.5 px-3 text-primary font-medium">{ord.id}</td>
                     <td className="py-2.5 px-3 text-muted-foreground text-[11px]">{ord.timestamp}</td>
                     <td className="py-2.5 px-3">
@@ -176,8 +176,8 @@ export const TradeBlotterModal: React.FC<TradeBlotterModalProps> = ({
                       <span
                         className={`text-[10px] px-1.5 py-0.5 rounded font-bold uppercase ${
                           ord.side === 'BUY'
-                            ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/20'
-                            : 'bg-rose-500/10 text-rose-700 border border-rose-500/20'
+                            ? 'bg-chart-4/10 text-foreground border border-chart-4/20'
+                            : 'bg-chart-5/10 text-foreground border border-chart-5/20'
                         }`}
                       >
                         {ord.side}
@@ -196,7 +196,7 @@ export const TradeBlotterModal: React.FC<TradeBlotterModalProps> = ({
                       <span
                         className={`text-[10px] px-2 py-0.5 rounded font-semibold ${
                           ord.status === 'EXECUTED'
-                            ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/30'
+                            ? 'bg-chart-4/10 text-foreground border border-chart-4/30'
                             : 'bg-primary/10 text-primary border border-primary/30'
                         }`}
                       >
@@ -214,9 +214,9 @@ export const TradeBlotterModal: React.FC<TradeBlotterModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="p-3 border-t border-border bg-white text-xs text-muted-foreground flex items-center justify-between">
+        <div className="p-3 border-t border-border bg-card text-xs text-muted-foreground flex items-center justify-between">
           <span>Routing: Direct Market Access (DMA) • FIX 4.4 Engine</span>
-          <span className="font-mono text-emerald-700 font-semibold">FIX Session: Connected</span>
+          <span className="font-mono text-foreground font-semibold">FIX Session: Connected</span>
         </div>
       </Card>
     </div>

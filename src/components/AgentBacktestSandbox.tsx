@@ -76,7 +76,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
       varLimit: 1.25,
       expectedSharpe: 1.84,
       expectedReturn: 13.8,
-      color: '#2563eb'
+      color: 'var(--primary)'
     };
   }, [models, activeModelId]);
 
@@ -186,24 +186,24 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
   };
 
   return (
-    <div className="flex flex-col h-full overflow-y-auto pr-0.5 space-y-3 font-sans text-xs bg-white select-none">
+    <div className="flex flex-col h-full overflow-y-auto pr-0.5 space-y-3 font-sans text-xs bg-card select-none">
       
       {/* Top Banner with Mode Selector */}
-      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-xl bg-white border border-border shrink-0 shadow-2xs">
+      <div className="flex flex-wrap items-center justify-between gap-2 px-3 py-2 rounded-xl bg-card border border-border shrink-0 shadow-2xs">
         <div className="flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-chart-4 animate-pulse" />
           <span className="font-bold text-foreground text-xs font-mono">● Model Output</span>
           <span className="text-[11px] font-mono text-muted-foreground">Live · Real-time</span>
         </div>
 
         {/* Sandbox Modes: Single Output | Compare Models | Merge Models */}
-        <div className="flex items-center gap-1 bg-slate-50 p-0.5 rounded-lg border border-border">
+        <div className="flex items-center gap-1 bg-muted p-0.5 rounded-lg border border-border">
           <button
             type="button"
             onClick={() => setSandboxMode('single')}
             className={`px-2 py-1 rounded-md text-[11px] font-mono transition-all ${
               sandboxMode === 'single'
-                ? 'bg-white text-blue-600 font-bold border border-border shadow-2xs'
+                ? 'bg-card text-primary font-bold border border-border shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -214,7 +214,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             onClick={() => setSandboxMode('compare')}
             className={`px-2 py-1 rounded-md text-[11px] font-mono transition-all flex items-center gap-1 ${
               sandboxMode === 'compare'
-                ? 'bg-white text-blue-600 font-bold border border-border shadow-2xs'
+                ? 'bg-card text-primary font-bold border border-border shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -226,7 +226,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             onClick={() => setSandboxMode('merge')}
             className={`px-2 py-1 rounded-md text-[11px] font-mono transition-all flex items-center gap-1 ${
               sandboxMode === 'merge'
-                ? 'bg-white text-emerald-700 font-bold border border-border shadow-2xs'
+                ? 'bg-card text-foreground font-bold border border-border shadow-2xs'
                 : 'text-muted-foreground hover:text-foreground'
             }`}
           >
@@ -242,13 +242,13 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
       {sandboxMode === 'single' && (
         <div className="space-y-3">
           {/* Target Dataset Selection Box */}
-          <div className="p-2.5 rounded-xl border border-border bg-white shadow-2xs space-y-2">
+          <div className="p-2.5 rounded-xl border border-border bg-card shadow-2xs space-y-2">
             <div className="flex items-center justify-between">
               <label className="text-[11px] font-bold text-foreground font-mono flex items-center gap-1.5">
-                <Database className="w-3.5 h-3.5 text-blue-600" />
+                <Database className="w-3.5 h-3.5 text-primary" />
                 <span>Targeted Sandbox Dataset</span>
               </label>
-              <span className="text-[10px] font-mono text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+              <span className="text-[10px] font-mono text-foreground bg-muted px-1.5 py-0.5 rounded border border-border">
                 Connected to Repo
               </span>
             </div>
@@ -259,7 +259,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                 setSelectedDataset(e.target.value);
                 handleSimulate();
               }}
-              className="w-full bg-white border border-border rounded-lg px-2.5 py-1.5 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500 cursor-pointer"
+              className="w-full bg-card border border-border rounded-lg px-2.5 py-1.5 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring cursor-pointer"
             >
               {targetedDatasets.map((ds) => (
                 <option key={ds.id} value={ds.id}>
@@ -273,7 +273,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
               <button 
                 type="button"
                 onClick={() => setIsParamsOpen(!isParamsOpen)}
-                className="text-blue-600 hover:text-blue-700 font-semibold flex items-center gap-1"
+                className="text-primary hover:text-accent-foreground font-semibold flex items-center gap-1"
               >
                 <SlidersHorizontal className="w-3 h-3" />
                 <span>{isParamsOpen ? 'Hide Parameters' : 'Adjust Model Parameters'}</span>
@@ -282,7 +282,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
 
             {/* Collapsible Parameter Controls */}
             {isParamsOpen && (
-              <div className="p-2.5 mt-1.5 rounded-lg bg-slate-50 border border-border space-y-2.5 animate-in fade-in">
+              <div className="p-2.5 mt-1.5 rounded-lg bg-muted border border-border space-y-2.5 animate-in fade-in">
                 <div className="flex items-center justify-between text-[11px] font-mono">
                   <span className="text-muted-foreground">Target Volatility (%):</span>
                   <span className="font-bold text-foreground">{targetVol}%</span>
@@ -327,17 +327,17 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
           </div>
 
           {/* Performance Over Time Card */}
-          <div className="p-3 rounded-xl border border-border bg-white shadow-2xs space-y-2">
+          <div className="p-3 rounded-xl border border-border bg-card shadow-2xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-foreground font-mono">Performance Over Time</span>
               <div className="flex items-center gap-3 text-[10px] font-mono">
                 <div className="flex items-center gap-1">
-                  <span className="w-2.5 h-0.5 bg-blue-600 inline-block" />
+                  <span className="w-2.5 h-0.5 bg-primary inline-block" />
                   <span className="text-muted-foreground">Returns (%):</span>
-                  <strong className="text-blue-700 font-bold">+{performanceData[performanceData.length - 1].returns}%</strong>
+                  <strong className="text-accent-foreground font-bold">+{performanceData[performanceData.length - 1].returns}%</strong>
                 </div>
                 <div className="flex items-center gap-1">
-                  <span className="w-2.5 h-0.5 bg-slate-400 inline-block" />
+                  <span className="w-2.5 h-0.5 bg-muted inline-block" />
                   <span className="text-muted-foreground">Sharpe:</span>
                   <strong className="text-foreground font-bold">{performanceData[performanceData.length - 1].sharpe}</strong>
                 </div>
@@ -347,22 +347,22 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             <div className="w-full h-44 pt-1">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={performanceData} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="day" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
-                  <YAxis domain={[10, 18]} tick={{ fontSize: 9, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="day" tick={{ fontSize: 9, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
+                  <YAxis domain={[10, 18]} tick={{ fontSize: 9, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px', fontSize: '11px' }}
+                    contentStyle={{ backgroundColor: 'var(--popover)', borderColor: 'var(--border)', borderRadius: '8px', fontSize: '11px' }}
                     formatter={(val: any, name: any) => [name === 'returns' ? `+${val}%` : val, name === 'returns' ? 'Return' : 'Sharpe']}
                   />
-                  <Line type="monotone" dataKey="returns" stroke="#2563eb" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="sharpe" stroke="#94a3b8" strokeWidth={1.5} strokeDasharray="3 3" dot={false} />
+                  <Line type="monotone" dataKey="returns" stroke="var(--primary)" strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="sharpe" stroke="var(--muted-foreground)" strokeWidth={1.5} strokeDasharray="3 3" dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           {/* Returns Distribution Histogram */}
-          <div className="p-3 rounded-xl border border-border bg-white shadow-2xs space-y-2">
+          <div className="p-3 rounded-xl border border-border bg-card shadow-2xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-foreground font-mono">Returns Distribution</span>
               <div className="flex items-center gap-1 text-[10px] font-mono">
@@ -373,8 +373,8 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                     onClick={() => setActiveTimeframe(tf)}
                     className={`px-1.5 py-0.5 rounded text-[10px] font-mono transition-all border ${
                       activeTimeframe === tf
-                        ? 'bg-blue-600 text-white font-bold border-blue-600 shadow-2xs'
-                        : 'bg-white text-muted-foreground border-border hover:bg-slate-50'
+                        ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                        : 'bg-card text-muted-foreground border-border hover:bg-muted'
                     }`}
                   >
                     {tf}
@@ -386,29 +386,29 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             <div className="w-full h-28 pt-1">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={distributionData} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="range" tick={{ fontSize: 8, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
-                  <YAxis tick={{ fontSize: 8, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="range" tick={{ fontSize: 8, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
+                  <YAxis tick={{ fontSize: 8, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px', fontSize: '11px' }}
+                    contentStyle={{ backgroundColor: 'var(--popover)', borderColor: 'var(--border)', borderRadius: '8px', fontSize: '11px' }}
                     formatter={(val: any) => [`${val} samples`, 'Frequency']}
                   />
-                  <Bar dataKey="count" fill="#3b82f6" radius={[2, 2, 0, 0]} />
+                  <Bar dataKey="count" fill="var(--primary)" radius={[2, 2, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
 
             {/* Metrics Bar */}
             <div className="grid grid-cols-3 gap-1.5 pt-2 border-t border-border text-center">
-              <div className="p-1.5 rounded-lg bg-slate-50 border border-border">
+              <div className="p-1.5 rounded-lg bg-muted border border-border">
                 <span className="text-[9px] text-muted-foreground block font-mono">Mean Return</span>
                 <span className="font-bold text-foreground font-mono text-[11px]">+0.14%/day</span>
               </div>
-              <div className="p-1.5 rounded-lg bg-slate-50 border border-border">
+              <div className="p-1.5 rounded-lg bg-muted border border-border">
                 <span className="text-[9px] text-muted-foreground block font-mono">Daily VaR 95%</span>
-                <span className="font-bold text-emerald-700 font-mono text-[11px]">{currentModel.varLimit || 1.14}%</span>
+                <span className="font-bold text-foreground font-mono text-[11px]">{currentModel.varLimit || 1.14}%</span>
               </div>
-              <div className="p-1.5 rounded-lg bg-slate-50 border border-border">
+              <div className="p-1.5 rounded-lg bg-muted border border-border">
                 <span className="text-[9px] text-muted-foreground block font-mono">Max Drawdown</span>
                 <span className="font-bold text-foreground font-mono text-[11px]">-3.2%</span>
               </div>
@@ -424,24 +424,24 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
         <div className="space-y-3 animate-in fade-in">
           
           {/* Dual Model Selectors */}
-          <div className="p-3 rounded-xl border border-border bg-slate-50/50 space-y-2.5">
+          <div className="p-3 rounded-xl border border-border bg-muted/50 space-y-2.5">
             <div className="text-xs font-bold text-foreground font-mono flex items-center justify-between">
               <span className="flex items-center gap-1.5">
-                <ArrowLeftRight className="w-3.5 h-3.5 text-blue-600" />
+                <ArrowLeftRight className="w-3.5 h-3.5 text-primary" />
                 Select Two Models to Compare in Sandbox:
               </span>
-              <Badge variant="outline" className="text-[10px] font-mono bg-white border-border">
+              <Badge variant="outline" className="text-[10px] font-mono bg-card border-border">
                 Dual Sandbox Overlay
               </Badge>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-blue-700 font-bold block">● Model A (Base):</span>
+                <span className="text-[10px] font-mono text-accent-foreground font-bold block">● Model A (Base):</span>
                 <select
                   value={compareModelAId}
                   onChange={(e) => setCompareModelAId(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                  className="w-full bg-card border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-ring"
                 >
                   {models.map(m => (
                     <option key={m.id} value={m.id}>{m.name} ({m.version})</option>
@@ -450,11 +450,11 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-emerald-700 font-bold block">● Model B (Challenger):</span>
+                <span className="text-[10px] font-mono text-foreground font-bold block">● Model B (Challenger):</span>
                 <select
                   value={compareModelBId}
                   onChange={(e) => setCompareModelBId(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-emerald-500"
+                  className="w-full bg-card border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground focus:outline-hidden focus:ring-1 focus:ring-chart-4"
                 >
                   {models.map(m => (
                     <option key={m.id} value={m.id}>{m.name} ({m.version})</option>
@@ -469,7 +469,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
               <select
                 value={selectedDataset}
                 onChange={(e) => setSelectedDataset(e.target.value)}
-                className="bg-white border border-border rounded px-2 py-0.5 text-xs font-mono text-foreground"
+                className="bg-card border border-border rounded px-2 py-0.5 text-xs font-mono text-foreground"
               >
                 {targetedDatasets.map(d => (
                   <option key={d.id} value={d.id}>{d.name}</option>
@@ -479,37 +479,37 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
           </div>
 
           {/* Dual-Curve Performance Chart */}
-          <div className="p-3 rounded-xl border border-border bg-white shadow-2xs space-y-2">
+          <div className="p-3 rounded-xl border border-border bg-card shadow-2xs space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-foreground font-mono">Performance Comparison (Overlay)</span>
               <div className="flex items-center gap-3 text-[10px] font-mono">
-                <span className="text-blue-700 font-bold">● {modelA.name}: +{compareData[compareData.length - 1].returnsA}%</span>
-                <span className="text-emerald-700 font-bold">● {modelB.name}: +{compareData[compareData.length - 1].returnsB}%</span>
+                <span className="text-accent-foreground font-bold">● {modelA.name}: +{compareData[compareData.length - 1].returnsA}%</span>
+                <span className="text-foreground font-bold">● {modelB.name}: +{compareData[compareData.length - 1].returnsB}%</span>
               </div>
             </div>
 
             <div className="w-full h-44 pt-1">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={compareData} margin={{ top: 5, right: 10, left: -25, bottom: 0 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" vertical={false} />
-                  <XAxis dataKey="day" tick={{ fontSize: 9, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
-                  <YAxis domain={[10, 20]} tick={{ fontSize: 9, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                  <XAxis dataKey="day" tick={{ fontSize: 9, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
+                  <YAxis domain={[10, 20]} tick={{ fontSize: 9, fill: 'var(--muted-foreground)' }} axisLine={{ stroke: 'var(--border)' }} />
                   <Tooltip 
-                    contentStyle={{ backgroundColor: '#ffffff', borderColor: '#e2e8f0', borderRadius: '8px', fontSize: '11px' }}
+                    contentStyle={{ backgroundColor: 'var(--popover)', borderColor: 'var(--border)', borderRadius: '8px', fontSize: '11px' }}
                     formatter={(val: any, name: any) => [
                       `+${val}%`, 
                       name === 'returnsA' ? modelA.name : modelB.name
                     ]}
                   />
-                  <Line type="monotone" dataKey="returnsA" stroke="#2563eb" strokeWidth={2} dot={false} name={modelA.name} />
-                  <Line type="monotone" dataKey="returnsB" stroke="#10b981" strokeWidth={2} dot={false} name={modelB.name} />
+                  <Line type="monotone" dataKey="returnsA" stroke="var(--primary)" strokeWidth={2} dot={false} name={modelA.name} />
+                  <Line type="monotone" dataKey="returnsB" stroke="var(--chart-4)" strokeWidth={2} dot={false} name={modelB.name} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </div>
 
           {/* Side-by-Side Metric Comparison Table */}
-          <div className="p-3 rounded-xl border border-border bg-white shadow-2xs space-y-2">
+          <div className="p-3 rounded-xl border border-border bg-card shadow-2xs space-y-2">
             <span className="text-xs font-bold text-foreground font-mono block">Quantitative Delta Analysis</span>
             
             <div className="overflow-x-auto">
@@ -517,8 +517,8 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                 <thead>
                   <tr className="border-b border-border text-muted-foreground text-left">
                     <th className="pb-1.5 font-medium">Metric</th>
-                    <th className="pb-1.5 font-bold text-blue-700">{modelA.name}</th>
-                    <th className="pb-1.5 font-bold text-emerald-700">{modelB.name}</th>
+                    <th className="pb-1.5 font-bold text-accent-foreground">{modelA.name}</th>
+                    <th className="pb-1.5 font-bold text-foreground">{modelB.name}</th>
                     <th className="pb-1.5 font-medium text-right">Advantage</th>
                   </tr>
                 </thead>
@@ -526,32 +526,32 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                   <tr>
                     <td className="py-1 text-muted-foreground">Expected 1Y Return</td>
                     <td className="py-1 font-semibold text-foreground">+{modelA.expectedReturn || 13.8}%</td>
-                    <td className="py-1 font-bold text-emerald-700">+{modelB.expectedReturn || 15.6}%</td>
-                    <td className="py-1 text-right text-emerald-700 font-bold">
+                    <td className="py-1 font-bold text-foreground">+{modelB.expectedReturn || 15.6}%</td>
+                    <td className="py-1 text-right text-foreground font-bold">
                       +{((modelB.expectedReturn || 15.6) - (modelA.expectedReturn || 13.8)).toFixed(1)}% (B)
                     </td>
                   </tr>
                   <tr>
                     <td className="py-1 text-muted-foreground">Sharpe Ratio</td>
                     <td className="py-1 font-semibold text-foreground">{modelA.expectedSharpe || 1.84}</td>
-                    <td className="py-1 font-bold text-emerald-700">{modelB.expectedSharpe || 2.15}</td>
-                    <td className="py-1 text-right text-emerald-700 font-bold">
+                    <td className="py-1 font-bold text-foreground">{modelB.expectedSharpe || 2.15}</td>
+                    <td className="py-1 text-right text-foreground font-bold">
                       +{((modelB.expectedSharpe || 2.15) - (modelA.expectedSharpe || 1.84)).toFixed(2)} (B)
                     </td>
                   </tr>
                   <tr>
                     <td className="py-1 text-muted-foreground">Daily 95% VaR</td>
                     <td className="py-1 font-semibold text-foreground">{modelA.varLimit || 1.25}%</td>
-                    <td className="py-1 font-bold text-emerald-700">{modelB.varLimit || 1.05}%</td>
-                    <td className="py-1 text-right text-emerald-700 font-bold">
+                    <td className="py-1 font-bold text-foreground">{modelB.varLimit || 1.05}%</td>
+                    <td className="py-1 text-right text-foreground font-bold">
                       {((modelA.varLimit || 1.25) - (modelB.varLimit || 1.05) > 0 ? 'Safer in B' : 'Comparable')}
                     </td>
                   </tr>
                   <tr>
                     <td className="py-1 text-muted-foreground">Max Shock Drawdown</td>
                     <td className="py-1 font-semibold text-foreground">-3.2%</td>
-                    <td className="py-1 font-bold text-emerald-700">-2.1%</td>
-                    <td className="py-1 text-right text-emerald-700 font-bold">+1.1% buffer (B)</td>
+                    <td className="py-1 font-bold text-foreground">-2.1%</td>
+                    <td className="py-1 text-right text-foreground font-bold">+1.1% buffer (B)</td>
                   </tr>
                 </tbody>
               </table>
@@ -565,7 +565,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                 type="button"
                 size="sm"
                 onClick={() => setSandboxMode('merge')}
-                className="font-mono text-xs bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg px-3 h-7 gap-1 shadow-2xs"
+                className="font-mono text-xs bg-chart-4 hover:bg-chart-4 text-secondary rounded-lg px-3 h-7 gap-1 shadow-2xs"
               >
                 <GitMerge className="w-3 h-3" />
                 <span>Merge Models</span>
@@ -581,13 +581,13 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
       {sandboxMode === 'merge' && (
         <div className="space-y-3 animate-in fade-in">
           
-          <div className="p-3 rounded-xl border border-border bg-emerald-50/30 space-y-3">
+          <div className="p-3 rounded-xl border border-border bg-muted/30 space-y-3">
             <div className="flex items-center justify-between">
               <div className="text-xs font-bold text-foreground font-mono flex items-center gap-1.5">
-                <GitMerge className="w-4 h-4 text-emerald-600" />
+                <GitMerge className="w-4 h-4 text-chart-4" />
                 <span>Model Merger &amp; Signal Combination Engine</span>
               </div>
-              <Badge variant="outline" className="text-[10px] font-mono bg-white text-emerald-700 border-emerald-300">
+              <Badge variant="outline" className="text-[10px] font-mono bg-card text-foreground border-border">
                 Barra Covariance Optimized
               </Badge>
             </div>
@@ -599,11 +599,11 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             {/* Model Pair Selection */}
             <div className="grid grid-cols-2 gap-2">
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-blue-700 font-bold block">Base Model A:</span>
+                <span className="text-[10px] font-mono text-accent-foreground font-bold block">Base Model A:</span>
                 <select
                   value={compareModelAId}
                   onChange={(e) => setCompareModelAId(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground"
+                  className="w-full bg-card border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground"
                 >
                   {models.map(m => (
                     <option key={m.id} value={m.id}>{m.name}</option>
@@ -612,11 +612,11 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
               </div>
 
               <div className="space-y-1">
-                <span className="text-[10px] font-mono text-emerald-700 font-bold block">Feature Model B:</span>
+                <span className="text-[10px] font-mono text-foreground font-bold block">Feature Model B:</span>
                 <select
                   value={compareModelBId}
                   onChange={(e) => setCompareModelBId(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground"
+                  className="w-full bg-card border border-border rounded-lg px-2 py-1 text-xs font-mono text-foreground"
                 >
                   {models.map(m => (
                     <option key={m.id} value={m.id}>{m.name}</option>
@@ -651,13 +651,13 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
                     onClick={() => setMergeStrategy(strat.id)}
                     className={`p-2 rounded-lg border text-left cursor-pointer transition-all ${
                       mergeStrategy === strat.id
-                        ? 'bg-white border-emerald-600 ring-1 ring-emerald-500/20 shadow-2xs'
-                        : 'bg-white/60 hover:bg-white border-border'
+                        ? 'bg-card border-chart-4 ring-1 ring-chart-4/20 shadow-2xs'
+                        : 'bg-card/60 hover:bg-card border-border'
                     }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold text-foreground font-mono">{strat.title}</span>
-                      {mergeStrategy === strat.id && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                      {mergeStrategy === strat.id && <CheckCircle2 className="w-3.5 h-3.5 text-chart-4" />}
                     </div>
                     <p className="text-[10px] text-muted-foreground mt-0.5">{strat.desc}</p>
                   </div>
@@ -666,20 +666,20 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             </div>
 
             {/* Projected Merged Metrics */}
-            <div className="p-2.5 rounded-lg bg-white border border-border space-y-2">
+            <div className="p-2.5 rounded-lg bg-card border border-border space-y-2">
               <span className="text-[10px] font-mono font-bold text-foreground block">
                 Projected Merged Model Metrics:
               </span>
               <div className="grid grid-cols-3 gap-1.5 text-center">
-                <div className="p-1.5 bg-slate-50 rounded border border-border">
+                <div className="p-1.5 bg-muted rounded border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Merged Return</span>
-                  <span className="text-xs font-bold text-emerald-700 font-mono">+17.4%</span>
+                  <span className="text-xs font-bold text-foreground font-mono">+17.4%</span>
                 </div>
-                <div className="p-1.5 bg-slate-50 rounded border border-border">
+                <div className="p-1.5 bg-muted rounded border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Merged Sharpe</span>
-                  <span className="text-xs font-bold text-blue-700 font-mono">2.28</span>
+                  <span className="text-xs font-bold text-accent-foreground font-mono">2.28</span>
                 </div>
-                <div className="p-1.5 bg-slate-50 rounded border border-border">
+                <div className="p-1.5 bg-muted rounded border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Daily VaR 95%</span>
                   <span className="text-xs font-bold text-foreground font-mono">0.92%</span>
                 </div>
@@ -690,7 +690,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             <Button
               type="button"
               onClick={handleExecuteMerge}
-              className="w-full font-mono text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg h-9 shadow-2xs gap-1.5"
+              className="w-full font-mono text-xs font-bold bg-chart-4 hover:bg-chart-4 text-secondary rounded-lg h-9 shadow-2xs gap-1.5"
             >
               <GitMerge className="w-3.5 h-3.5" />
               <span>Merge into New Model &amp; Test in Sandbox</span>
@@ -708,7 +708,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
           variant="outline"
           size="sm"
           onClick={handleSimulate}
-          className="flex-1 font-mono text-xs gap-1.5 h-8 bg-white hover:bg-slate-50 text-foreground border-border"
+          className="flex-1 font-mono text-xs gap-1.5 h-8 bg-card hover:bg-muted text-foreground border-border"
         >
           <RotateCcw className={`w-3.5 h-3.5 ${isSimulating ? 'animate-spin' : ''}`} />
           <span>Re-run Simulation</span>
@@ -719,7 +719,7 @@ export const AgentBacktestSandbox: React.FC<BacktestSandboxProps> = ({
             type="button"
             size="sm"
             onClick={onDeployModel}
-            className="flex-1 font-mono text-xs gap-1.5 h-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-2xs"
+            className="flex-1 font-mono text-xs gap-1.5 h-8 bg-primary hover:bg-primary text-primary-foreground font-semibold shadow-2xs"
           >
             <CheckCircle2 className="w-3.5 h-3.5" />
             <span>Deploy Model</span>

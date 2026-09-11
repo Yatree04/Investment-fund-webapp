@@ -137,7 +137,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
         <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
           <span className="text-[11px] text-muted-foreground font-medium">Total Long Exposure</span>
           <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-lg font-bold text-emerald-500">
+            <span className="text-lg font-bold text-chart-4">
               ${(totalLongValue / 1000000).toFixed(1)}M
             </span>
           </div>
@@ -149,7 +149,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
         <div className="bg-card p-3.5 rounded-lg border border-border shadow-xs transition-colors">
           <span className="text-[11px] text-muted-foreground font-medium">Total Short Exposure</span>
           <div className="mt-1 flex items-baseline gap-1 font-mono">
-            <span className="text-lg font-bold text-rose-500">
+            <span className="text-lg font-bold text-chart-5">
               ${(totalShortValue / 1000000).toFixed(1)}M
             </span>
           </div>
@@ -175,7 +175,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
               {totalShortValue > 0 ? (totalLongValue / totalShortValue).toFixed(2) : 'N/A'}x
             </span>
           </div>
-          <span className="text-[11px] text-emerald-500 font-mono">Risk Neutrality Guard OK</span>
+          <span className="text-[11px] text-chart-4 font-mono">Risk Neutrality Guard OK</span>
         </div>
       </div>
 
@@ -232,7 +232,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
           </select>
 
           {/* Side Filter */}
-          <div className="flex items-center space-x-1 bg-white p-0.5 rounded-md border border-border text-xs">
+          <div className="flex items-center space-x-1 bg-card p-0.5 rounded-md border border-border text-xs">
             {(['ALL', 'Long', 'Short'] as const).map((side) => (
               <button
                 key={side}
@@ -259,10 +259,10 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
       </div>
 
       {/* Holdings Table */}
-      <div className="bg-white rounded-lg border border-border overflow-hidden shadow-xs transition-colors">
+      <div className="bg-card rounded-lg border border-border overflow-hidden shadow-xs transition-colors">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-white text-muted-foreground border-b border-border font-mono uppercase tracking-wider text-[10px]">
+            <thead className="bg-card text-muted-foreground border-b border-border font-mono uppercase tracking-wider text-[10px]">
               <tr>
                 <th className="py-3 px-4 cursor-pointer" onClick={() => handleSort('ticker')}>
                   <div className="flex items-center gap-1">
@@ -309,7 +309,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
                 filteredHoldings.map((h) => {
                   const isPositive = h.unrealizedPnL >= 0;
                   return (
-                    <tr key={h.id} className="hover:bg-slate-50 transition">
+                    <tr key={h.id} className="hover:bg-muted transition">
                       <td className="py-3 px-4">
                         <div className="font-bold text-foreground flex items-center gap-2">
                           <span className="text-primary font-semibold">{h.ticker}</span>
@@ -323,8 +323,8 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
                         <span
                           className={`inline-block px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
                             h.side === 'Long'
-                              ? 'bg-emerald-500/10 text-emerald-700 border border-emerald-500/30'
-                              : 'bg-rose-500/10 text-rose-700 border border-rose-500/30'
+                              ? 'bg-chart-4/10 text-foreground border border-chart-4/30'
+                              : 'bg-chart-5/10 text-foreground border border-chart-5/30'
                           }`}
                         >
                           {h.side}
@@ -355,10 +355,10 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
                       </td>
 
                       <td className="py-3 px-3 text-right">
-                        <span className={`block font-bold ${isPositive ? 'text-emerald-500' : 'text-rose-500'}`}>
+                        <span className={`block font-bold ${isPositive ? 'text-chart-4' : 'text-chart-5'}`}>
                           {isPositive ? `+$${(h.unrealizedPnL / 1000000).toFixed(2)}M` : `-$${(Math.abs(h.unrealizedPnL) / 1000000).toFixed(2)}M`}
                         </span>
-                        <span className={`text-[10px] block ${isPositive ? 'text-emerald-500/80' : 'text-rose-500/80'}`}>
+                        <span className={`text-[10px] block ${isPositive ? 'text-chart-4/80' : 'text-chart-5/80'}`}>
                           {isPositive ? `+${h.unrealizedPnLPct}%` : `${h.unrealizedPnLPct}%`}
                         </span>
                       </td>
@@ -377,7 +377,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
                         <button
                           onClick={() => onRemoveHolding(h.id)}
                           title="Liquidate / Remove simulated position"
-                          className="px-2 py-1 rounded bg-white hover:bg-destructive/20 text-muted-foreground hover:text-destructive text-[11px] transition border border-border"
+                          className="px-2 py-1 rounded bg-card hover:bg-destructive/20 text-muted-foreground hover:text-destructive text-[11px] transition border border-border"
                         >
                           Liquidate
                         </button>
@@ -393,8 +393,8 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
 
       {/* Modal for Adding / Simulating Position */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-border rounded-xl w-full max-w-lg overflow-hidden shadow-2xl transition-colors">
+        <div className="fixed inset-0 z-50 bg-secondary/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-xl w-full max-w-lg overflow-hidden shadow-2xl transition-colors">
             <div className="flex items-center justify-between p-4 border-b border-border">
               <div className="flex items-center gap-2">
                 <Plus className="w-4 h-4 text-primary" />
@@ -495,7 +495,7 @@ export const HoldingsView: React.FC<HoldingsViewProps> = ({
                 </div>
               </div>
 
-              <div className="bg-white p-3 rounded-md border border-border text-[11px] text-muted-foreground space-y-1">
+              <div className="bg-card p-3 rounded-md border border-border text-[11px] text-muted-foreground space-y-1">
                 <div className="flex justify-between">
                   <span>Simulated Notional Value:</span>
                   <span className="font-mono text-foreground font-semibold">

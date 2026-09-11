@@ -738,7 +738,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
   };
 
   return (
-    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-slate-50/50 p-2 sm:p-3">
+    <div className="h-full flex-1 flex flex-col min-h-0 overflow-hidden space-y-2 select-none bg-muted/50 p-2 sm:p-3">
       
       {/* =========================================================================
           TOP COMMAND & HEADER BAR MATCHING SKETCH
@@ -746,13 +746,13 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           - Model Tabs: [Model 1 ✓] [Model 3] [Model 1] [sandbox view]
           - Save notes button
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
+      <div className="bg-card border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs flex flex-col md:flex-row items-stretch md:items-center justify-between gap-2.5 shrink-0">
         
         {/* Left: /agent bar */}
         <div className="flex items-center gap-2 flex-1 max-w-md">
-          <div className="relative w-full flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-lg transition-all">
-            <span className="pl-3 pr-1 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+          <div className="relative w-full flex items-center bg-muted hover:bg-card border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-ring/30 rounded-lg transition-all">
+            <span className="pl-3 pr-1 text-primary font-mono text-xs font-semibold flex items-center gap-1">
+              <Sparkles className="w-3.5 h-3.5 text-primary" />
             </span>
             <input
               type="text"
@@ -765,7 +765,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             <button
               type="button"
               onClick={() => handleRunAuditPrompt()}
-              className="absolute right-2 p-1 rounded text-blue-600 hover:bg-blue-50"
+              className="absolute right-2 p-1 rounded text-primary hover:bg-accent"
               title="Run audit search"
             >
               <Search className="w-3.5 h-3.5" />
@@ -784,8 +784,8 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             }}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1 ${
               selectedModelKey === 'model-1' && activeViewMode === 'flow'
-                ? 'bg-blue-600 text-white font-bold border-blue-600 shadow-2xs'
-                : 'bg-white text-foreground hover:bg-slate-50 border-border'
+                ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted border-border'
             }`}
           >
             <span>Model 1</span>
@@ -801,8 +801,8 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             }}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1 ${
               selectedModelKey === 'model-3' && activeViewMode === 'flow'
-                ? 'bg-blue-600 text-white font-bold border-blue-600 shadow-2xs'
-                : 'bg-white text-foreground hover:bg-slate-50 border-border'
+                ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted border-border'
             }`}
           >
             <span>Model 3</span>
@@ -818,8 +818,8 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             }}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1 ${
               selectedModelKey === 'model-custom' && activeViewMode === 'flow'
-                ? 'bg-blue-600 text-white font-bold border-blue-600 shadow-2xs'
-                : 'bg-white text-foreground hover:bg-slate-50 border-border'
+                ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted border-border'
             }`}
           >
             <span>Model 1 (Vol Skew)</span>
@@ -837,8 +837,8 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             }}
             className={`px-3 py-1 rounded-lg text-xs font-mono transition-all border shrink-0 flex items-center gap-1 ${
               activeViewMode === 'sandbox'
-                ? 'bg-emerald-600 text-white font-bold border-emerald-600 shadow-2xs'
-                : 'bg-white text-emerald-700 hover:bg-emerald-50/50 border-emerald-300'
+                ? 'bg-chart-4 text-secondary font-bold border-chart-4 shadow-2xs'
+                : 'bg-card text-foreground hover:bg-muted/50 border-border'
             }`}
           >
             <BarChart2 className="w-3.5 h-3.5" />
@@ -853,9 +853,9 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setIsSaveNotesOpen(true)}
-            className="h-8 px-3 text-xs font-mono font-semibold bg-white hover:bg-slate-50 border-border text-foreground rounded-lg gap-1.5 shadow-2xs"
+            className="h-8 px-3 text-xs font-mono font-semibold bg-card hover:bg-muted border-border text-foreground rounded-lg gap-1.5 shadow-2xs"
           >
-            <Save className="w-3.5 h-3.5 text-blue-600" />
+            <Save className="w-3.5 h-3.5 text-primary" />
             <span>Save notes</span>
           </Button>
         </div>
@@ -864,12 +864,12 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
       {/* Anti-Hallucination Refresh Banner & Notification */}
       {refreshNotification && (
-        <div className="px-3 py-2 bg-emerald-50 border border-emerald-200 text-emerald-900 rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in duration-200">
+        <div className="px-3 py-2 bg-muted border border-border text-foreground rounded-xl text-xs font-mono flex items-center justify-between gap-2 shrink-0 animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
-            <RefreshCw className="w-3.5 h-3.5 text-emerald-600 animate-spin" />
+            <RefreshCw className="w-3.5 h-3.5 text-chart-4 animate-spin" />
             <span>{refreshNotification}</span>
           </div>
-          <Badge className="bg-emerald-600 text-white text-[10px] font-mono font-bold">
+          <Badge className="bg-chart-4 text-secondary text-[10px] font-mono font-bold">
             GROUNDED
           </Badge>
         </div>
@@ -881,43 +881,43 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           Col 2: Model outputanalysis , risk analysis and monitoring (Payload lineage + sandbox insights/graphs + questions)
           Col 3: symentic language memeory of human intervention (Human intervention, action taken, reasoning, changes done)
          ========================================================================= */}
-      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
+      <div className="flex-1 min-h-0 border border-border rounded-2xl bg-card shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-0 relative">
         
         {/* =========================================================================
             COLUMN 1: Model, task and backtesting (lg:col-span-4)
             FILLED WITH FUNCTIONS AND SUB-AGENTS DOING RESEARCH & WORK DONE.
             CLICKING ANY NODE EXPANDS ITS DEEP DESCRIPTION & VERIFICATION CHECKLIST!
            ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0">
+        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-muted/40 overflow-y-auto min-h-0">
           <div className="space-y-2.5">
             
             {/* Column Header */}
             <div className="flex items-center justify-between pb-1.5 border-b border-border/70">
               <div>
                 <h2 className="text-xs font-bold font-mono text-foreground tracking-tight flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-blue-500" />
+                  <span className="w-2 h-2 rounded-full bg-primary" />
                   Model, task and backtesting
                 </h2>
                 <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
                   {selectedNodeId ? '1 node selected (click to toggle description)' : 'Click any node below to inspect full description & checklist'}
                 </p>
               </div>
-              <Badge variant="outline" className="bg-white text-[10px] font-mono text-blue-700 border-blue-200">
+              <Badge variant="outline" className="bg-card text-[10px] font-mono text-accent-foreground border-border">
                 {currentWorkflow.subAgentNodes.length} Nodes Running
               </Badge>
             </div>
 
             {/* If a node is selected, show an active filter bar to view all or collapse */}
             {selectedNodeId && (
-              <div className="flex items-center justify-between bg-blue-50/80 border border-blue-200 px-2.5 py-1.5 rounded-lg text-xs font-mono text-blue-900 animate-in fade-in">
+              <div className="flex items-center justify-between bg-accent/80 border border-border px-2.5 py-1.5 rounded-lg text-xs font-mono text-accent-foreground animate-in fade-in">
                 <span className="text-[11px] font-bold flex items-center gap-1.5">
-                  <Info className="w-3.5 h-3.5 text-blue-600" />
+                  <Info className="w-3.5 h-3.5 text-primary" />
                   <span>Inspecting Node Description</span>
                 </span>
                 <button
                   type="button"
                   onClick={() => setSelectedNodeId(null)}
-                  className="text-[10px] font-bold text-blue-700 hover:text-blue-950 underline flex items-center gap-0.5"
+                  className="text-[10px] font-bold text-accent-foreground hover:text-accent-foreground underline flex items-center gap-0.5"
                 >
                   <span>Show all nodes</span>
                   <X className="w-3 h-3" />
@@ -936,30 +936,30 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                     onClick={() => setSelectedNodeId(isSelected ? null : node.id)}
                     className={`rounded-xl border-2 transition-all cursor-pointer p-3 space-y-2.5 shadow-2xs ${
                       isSelected 
-                        ? 'border-emerald-500 bg-emerald-50/80 ring-2 ring-emerald-400/30' 
-                        : 'border-emerald-300/80 bg-white hover:bg-emerald-50/40 hover:border-emerald-400'
+                        ? 'border-chart-4 bg-muted/80 ring-2 ring-chart-4/30' 
+                        : 'border-border/80 bg-card hover:bg-muted/40 hover:border-chart-4'
                     }`}
                   >
                     {/* Node Header: Sub-Agent Title + Status + Anti-Hallucination Countdown & Click Hint */}
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-start gap-2 min-w-0">
                         <div className={`w-6 h-6 rounded-md flex items-center justify-center shrink-0 mt-0.5 shadow-2xs ${
-                          isSelected ? 'bg-emerald-600 text-white' : 'bg-emerald-100 text-emerald-800'
+                          isSelected ? 'bg-chart-4 text-secondary' : 'bg-muted text-foreground'
                         }`}>
                           <Cpu className="w-3.5 h-3.5" />
                         </div>
                         <div className="min-w-0">
-                          <div className="font-bold text-xs font-mono text-emerald-950 flex items-center gap-1.5 flex-wrap">
+                          <div className="font-bold text-xs font-mono text-foreground flex items-center gap-1.5 flex-wrap">
                             <span className="truncate">{node.name}</span>
-                            <Badge variant="outline" className="bg-white/90 text-[9px] font-mono text-emerald-800 border-emerald-300 py-0 px-1">
+                            <Badge variant="outline" className="bg-card/90 text-[9px] font-mono text-foreground border-border py-0 px-1">
                               {node.tag}
                             </Badge>
                           </div>
-                          <div className="text-[11px] font-mono text-emerald-800/90 font-medium truncate">
+                          <div className="text-[11px] font-mono text-foreground/90 font-medium truncate">
                             {node.subAgentName}
                           </div>
                           <div className="text-[10px] font-mono text-muted-foreground flex items-center gap-2 mt-0.5">
-                            <span className="flex items-center gap-0.5 text-emerald-700">
+                            <span className="flex items-center gap-0.5 text-foreground">
                               <Clock className="w-3 h-3" />
                               {node.lastExecutionTime}
                             </span>
@@ -971,11 +971,11 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                       {/* Right: Anti-Hallucination refresh badge & click indicator */}
                       <div className="flex flex-col items-end shrink-0">
-                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-emerald-100 text-emerald-900 border border-emerald-300 text-[9px] font-mono font-bold">
-                          <RotateCw className="w-2.5 h-2.5 text-emerald-700" />
+                        <span className="flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-muted text-foreground border border-border text-[9px] font-mono font-bold">
+                          <RotateCw className="w-2.5 h-2.5 text-foreground" />
                           <span>{node.refreshIntervalSec}s TTL</span>
                         </span>
-                        <span className="text-[9px] font-mono text-emerald-700 font-semibold mt-1 flex items-center gap-0.5">
+                        <span className="text-[9px] font-mono text-foreground font-semibold mt-1 flex items-center gap-0.5">
                           {isSelected ? 'Click to collapse' : 'Click for description'}
                           {isSelected ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                         </span>
@@ -983,9 +983,9 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                     </div>
 
                     {/* Work Done & Research Highlights Pills */}
-                    <div className="grid grid-cols-3 gap-1.5 bg-slate-50/80 p-1.5 rounded-lg border border-border/60">
+                    <div className="grid grid-cols-3 gap-1.5 bg-muted/80 p-1.5 rounded-lg border border-border/60">
                       {node.workDoneMetrics.map((m, mIdx) => (
-                        <div key={mIdx} className="bg-white p-1 rounded border border-slate-200/80 text-center">
+                        <div key={mIdx} className="bg-card p-1 rounded border border-border/80 text-center">
                           <span className="text-[8px] font-mono uppercase text-muted-foreground block truncate">{m.label}</span>
                           <span className="text-[10px] font-mono font-bold text-foreground block truncate">{m.value}</span>
                         </div>
@@ -994,16 +994,16 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                     {/* Active Quantitative Functions Executed by this Sub-Agent */}
                     <div className="space-y-1">
-                      <div className="text-[10px] font-mono font-bold text-emerald-950 uppercase flex items-center justify-between">
+                      <div className="text-[10px] font-mono font-bold text-foreground uppercase flex items-center justify-between">
                         <span className="flex items-center gap-1">
-                          <Code2 className="w-3 h-3 text-emerald-700" />
+                          <Code2 className="w-3 h-3 text-foreground" />
                           <span>Executed Functions &amp; Algorithms:</span>
                         </span>
-                        <span className="text-[9px] text-emerald-700 font-normal">{node.functionsUsed.length} active</span>
+                        <span className="text-[9px] text-foreground font-normal">{node.functionsUsed.length} active</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {node.functionsUsed.map((fn, fIdx) => (
-                          <span key={fIdx} className="px-1.5 py-0.5 bg-white border border-emerald-200 text-emerald-950 rounded text-[9.5px] font-mono font-medium">
+                          <span key={fIdx} className="px-1.5 py-0.5 bg-card border border-border text-foreground rounded text-[9.5px] font-mono font-medium">
                             {fn}
                           </span>
                         ))}
@@ -1012,13 +1012,13 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                     {/* Data Streams Used */}
                     <div className="space-y-1">
-                      <div className="text-[10px] font-mono font-bold text-emerald-950 uppercase flex items-center gap-1">
-                        <Database className="w-3 h-3 text-emerald-700" />
+                      <div className="text-[10px] font-mono font-bold text-foreground uppercase flex items-center gap-1">
+                        <Database className="w-3 h-3 text-foreground" />
                         <span>Data Streams Used:</span>
                       </div>
                       <div className="flex flex-wrap gap-1">
                         {node.datasetsUsed.map((ds, dsIdx) => (
-                          <span key={dsIdx} className="px-1.5 py-0.5 bg-emerald-100/70 text-emerald-900 border border-emerald-300 rounded text-[9.5px] font-mono font-semibold">
+                          <span key={dsIdx} className="px-1.5 py-0.5 bg-muted/70 text-foreground border border-border rounded text-[9.5px] font-mono font-semibold">
                             {ds}
                           </span>
                         ))}
@@ -1029,50 +1029,50 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                         EXPANDED DEEP DESCRIPTION & CHECKLIST (REVEALED ONLY ON CLICK)
                        ============================================================= */}
                     {isSelected && (
-                      <div className="pt-2 border-t border-emerald-300/80 space-y-2.5 animate-in fade-in duration-200">
+                      <div className="pt-2 border-t border-border/80 space-y-2.5 animate-in fade-in duration-200">
                         
                         {/* Anti-Hallucination Grounding Status */}
-                        <div className="bg-white/90 border border-emerald-300 rounded-lg p-2 text-[11px] font-mono text-emerald-900 flex items-center justify-between">
+                        <div className="bg-card/90 border border-border rounded-lg p-2 text-[11px] font-mono text-foreground flex items-center justify-between">
                           <div className="flex items-center gap-1.5">
-                            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+                            <ShieldCheck className="w-3.5 h-3.5 text-chart-4" />
                             <span>Anti-Hallucination Grounding:</span>
                           </div>
-                          <strong className="text-emerald-700 font-bold">{node.antiHallucinationConfidence}% Verified</strong>
+                          <strong className="text-foreground font-bold">{node.antiHallucinationConfidence}% Verified</strong>
                         </div>
 
                         {/* Full Deep Description Paragraph */}
-                        <div className="space-y-1 bg-white p-2.5 rounded-lg border border-emerald-200">
-                          <div className="text-[10px] font-mono font-bold text-emerald-900 uppercase flex items-center gap-1">
-                            <FileText className="w-3 h-3 text-emerald-700" />
+                        <div className="space-y-1 bg-card p-2.5 rounded-lg border border-border">
+                          <div className="text-[10px] font-mono font-bold text-foreground uppercase flex items-center gap-1">
+                            <FileText className="w-3 h-3 text-foreground" />
                             <span>Full Task &amp; Strategy Description:</span>
                           </div>
-                          <p className="text-xs text-emerald-950 leading-relaxed font-sans">
+                          <p className="text-xs text-foreground leading-relaxed font-sans">
                             {node.fullDescription}
                           </p>
-                          <div className="text-[11px] text-emerald-800 font-sans pt-1 border-t border-emerald-100">
+                          <div className="text-[11px] text-foreground font-sans pt-1 border-t border-border">
                             <strong>Work Done Summary:</strong> {node.taskSummary}
                           </div>
                         </div>
 
                         {/* Step-by-Step Verification Checklist */}
-                        <div className="space-y-1.5 bg-white p-2.5 rounded-lg border border-emerald-200">
-                          <div className="text-[10px] font-mono font-bold text-emerald-900 uppercase flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 text-emerald-600" />
+                        <div className="space-y-1.5 bg-card p-2.5 rounded-lg border border-border">
+                          <div className="text-[10px] font-mono font-bold text-foreground uppercase flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-chart-4" />
                             <span>Verification Checklist:</span>
                           </div>
                           {node.checklist.map((item, cIdx) => (
-                            <div key={cIdx} className="flex items-start gap-1.5 text-[11px] font-mono text-emerald-900">
-                              <Check className="w-3 h-3 text-emerald-600 shrink-0 mt-0.5" />
+                            <div key={cIdx} className="flex items-start gap-1.5 text-[11px] font-mono text-foreground">
+                              <Check className="w-3 h-3 text-chart-4 shrink-0 mt-0.5" />
                               <span>{item}</span>
                             </div>
                           ))}
                         </div>
 
                         {/* Payload Handoff Lineage */}
-                        <div className="bg-emerald-100/50 p-2 rounded-lg border border-emerald-300 text-[11px] font-mono text-emerald-950 space-y-0.5">
-                          <div className="text-emerald-900 font-bold uppercase text-[9px]">Target Node Routing:</div>
-                          <div className="font-semibold text-emerald-950">{node.passedToNode}</div>
-                          <p className="text-[10.5px] font-sans text-emerald-800">{node.payloadSummary}</p>
+                        <div className="bg-muted/50 p-2 rounded-lg border border-border text-[11px] font-mono text-foreground space-y-0.5">
+                          <div className="text-foreground font-bold uppercase text-[9px]">Target Node Routing:</div>
+                          <div className="font-semibold text-foreground">{node.passedToNode}</div>
+                          <p className="text-[10.5px] font-sans text-foreground">{node.payloadSummary}</p>
                         </div>
 
                       </div>
@@ -1089,47 +1089,47 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
         {/* =========================================================================
             COLUMN 2: Model outputanalysis , risk analysis and monitoring (lg:col-span-4)
            ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0">
+        <div className="lg:col-span-4 border-r border-border p-3 sm:p-3.5 flex flex-col justify-between bg-muted/40 overflow-y-auto min-h-0">
           <div className="space-y-2.5">
             {/* Column Header matching sketch */}
             <div className="flex items-center justify-between pb-1.5 border-b border-border/70">
               <div>
                 <h2 className="text-xs font-bold font-mono text-foreground tracking-tight flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                  <span className="w-2 h-2 rounded-full bg-chart-4" />
                   Model outputanalysis , risk analysis and monitoring
                 </h2>
                 <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
                   Payload lineage, risk sandbox &amp; node probes
                 </p>
               </div>
-              <Badge variant="outline" className="bg-white text-[10px] font-mono text-emerald-700 border-emerald-200">
+              <Badge variant="outline" className="bg-card text-[10px] font-mono text-foreground border-border">
                 Sharpe {currentWorkflow.sandboxSharpe}
               </Badge>
             </div>
 
             {/* Output Analysis Node Card (Green card matching sketch) */}
-            <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2.5">
+            <div className="rounded-xl border-2 border-border bg-card p-3 shadow-2xs space-y-2.5">
               
               {/* Text regarding what was there passed to which node */}
               <div className="space-y-1">
-                <div className="text-[11px] font-bold font-mono text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
-                  <ArrowRight className="w-3.5 h-3.5 text-emerald-600" />
+                <div className="text-[11px] font-bold font-mono text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <ArrowRight className="w-3.5 h-3.5 text-chart-4" />
                   <span>Payload Lineage &amp; Routing</span>
                 </div>
-                <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200 text-xs font-mono text-emerald-950 space-y-1">
-                  <div className="text-emerald-800 text-[10px] uppercase font-bold">
+                <div className="bg-muted p-2 rounded-lg border border-border text-xs font-mono text-foreground space-y-1">
+                  <div className="text-foreground text-[10px] uppercase font-bold">
                     Target Node:
                   </div>
-                  <div className="font-bold text-emerald-950">
+                  <div className="font-bold text-foreground">
                     {activeSelectedNode ? activeSelectedNode.passedToNode : currentWorkflow.passedToNode}
                   </div>
-                  <div className="text-emerald-800 text-[10px] pt-1 border-t border-emerald-200/80">
+                  <div className="text-foreground text-[10px] pt-1 border-t border-border/80">
                     Payload Details:
                   </div>
-                  <p className="text-[11px] text-emerald-900 font-sans leading-relaxed">
+                  <p className="text-[11px] text-foreground font-sans leading-relaxed">
                     {activeSelectedNode ? activeSelectedNode.payloadSummary : currentWorkflow.payloadSummary}
                   </p>
-                  <div className="text-[10px] text-emerald-700 pt-0.5">
+                  <div className="text-[10px] text-foreground pt-0.5">
                     Execution Latency: <strong>{activeSelectedNode ? activeSelectedNode.latencyMs : currentWorkflow.latencyMs} ms</strong>
                   </div>
                 </div>
@@ -1138,14 +1138,14 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
               {/* Sandbox and insights, on detailed examination can provide detailed graphs */}
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="text-[11px] font-bold font-mono text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
-                    <BarChart2 className="w-3.5 h-3.5 text-emerald-600" />
+                  <div className="text-[11px] font-bold font-mono text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                    <BarChart2 className="w-3.5 h-3.5 text-chart-4" />
                     <span>Sandbox &amp; Risk Insights</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setIsGraphExpanded(!isGraphExpanded)}
-                    className="text-[10px] font-mono text-emerald-800 hover:text-emerald-950 underline flex items-center gap-0.5"
+                    className="text-[10px] font-mono text-foreground hover:text-foreground underline flex items-center gap-0.5"
                   >
                     <span>{isGraphExpanded ? 'Hide graph' : 'Examine graphs'}</span>
                     {isGraphExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
@@ -1154,46 +1154,46 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                 {/* Metrics Pill Grid */}
                 <div className="grid grid-cols-2 gap-1.5">
-                  <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200">
-                    <span className="text-[9px] font-mono text-emerald-700 uppercase block">Expected Sharpe</span>
-                    <span className="text-sm font-bold font-mono text-emerald-950">{currentWorkflow.sandboxSharpe}</span>
+                  <div className="bg-muted p-2 rounded-lg border border-border">
+                    <span className="text-[9px] font-mono text-foreground uppercase block">Expected Sharpe</span>
+                    <span className="text-sm font-bold font-mono text-foreground">{currentWorkflow.sandboxSharpe}</span>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200">
-                    <span className="text-[9px] font-mono text-emerald-700 uppercase block">Simulated VaR 95%</span>
-                    <span className="text-sm font-bold font-mono text-emerald-950">{currentWorkflow.sandboxVaR}%</span>
+                  <div className="bg-muted p-2 rounded-lg border border-border">
+                    <span className="text-[9px] font-mono text-foreground uppercase block">Simulated VaR 95%</span>
+                    <span className="text-sm font-bold font-mono text-foreground">{currentWorkflow.sandboxVaR}%</span>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200">
-                    <span className="text-[9px] font-mono text-emerald-700 uppercase block">Max Drawdown</span>
-                    <span className="text-sm font-bold font-mono text-emerald-950">{currentWorkflow.sandboxMaxDrawdown}%</span>
+                  <div className="bg-muted p-2 rounded-lg border border-border">
+                    <span className="text-[9px] font-mono text-foreground uppercase block">Max Drawdown</span>
+                    <span className="text-sm font-bold font-mono text-foreground">{currentWorkflow.sandboxMaxDrawdown}%</span>
                   </div>
-                  <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200">
-                    <span className="text-[9px] font-mono text-emerald-700 uppercase block">Win Probability</span>
-                    <span className="text-sm font-bold font-mono text-emerald-950">{currentWorkflow.sandboxWinRate}%</span>
+                  <div className="bg-muted p-2 rounded-lg border border-border">
+                    <span className="text-[9px] font-mono text-foreground uppercase block">Win Probability</span>
+                    <span className="text-sm font-bold font-mono text-foreground">{currentWorkflow.sandboxWinRate}%</span>
                   </div>
                 </div>
 
                 {/* Detailed Examination Graph */}
                 {isGraphExpanded && (
-                  <div className="bg-slate-50 p-2 rounded-lg border border-emerald-200 shadow-2xs space-y-1">
-                    <div className="flex items-center justify-between text-[10px] font-mono text-emerald-900 px-1">
+                  <div className="bg-muted p-2 rounded-lg border border-border shadow-2xs space-y-1">
+                    <div className="flex items-center justify-between text-[10px] font-mono text-foreground px-1">
                       <span>Cumulative Signal Alpha</span>
-                      <span className="text-emerald-700 font-bold">+5.6% Outperformance</span>
+                      <span className="text-foreground font-bold">+5.6% Outperformance</span>
                     </div>
                     <div className="h-28 w-full">
                       <ResponsiveContainer width="100%" height="100%">
                         <AreaChart data={currentWorkflow.chartData}>
                           <defs>
                             <linearGradient id="auditAlphaGrad" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="#059669" stopOpacity={0.4} />
-                              <stop offset="95%" stopColor="#059669" stopOpacity={0.0} />
+                              <stop offset="5%" stopColor="var(--chart-4)" stopOpacity={0.4} />
+                              <stop offset="95%" stopColor="var(--chart-4)" stopOpacity={0.0} />
                             </linearGradient>
                           </defs>
-                          <CartesianGrid strokeDasharray="2 2" stroke="#e2e8f0" vertical={false} />
-                          <XAxis dataKey="time" tick={{ fontSize: 9 }} stroke="#64748b" />
-                          <YAxis tick={{ fontSize: 9 }} stroke="#64748b" domain={[0, 6]} />
-                          <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'monospace' }} />
-                          <Area type="monotone" dataKey="alpha" stroke="#059669" strokeWidth={2} fillOpacity={1} fill="url(#auditAlphaGrad)" name="Alpha %" />
-                          <Line type="monotone" dataKey="benchmark" stroke="#94a3b8" strokeWidth={1.5} strokeDasharray="3 3" dot={false} name="Benchmark %" />
+                          <CartesianGrid strokeDasharray="2 2" stroke="var(--border)" vertical={false} />
+                          <XAxis dataKey="time" tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" />
+                          <YAxis tick={{ fontSize: 9 }} stroke="var(--muted-foreground)" domain={[0, 6]} />
+                          <Tooltip contentStyle={{ fontSize: '11px', fontFamily: 'var(--font-mono)' }} />
+                          <Area type="monotone" dataKey="alpha" stroke="var(--chart-4)" strokeWidth={2} fillOpacity={1} fill="url(#auditAlphaGrad)" name="Alpha %" />
+                          <Line type="monotone" dataKey="benchmark" stroke="var(--muted-foreground)" strokeWidth={1.5} strokeDasharray="3 3" dot={false} name="Benchmark %" />
                         </AreaChart>
                       </ResponsiveContainer>
                     </div>
@@ -1202,24 +1202,24 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
               </div>
 
               {/* Divider Line matching sketch */}
-              <div className="border-t border-emerald-300/80 my-1" />
+              <div className="border-t border-border/80 my-1" />
 
               {/* Can be asked questions as well..... (Interactive Q&A probe) */}
               <div className="space-y-2">
-                <div className="text-[11px] font-bold font-mono text-emerald-950 uppercase tracking-wider flex items-center gap-1.5">
-                  <HelpCircle className="w-3.5 h-3.5 text-emerald-600" />
+                <div className="text-[11px] font-bold font-mono text-foreground uppercase tracking-wider flex items-center gap-1.5">
+                  <HelpCircle className="w-3.5 h-3.5 text-chart-4" />
                   <span>Can be asked questions as well.....</span>
                 </div>
 
                 {/* Q&A Stream */}
                 <div className="max-h-36 overflow-y-auto space-y-1.5 pr-1">
                   {currentWorkflow.qaHistory.map((item, idx) => (
-                    <div key={idx} className="bg-slate-50 p-2 rounded-lg border border-emerald-200 text-xs font-mono space-y-1">
-                      <div className="font-bold text-emerald-950 flex items-center justify-between">
+                    <div key={idx} className="bg-muted p-2 rounded-lg border border-border text-xs font-mono space-y-1">
+                      <div className="font-bold text-foreground flex items-center justify-between">
                         <span>Q: {item.q}</span>
-                        <span className="text-[9px] text-emerald-700">{item.time}</span>
+                        <span className="text-[9px] text-foreground">{item.time}</span>
                       </div>
-                      <p className="text-[11px] text-emerald-900 font-sans leading-relaxed">
+                      <p className="text-[11px] text-foreground font-sans leading-relaxed">
                         A: {item.a}
                       </p>
                     </div>
@@ -1233,13 +1233,13 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                     value={currentQuestion}
                     onChange={(e) => setCurrentQuestion(e.target.value)}
                     placeholder="Ask question to this node..."
-                    className="h-7 text-xs font-mono bg-white border-emerald-300 text-emerald-950 placeholder:text-emerald-700/60 focus-visible:ring-emerald-400"
+                    className="h-7 text-xs font-mono bg-card border-border text-foreground placeholder:text-foreground/60 focus-visible:ring-chart-4"
                   />
                   <Button
                     type="submit"
                     size="sm"
                     disabled={isAnswering || !currentQuestion.trim()}
-                    className="h-7 px-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-mono rounded-lg shrink-0"
+                    className="h-7 px-2.5 bg-chart-4 hover:bg-chart-4 text-secondary text-xs font-mono rounded-lg shrink-0"
                   >
                     {isAnswering ? <RotateCw className="w-3 h-3 animate-spin" /> : <Send className="w-3 h-3" />}
                   </Button>
@@ -1254,13 +1254,13 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
         {/* =========================================================================
             COLUMN 3: symentic language memeory of human intervention (lg:col-span-4)
            ========================================================================= */}
-        <div className="lg:col-span-4 p-3 sm:p-3.5 flex flex-col justify-between bg-slate-50/40 overflow-y-auto min-h-0">
+        <div className="lg:col-span-4 p-3 sm:p-3.5 flex flex-col justify-between bg-muted/40 overflow-y-auto min-h-0">
           <div className="space-y-2.5">
             {/* Column Header matching sketch */}
             <div className="flex items-center justify-between pb-1.5 border-b border-border/70">
               <div>
                 <h2 className="text-xs font-bold font-mono text-foreground tracking-tight flex items-center gap-1.5">
-                  <span className="w-2 h-2 rounded-full bg-purple-500" />
+                  <span className="w-2 h-2 rounded-full bg-chart-2" />
                   symentic language memeory of human intervention
                 </h2>
                 <p className="text-[10px] font-mono text-muted-foreground mt-0.5">
@@ -1272,19 +1272,19 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                 variant="outline"
                 size="sm"
                 onClick={() => setIsAddInterventionOpen(true)}
-                className="h-6 text-[10px] font-mono px-2 py-0 border-border text-foreground hover:bg-white bg-white/80 rounded-md gap-1 shadow-2xs"
+                className="h-6 text-[10px] font-mono px-2 py-0 border-border text-foreground hover:bg-card bg-card/80 rounded-md gap-1 shadow-2xs"
               >
-                <Plus className="w-3 h-3 text-purple-600" />
+                <Plus className="w-3 h-3 text-chart-2" />
                 <span>Log intervention</span>
               </Button>
             </div>
 
             {/* Human Intervention Node Card (Styled green card matching sketch) */}
-            <div className="rounded-xl border-2 border-emerald-300 bg-white p-3 shadow-2xs space-y-2.5">
+            <div className="rounded-xl border-2 border-border bg-card p-3 shadow-2xs space-y-2.5">
               
-              <div className="text-[11px] font-bold font-mono text-emerald-950 uppercase tracking-wider flex items-center justify-between">
+              <div className="text-[11px] font-bold font-mono text-foreground uppercase tracking-wider flex items-center justify-between">
                 <span className="flex items-center gap-1.5">
-                  <UserCheck className="w-3.5 h-3.5 text-emerald-600" />
+                  <UserCheck className="w-3.5 h-3.5 text-chart-4" />
                   <span>Human intervention, action taken &amp; reasoning</span>
                 </span>
                 <span className="text-[9px] text-muted-foreground font-mono">
@@ -1302,7 +1302,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                       key={item.id} 
                       onClick={() => setSelectedInterventionId(isExpanded ? null : item.id)}
                       className={`p-2.5 rounded-xl border transition-all cursor-pointer shadow-2xs space-y-1.5 text-xs font-mono ${
-                        isExpanded ? 'bg-purple-50/70 border-purple-300' : 'bg-slate-50 hover:bg-slate-100/80 border-slate-200'
+                        isExpanded ? 'bg-muted/70 border-border' : 'bg-muted hover:bg-muted/80 border-border'
                       }`}
                     >
                       {/* Header with Operator + Time + Status */}
@@ -1312,7 +1312,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                           <span className="text-[10px] text-muted-foreground font-sans">{item.role}</span>
                         </div>
                         <div className="text-right flex items-center gap-1.5">
-                          <Badge className="bg-emerald-600 text-white text-[9px] font-mono py-0">
+                          <Badge className="bg-chart-4 text-secondary text-[9px] font-mono py-0">
                             {item.status}
                           </Badge>
                           <span className="text-[9px] text-muted-foreground">{item.timestamp}</span>
@@ -1321,7 +1321,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                       {/* Action Taken */}
                       <div className="space-y-0.5">
-                        <span className="text-[9.5px] font-bold uppercase text-slate-700 block">Action Taken:</span>
+                        <span className="text-[9.5px] font-bold uppercase text-muted-foreground block">Action Taken:</span>
                         <p className="text-[11px] font-sans text-foreground font-medium">
                           {item.actionTaken}
                         </p>
@@ -1329,25 +1329,25 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
                       {/* Click to expand full reasoning & parameter changes */}
                       {isExpanded ? (
-                        <div className="space-y-1.5 pt-1 border-t border-purple-200/80 animate-in fade-in">
+                        <div className="space-y-1.5 pt-1 border-t border-border/80 animate-in fade-in">
                           {/* Semantic Reasoning */}
-                          <div className="bg-white p-2 rounded-lg border border-purple-200">
-                            <span className="text-[9px] font-bold uppercase text-purple-900 block">Human Reasoning:</span>
-                            <p className="text-[11px] font-sans text-purple-950 italic leading-relaxed">
+                          <div className="bg-card p-2 rounded-lg border border-border">
+                            <span className="text-[9px] font-bold uppercase text-foreground block">Human Reasoning:</span>
+                            <p className="text-[11px] font-sans text-foreground italic leading-relaxed">
                               "{item.reasoning}"
                             </p>
                           </div>
 
                           {/* Parameter changes & final outcome */}
                           <div className="space-y-1 text-[11px]">
-                            <div className="flex items-center justify-between text-slate-900">
+                            <div className="flex items-center justify-between text-foreground">
                               <span className="text-[10px] font-bold">Parameter Diff:</span>
-                              <code className="bg-purple-100 px-1.5 py-0.5 rounded text-[10px] font-mono text-purple-950">
+                              <code className="bg-muted px-1.5 py-0.5 rounded text-[10px] font-mono text-foreground">
                                 {item.parameterDiff}
                               </code>
                             </div>
                             <div className="space-y-0.5 pt-0.5">
-                              <span className="text-[9.5px] font-bold uppercase text-slate-700 block">Final Outcome &amp; Impact:</span>
+                              <span className="text-[9.5px] font-bold uppercase text-muted-foreground block">Final Outcome &amp; Impact:</span>
                               <p className="text-[11px] font-sans text-foreground">
                                 {item.finalOutcome}
                               </p>
@@ -1355,7 +1355,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                           </div>
                         </div>
                       ) : (
-                        <div className="text-[9px] text-purple-700 font-mono font-semibold pt-0.5 flex items-center justify-between">
+                        <div className="text-[9px] text-foreground font-mono font-semibold pt-0.5 flex items-center justify-between">
                           <span>Diff: {item.parameterDiff}</span>
                           <span className="underline">Click for reasoning ↓</span>
                         </div>
@@ -1377,11 +1377,11 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           BOTTOM AUDIT PROMPT BAR MATCHING SKETCH
           "prompt bar to understand and audit previous workflows that were done..."
          ========================================================================= */}
-      <div className="bg-white border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
+      <div className="bg-card border border-border rounded-xl p-2.5 sm:p-3 shadow-2xs space-y-2 shrink-0">
         <form onSubmit={handleRunAuditPrompt} className="flex items-center gap-2">
-          <div className="relative flex-1 flex items-center bg-slate-50 hover:bg-white border border-border focus-within:border-blue-500 focus-within:ring-1 focus-within:ring-blue-400/30 rounded-xl transition-all">
-            <span className="pl-3.5 pr-1.5 text-blue-600 font-mono text-xs font-semibold flex items-center gap-1.5">
-              <Terminal className="w-4 h-4 text-blue-600" />
+          <div className="relative flex-1 flex items-center bg-muted hover:bg-card border border-border focus-within:border-primary focus-within:ring-1 focus-within:ring-ring/30 rounded-xl transition-all">
+            <span className="pl-3.5 pr-1.5 text-primary font-mono text-xs font-semibold flex items-center gap-1.5">
+              <Terminal className="w-4 h-4 text-primary" />
             </span>
             <input
               type="text"
@@ -1394,7 +1394,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           <Button
             type="submit"
             disabled={isSearchingAudit || !auditQuery.trim()}
-            className="h-10 px-4 bg-blue-600 hover:bg-blue-700 text-white text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
+            className="h-10 px-4 bg-primary hover:bg-primary text-primary-foreground text-xs font-mono rounded-xl font-bold gap-1.5 shadow-xs shrink-0"
           >
             {isSearchingAudit ? <RotateCw className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
             <span>Audit Workflows</span>
@@ -1403,7 +1403,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
         {/* Quick prompt suggestions */}
         <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-mono text-muted-foreground pt-0.5">
-          <span className="text-[10px] uppercase font-bold text-slate-500">Quick Audit Checks:</span>
+          <span className="text-[10px] uppercase font-bold text-muted-foreground">Quick Audit Checks:</span>
           {[
             'Audit all human overrides on Model 1',
             'When did sub-agents last refresh against hallucinations?',
@@ -1424,7 +1424,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                   });
                 }, 400);
               }}
-              className="px-2 py-0.5 rounded-md bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors"
+              className="px-2 py-0.5 rounded-md bg-muted hover:bg-muted text-muted-foreground transition-colors"
             >
               {suggestion}
             </button>
@@ -1433,18 +1433,18 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
 
         {/* Audit Search Output Card */}
         {auditResults && (
-          <div className="mt-2 p-3 bg-slate-900 text-slate-100 rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
-            <div className="flex items-center justify-between pb-1 border-b border-slate-800 text-slate-400 text-[11px]">
-              <span className="text-emerald-400 font-bold"># AUDIT MEMORY RESPONSE ({auditResults.timestamp})</span>
+          <div className="mt-2 p-3 bg-secondary text-secondary-foreground rounded-xl font-mono text-xs space-y-1.5 animate-in fade-in">
+            <div className="flex items-center justify-between pb-1 border-b border-secondary text-muted-foreground text-[11px]">
+              <span className="text-chart-4 font-bold"># AUDIT MEMORY RESPONSE ({auditResults.timestamp})</span>
               <button
                 type="button"
                 onClick={() => setAuditResults(null)}
-                className="text-slate-400 hover:text-white"
+                className="text-muted-foreground hover:text-primary-foreground"
               >
                 ✕ Close
               </button>
             </div>
-            <pre className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-slate-200">
+            <pre className="whitespace-pre-wrap font-mono text-[11px] leading-relaxed text-secondary-foreground">
               {auditResults.response}
             </pre>
           </div>
@@ -1456,11 +1456,11 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           SAVE NOTES MODAL / DRAWER
          ========================================================================= */}
       {isSaveNotesOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-border rounded-2xl shadow-2xl w-full max-w-lg p-5 space-y-4 animate-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-secondary/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-lg p-5 space-y-4 animate-in zoom-in-95">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-blue-100 text-blue-700">
+                <div className="p-1.5 rounded-lg bg-accent text-accent-foreground">
                   <Save className="w-4 h-4" />
                 </div>
                 <div>
@@ -1485,7 +1485,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                 rows={6}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full p-2.5 rounded-xl border border-border text-xs font-mono text-foreground bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-1 focus:ring-blue-500"
+                className="w-full p-2.5 rounded-xl border border-border text-xs font-mono text-foreground bg-muted focus:bg-card focus:outline-hidden focus:ring-1 focus:ring-ring"
               />
             </div>
 
@@ -1502,7 +1502,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                   a.download = `deshaw-audit-notes-${Date.now()}.txt`;
                   a.click();
                 }}
-                className="h-8 text-xs font-mono gap-1 text-slate-700"
+                className="h-8 text-xs font-mono gap-1 text-muted-foreground"
               >
                 <Download className="w-3.5 h-3.5" />
                 <span>Export TXT</span>
@@ -1523,7 +1523,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                   size="sm"
                   onClick={handleSaveNotes}
                   disabled={saveStatus === 'saving'}
-                  className="h-8 text-xs font-mono bg-blue-600 hover:bg-blue-700 text-white font-bold"
+                  className="h-8 text-xs font-mono bg-primary hover:bg-primary text-primary-foreground font-bold"
                 >
                   {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'saved' ? '✓ Saved!' : 'Save Notes'}
                 </Button>
@@ -1537,11 +1537,11 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
           LOG NEW HUMAN INTERVENTION MODAL
          ========================================================================= */}
       {isAddInterventionOpen && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-white border border-border rounded-2xl shadow-2xl w-full max-w-md p-5 space-y-4 animate-in zoom-in-95">
+        <div className="fixed inset-0 z-50 bg-secondary/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-card border border-border rounded-2xl shadow-2xl w-full max-w-md p-5 space-y-4 animate-in zoom-in-95">
             <div className="flex items-center justify-between border-b border-border pb-3">
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-purple-100 text-purple-700">
+                <div className="p-1.5 rounded-lg bg-muted text-foreground">
                   <UserCheck className="w-4 h-4" />
                 </div>
                 <div>
@@ -1583,7 +1583,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                   value={newReasoning}
                   onChange={(e) => setNewReasoning(e.target.value)}
                   placeholder="Explain why human judgment intervened (macro risk, liquidity constraint, etc.)..."
-                  className="w-full p-2 rounded-lg border border-border text-xs font-mono text-foreground bg-slate-50 focus:bg-white"
+                  className="w-full p-2 rounded-lg border border-border text-xs font-mono text-foreground bg-muted focus:bg-card"
                 />
               </div>
 
@@ -1613,7 +1613,7 @@ export const AuditLogView: React.FC<AuditLogViewProps> = ({
                 <Button
                   type="submit"
                   size="sm"
-                  className="h-8 text-xs font-mono bg-purple-600 hover:bg-purple-700 text-white font-bold"
+                  className="h-8 text-xs font-mono bg-chart-2 hover:bg-chart-2 text-secondary font-bold"
                 >
                   Save Intervention
                 </Button>

@@ -50,7 +50,7 @@ const Sparkline: React.FC<{ points: number[]; isPositive: boolean }> = ({ points
     })
     .join(' ');
 
-  const strokeColor = isPositive ? '#16a34a' : '#e11d48';
+  const strokeColor = isPositive ? 'var(--chart-4)' : 'var(--chart-5)';
 
   return (
     <svg width={width} height={height} className="overflow-visible shrink-0">
@@ -92,7 +92,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       id: 'msg-1',
       sender: 'Sarah K.',
       avatar: 'SK',
-      avatarBg: 'bg-blue-600',
+      avatarBg: 'bg-primary',
       time: '09:42',
       text: 'Approved AAPL add — increasing to 8.5% weight. Risk confirms within limits.',
       isAi: false,
@@ -101,7 +101,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       id: 'msg-2',
       sender: 'AI Insight',
       avatar: 'AI',
-      avatarBg: 'bg-purple-600',
+      avatarBg: 'bg-chart-2',
       time: '09:51',
       text: 'Based on current momentum, NVDA rebalance recommended within 48h to stay within mandate.',
       isAi: true,
@@ -197,21 +197,21 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
     {
       id: 'news-1',
       tag: 'MACRO',
-      tagColor: 'bg-blue-50 text-blue-700 border-blue-200',
+      tagColor: 'bg-accent text-accent-foreground border-border',
       time: '2m ago',
       title: 'Fed signals dovish pivot as inflation cools to 2.3% — rate cut probability at 78% for December',
     },
     {
       id: 'news-2',
       tag: 'POSITION',
-      tagColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      tagColor: 'bg-muted text-foreground border-border',
       time: '14m ago',
       title: 'NVDA earnings beat consensus by $0.18 EPS; guidance raised — AI Agent flagged pre-market momentum shift',
     },
     {
       id: 'news-3',
       tag: 'POSITION',
-      tagColor: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+      tagColor: 'bg-muted text-foreground border-border',
       time: '14m ago',
       title: 'NVDA earnings beat consensus by $0.18 EPS; guidance raised — AI Agent flagged pre-market momentum shift',
     },
@@ -243,7 +243,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
       id: `ai-${Date.now()}`,
       sender: 'AI Insight',
       avatar: 'AI',
-      avatarBg: 'bg-purple-600',
+      avatarBg: 'bg-chart-2',
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       text: `Command executed: "${agentInput}". Portfolio factor sensitivity and exposure limits verified within compliance constraints.`,
       isAi: true,
@@ -263,7 +263,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           {/* Chart Header: [Overview] [P&L] [Sandbox] [AI]   and   [1y] [3y] [5y] */}
           <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
             {/* Left segmented tabs */}
-            <div className="flex items-center bg-white rounded-md p-0.5 border border-border text-xs font-medium">
+            <div className="flex items-center bg-card rounded-md p-0.5 border border-border text-xs font-medium">
               {(['Overview', 'P&L', 'Sandbox', 'AI'] as const).map((tab) => (
                 <button
                   key={tab}
@@ -271,7 +271,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   className={`px-3 py-1 rounded transition-colors ${
                     activeChartTab === tab
                       ? 'bg-primary text-primary-foreground font-semibold shadow-2xs'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
                   {tab}
@@ -280,7 +280,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             </div>
 
             {/* Right timeframe period buttons */}
-            <div className="flex items-center bg-white rounded-md p-0.5 border border-border text-xs font-mono font-medium">
+            <div className="flex items-center bg-card rounded-md p-0.5 border border-border text-xs font-mono font-medium">
               {(['1y', '3y', '5y'] as const).map((period) => (
                 <button
                   key={period}
@@ -288,7 +288,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   className={`px-2.5 py-1 rounded transition-colors ${
                     activePeriod === period
                       ? 'bg-primary text-primary-foreground font-semibold shadow-2xs'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                   }`}
                 >
                   {period}
@@ -312,7 +312,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   dataKey="month" 
                   tickLine={false} 
                   axisLine={false} 
-                  tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontFamily: 'monospace' }}
+                  tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontFamily: 'var(--font-mono)' }}
                 />
                 <YAxis 
                   domain={[0, 10]} 
@@ -320,7 +320,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   tickFormatter={(val) => `${val}B`}
                   tickLine={false} 
                   axisLine={false} 
-                  tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontFamily: 'monospace' }}
+                  tick={{ fill: 'var(--muted-foreground)', fontSize: 11, fontFamily: 'var(--font-mono)' }}
                 />
                 <Tooltip
                   content={({ active, payload }) => {
@@ -330,7 +330,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                       <div className="bg-popover border border-border p-2 rounded-md shadow-md text-xs font-mono text-popover-foreground">
                         <div className="font-bold text-primary">{d.month} 2025</div>
                         <div>Portfolio NAV: {d.val.toFixed(2)}B</div>
-                        <div className="text-emerald-600 font-semibold">+18.0% Cumulative</div>
+                        <div className="text-chart-4 font-semibold">+18.0% Cumulative</div>
                       </div>
                     );
                   }}
@@ -351,13 +351,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
           <div className="flex items-center justify-end gap-2 pt-2 border-t border-border/60 mt-1">
             <span className="text-xs text-muted-foreground font-sans">Viewing:</span>
             <div className="flex items-center -space-x-1">
-              <div className="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
+              <div className="w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
                 SK
               </div>
-              <div className="w-5 h-5 rounded-full bg-purple-600 text-white flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
+              <div className="w-5 h-5 rounded-full bg-chart-2 text-secondary flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
                 DR
               </div>
-              <div className="w-5 h-5 rounded-full bg-amber-600 text-white flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
+              <div className="w-5 h-5 rounded-full bg-chart-3 text-secondary flex items-center justify-center text-[9px] font-bold ring-2 ring-card font-mono">
                 MK
               </div>
             </div>
@@ -375,7 +375,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               <div className="text-2xl sm:text-[26px] font-bold text-foreground mt-1 tracking-tight font-sans">
                 ₹8,100,000,000
               </div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-600 mt-1 font-mono">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-chart-4 mt-1 font-mono">
                 <span>▲</span>
                 <span>+18.0%</span>
                 <span className="text-muted-foreground font-normal">YTD</span>
@@ -390,7 +390,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Max DD</span>
-                <span className="font-bold text-rose-600">-4.2%</span>
+                <span className="font-bold text-chart-5">-4.2%</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Beta</span>
@@ -410,14 +410,14 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               </div>
 
               {/* Progress bar with Profit 72% | Loss 28% */}
-              <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-slate-100 border border-border mt-2">
+              <div className="w-full h-2.5 rounded-full overflow-hidden flex bg-muted border border-border mt-2">
                 <div 
-                  className="bg-emerald-500 h-full transition-all" 
+                  className="bg-chart-4 h-full transition-all" 
                   style={{ width: '72%' }}
                   title="Profit: 72%"
                 />
                 <div 
-                  className="bg-rose-500 h-full transition-all" 
+                  className="bg-chart-5 h-full transition-all" 
                   style={{ width: '28%' }}
                   title="Loss: 28%"
                 />
@@ -425,12 +425,12 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
               {/* Legend: ● Profit 72%    ● Loss 28% */}
               <div className="flex items-center justify-between text-xs font-mono mt-1.5">
-                <span className="text-emerald-600 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="text-chart-4 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-chart-4" />
                   Profit 72%
                 </span>
-                <span className="text-rose-600 font-semibold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500" />
+                <span className="text-chart-5 font-semibold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-chart-5" />
                   Loss 28%
                 </span>
               </div>
@@ -440,7 +440,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
             <div className="space-y-1.5 pt-3 border-t border-border mt-3 text-xs font-mono">
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Net Exp.</span>
-                <span className="font-bold text-emerald-600">+142%</span>
+                <span className="font-bold text-chart-4">+142%</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-muted-foreground">Leverage</span>
@@ -475,7 +475,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                 <div
                   key={stk.symbol}
                   onClick={onNavigateToHoldings}
-                  className="flex items-center justify-between text-xs hover:bg-slate-50 p-1.5 rounded-md transition-colors cursor-pointer group"
+                  className="flex items-center justify-between text-xs hover:bg-muted p-1.5 rounded-md transition-colors cursor-pointer group"
                 >
                   {/* Left: Ticker & Company */}
                   <div className="min-w-0 pr-2">
@@ -498,7 +498,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                       {stk.price}
                     </div>
                     <div className={`font-mono text-[11px] font-medium ${
-                      stk.isPositive ? 'text-emerald-600' : 'text-rose-600'
+                      stk.isPositive ? 'text-chart-4' : 'text-chart-5'
                     }`}>
                       {stk.change}
                     </div>
@@ -527,7 +527,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               <h3 className="text-sm font-bold text-foreground tracking-tight">
                 News &amp; Important Updates
               </h3>
-              <span className="w-5 h-5 rounded-full bg-rose-500/15 text-rose-600 flex items-center justify-center font-bold text-xs font-mono">
+              <span className="w-5 h-5 rounded-full bg-chart-5/15 text-chart-5 flex items-center justify-center font-bold text-xs font-mono">
                 5
               </span>
             </div>
@@ -537,7 +537,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               {newsUpdates.map((item) => (
                 <div 
                   key={item.id}
-                  className="p-3 rounded-lg border border-border bg-white hover:bg-slate-50 transition-colors"
+                  className="p-3 rounded-lg border border-border bg-card hover:bg-muted transition-colors"
                 >
                   <div className="flex items-center gap-2 mb-1.5">
                     <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded border ${item.tagColor}`}>
@@ -564,8 +564,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
               <h3 className="text-sm font-bold text-foreground tracking-tight">
                 Team Updates
               </h3>
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-emerald-500/15 text-emerald-600 border border-emerald-500/30">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-mono font-semibold bg-chart-4/15 text-chart-4 border border-chart-4/30">
+                <span className="w-1.5 h-1.5 rounded-full bg-chart-4 animate-pulse" />
                 Live
               </span>
             </div>
@@ -577,13 +577,13 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   {/* Sender line with avatar */}
                   <div className="flex items-center gap-1.5 text-[11px]">
                     {msg.isAi ? (
-                      <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                      <Sparkles className="w-3.5 h-3.5 text-primary shrink-0" />
                     ) : (
-                      <div className={`w-4 h-4 rounded-full ${msg.avatarBg} text-white flex items-center justify-center font-bold text-[8px] font-mono shrink-0`}>
+                      <div className={`w-4 h-4 rounded-full ${msg.avatarBg} text-primary-foreground flex items-center justify-center font-bold text-[8px] font-mono shrink-0`}>
                         {msg.avatar}
                       </div>
                     )}
-                    <span className={`font-semibold truncate ${msg.isAi ? 'text-blue-700 dark:text-blue-300' : 'text-foreground'}`}>
+                    <span className={`font-semibold truncate ${msg.isAi ? 'text-accent-foreground dark:text-primary' : 'text-foreground'}`}>
                       {msg.sender}
                     </span>
                     <span className="text-muted-foreground font-mono text-[10px]">· {msg.time}</span>
@@ -592,8 +592,8 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
                   {/* Message bubble */}
                   <div className={`p-2.5 rounded-lg text-xs leading-relaxed ${
                     msg.isAi 
-                      ? 'bg-blue-50/40 border border-blue-400/60 text-foreground' 
-                      : 'bg-white border border-border text-foreground'
+                      ? 'bg-accent/40 border border-primary/60 text-foreground' 
+                      : 'bg-card border border-border text-foreground'
                   }`}>
                     {msg.text}
                   </div>
@@ -604,7 +604,7 @@ export const OverviewView: React.FC<OverviewViewProps> = ({
 
           {/* Chat Input: "Add update..." + Up Arrow Button */}
           <div className="pt-2 border-t border-border">
-            <div className="flex items-center gap-1.5 bg-white border border-border rounded-md px-2.5 py-1.5 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
+            <div className="flex items-center gap-1.5 bg-card border border-border rounded-md px-2.5 py-1.5 focus-within:ring-1 focus-within:ring-primary focus-within:border-primary transition-all">
               <input
                 type="text"
                 value={newUpdateText}

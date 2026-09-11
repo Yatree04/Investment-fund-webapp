@@ -12,10 +12,10 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-destructive-foreground shadow-xs hover:bg-destructive/90",
         outline:
-          "border border-border bg-white text-foreground shadow-xs hover:bg-slate-50 hover:text-foreground",
+          "border border-border bg-card text-foreground shadow-xs hover:bg-muted hover:text-foreground",
         secondary:
-          "border border-border bg-white text-foreground shadow-xs hover:bg-slate-50",
-        ghost: "hover:bg-slate-50 hover:text-foreground",
+          "border border-border bg-card text-foreground shadow-xs hover:bg-muted",
+        ghost: "hover:bg-muted hover:text-foreground",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

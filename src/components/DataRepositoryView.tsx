@@ -466,13 +466,13 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
          ========================================================================= */}
       <div className="flex flex-wrap items-center justify-between pb-1.5 border-b border-border gap-2 shrink-0">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950/50 border border-blue-400/40 flex items-center justify-center text-blue-600 shadow-2xs">
+          <div className="w-8 h-8 rounded-lg bg-accent dark:bg-muted/50 border border-primary/40 flex items-center justify-center text-primary shadow-2xs">
             <Database className="w-4 h-4" />
           </div>
           <div>
             <h1 className="text-sm sm:text-base font-bold text-foreground font-mono tracking-tight flex items-center gap-2">
               <span>Quantitative Data Repository</span>
-              <Badge variant="outline" className="text-[10px] font-mono border-blue-400/50 text-blue-600 bg-blue-50/40 dark:bg-blue-950/40">
+              <Badge variant="outline" className="text-[10px] font-mono border-primary/50 text-primary bg-accent/40 dark:bg-muted/40">
                 NY4 Colocation
               </Badge>
             </h1>
@@ -484,19 +484,19 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
 
         {/* Global Live Feeds Telemetry */}
         <div className="flex items-center gap-2 font-mono text-[11px]">
-          <div className="hidden md:flex items-center gap-3 px-3 py-1 rounded-lg border border-border bg-white shadow-2xs">
+          <div className="hidden md:flex items-center gap-3 px-3 py-1 rounded-lg border border-border bg-card shadow-2xs">
             <span className="flex items-center gap-1.5 text-muted-foreground">
-              <Radio className="w-3 h-3 text-emerald-500 animate-pulse" />
+              <Radio className="w-3 h-3 text-chart-4 animate-pulse" />
               <span>NY4 Tick: <strong className="text-foreground">0.04 ms</strong></span>
             </span>
             <span className="text-border">|</span>
             <span className="flex items-center gap-1.5 text-muted-foreground">
-              <Server className="w-3 h-3 text-blue-500" />
+              <Server className="w-3 h-3 text-primary" />
               <span>CME Aurora: <strong className="text-foreground">0.08 ms</strong></span>
             </span>
             <span className="text-border">|</span>
             <span className="text-muted-foreground">
-              Capacity: <strong className="text-emerald-700 dark:text-emerald-400">11.5 TB Active</strong>
+              Capacity: <strong className="text-foreground dark:text-chart-4">11.5 TB Active</strong>
             </span>
           </div>
 
@@ -504,9 +504,9 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
             variant="outline"
             size="sm"
             onClick={() => setShowIngestModal(true)}
-            className="h-8 font-mono text-xs gap-1.5 border-blue-400/50 hover:bg-blue-50 dark:hover:bg-blue-950/40 text-blue-700 dark:text-blue-300 shadow-2xs"
+            className="h-8 font-mono text-xs gap-1.5 border-primary/50 hover:bg-accent dark:hover:bg-muted/40 text-accent-foreground dark:text-primary shadow-2xs"
           >
-            <Plus className="w-3.5 h-3.5 text-blue-600" />
+            <Plus className="w-3.5 h-3.5 text-primary" />
             <span className="hidden sm:inline">Connect Feed / Ingest</span>
             <span className="sm:hidden">Ingest</span>
           </Button>
@@ -516,12 +516,12 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
       {/* =========================================================================
           MAIN WORKSPACE LAYOUT: Master List (Left 4 cols) + Schema Inspector (Right 8 cols)
          ========================================================================= */}
-      <div className="flex-1 min-h-0 border border-border rounded-xl bg-white shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
+      <div className="flex-1 min-h-0 border border-border rounded-xl bg-card shadow-xs overflow-hidden grid grid-cols-1 lg:grid-cols-12">
         
         {/* =========================================================================
             LEFT COLUMN: DATASET CATALOG & FILTERS (4 of 12)
            ========================================================================= */}
-        <div className="lg:col-span-4 border-r border-border p-3 flex flex-col justify-between bg-white min-h-0 overflow-hidden">
+        <div className="lg:col-span-4 border-r border-border p-3 flex flex-col justify-between bg-card min-h-0 overflow-hidden">
           <div className="flex flex-col min-h-0 flex-1 overflow-hidden">
             
             {/* Search Bar */}
@@ -532,7 +532,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search datasets, tickers, schemas..."
-                className="pl-8 h-8 text-xs font-mono bg-white border-border"
+                className="pl-8 h-8 text-xs font-mono bg-card border-border"
               />
               {searchQuery && (
                 <button
@@ -559,7 +559,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                   className={`px-2 py-1 rounded-md whitespace-nowrap transition-colors border ${
                     activeCategory === cat.id
                       ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
-                      : 'bg-white text-muted-foreground hover:text-foreground border-border hover:bg-slate-50'
+                      : 'bg-card text-muted-foreground hover:text-foreground border-border hover:bg-muted'
                   }`}
                 >
                   {cat.label}
@@ -577,18 +577,18 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                     onClick={() => setSelectedDatasetId(ds.id)}
                     className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-blue-50/70 border-blue-400/70 shadow-xs ring-1 ring-blue-400/30'
-                        : 'bg-white hover:bg-slate-50 border-border'
+                        ? 'bg-accent/70 border-primary/70 shadow-xs ring-1 ring-ring/30'
+                        : 'bg-card hover:bg-muted border-border'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-white text-primary border border-border">
+                      <span className="text-[9px] font-mono font-semibold px-1.5 py-0.5 rounded bg-card text-primary border border-border">
                         {ds.categoryLabel}
                       </span>
                       <div className="flex items-center gap-1 text-[9px] font-mono">
                         {ds.isLiveStream ? (
-                          <span className="flex items-center gap-1 text-emerald-700 font-semibold">
-                            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                          <span className="flex items-center gap-1 text-foreground font-semibold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-chart-4 animate-pulse" />
                             LIVE
                           </span>
                         ) : (
@@ -601,7 +601,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
 
                     <div className="text-xs font-bold text-foreground tracking-tight flex items-center justify-between">
                       <span>{ds.name}</span>
-                      {isSelected && <ChevronRight className="w-3.5 h-3.5 text-blue-600 shrink-0" />}
+                      {isSelected && <ChevronRight className="w-3.5 h-3.5 text-primary shrink-0" />}
                     </div>
 
                     <div className="text-[10px] font-mono text-muted-foreground mt-0.5 truncate">
@@ -614,7 +614,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
 
                     <div className="mt-2 pt-1.5 border-t border-border/50 flex items-center justify-between text-[9px] font-mono text-muted-foreground">
                       <span>Format: <strong>{ds.format}</strong></span>
-                      <span>Quality: <strong className="text-emerald-700">{ds.completeness}</strong></span>
+                      <span>Quality: <strong className="text-foreground">{ds.completeness}</strong></span>
                     </div>
                   </div>
                 );
@@ -631,27 +631,27 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
           {/* Quick Info footer */}
           <div className="pt-2 border-t border-border text-[10px] font-mono text-muted-foreground flex items-center justify-between shrink-0">
             <span>Storage: Hot NVMe Lakehouse</span>
-            <span className="text-emerald-700 font-semibold">SLA: 99.999%</span>
+            <span className="text-foreground font-semibold">SLA: 99.999%</span>
           </div>
         </div>
 
         {/* =========================================================================
             RIGHT COLUMN: DATASET SCHEMA, PREVIEW & CODE INSPECTOR (8 of 12)
            ========================================================================= */}
-        <div className="lg:col-span-8 flex flex-col min-h-0 bg-white overflow-hidden">
+        <div className="lg:col-span-8 flex flex-col min-h-0 bg-card overflow-hidden">
           
           {/* Header & Tabs for Selected Dataset */}
-          <div className="p-3 sm:p-4 border-b border-border bg-white flex flex-wrap items-center justify-between gap-2 shrink-0">
+          <div className="p-3 sm:p-4 border-b border-border bg-card flex flex-wrap items-center justify-between gap-2 shrink-0">
             <div className="min-w-0">
               <div className="flex items-center gap-2">
                 <h2 className="text-sm sm:text-base font-bold text-foreground font-mono truncate">
                   {selectedDataset.name}
                 </h2>
-                <Badge variant="outline" className="text-[10px] font-mono border-border text-foreground bg-white">
+                <Badge variant="outline" className="text-[10px] font-mono border-border text-foreground bg-card">
                   {selectedDataset.format}
                 </Badge>
                 {selectedDataset.latency && (
-                  <Badge variant="outline" className="text-[10px] font-mono bg-white text-emerald-700 border-emerald-300">
+                  <Badge variant="outline" className="text-[10px] font-mono bg-card text-foreground border-border">
                     {selectedDataset.latency}
                   </Badge>
                 )}
@@ -673,10 +673,10 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                     onOpenAgentModal(`Query ${selectedDataset.identifier} and verify recent signals`);
                   }
                 }}
-                className="h-8 text-xs gap-1.5 border-blue-400/50 bg-white hover:bg-blue-50 text-blue-700 shadow-2xs"
+                className="h-8 text-xs gap-1.5 border-primary/50 bg-card hover:bg-accent text-accent-foreground shadow-2xs"
                 title="Send query to Systematic Agent"
               >
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                <Sparkles className="w-3.5 h-3.5 text-primary" />
                 <span className="hidden sm:inline">Ask Agent</span>
               </Button>
 
@@ -685,13 +685,13 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                 size="sm"
                 onClick={handleExportSample}
                 disabled={isExporting}
-                className="h-8 text-xs gap-1.5 border-border bg-white hover:bg-slate-50 text-foreground shadow-2xs"
+                className="h-8 text-xs gap-1.5 border-border bg-card hover:bg-muted text-foreground shadow-2xs"
                 title="Download sample dataset slice in CSV format"
               >
                 {exportSuccess ? (
                   <>
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                    <span className="text-emerald-600">Exported</span>
+                    <CheckCircle2 className="w-3.5 h-3.5 text-chart-4" />
+                    <span className="text-chart-4">Exported</span>
                   </>
                 ) : (
                   <>
@@ -705,7 +705,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
           </div>
 
           {/* Sub-Tabs: Preview, Schema, Python SDK, Lineage */}
-          <div className="px-3 sm:px-4 py-1.5 border-b border-border bg-white flex items-center justify-between shrink-0">
+          <div className="px-3 sm:px-4 py-1.5 border-b border-border bg-card flex items-center justify-between shrink-0">
             <div className="flex items-center gap-1 text-xs font-mono">
               {[
                 { id: 'preview', label: 'Live Data Preview', icon: Table },
@@ -721,8 +721,8 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                     onClick={() => setActiveInspectorTab(tab.id as any)}
                     className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md transition-colors ${
                       isActive
-                        ? 'bg-white text-primary font-bold shadow-2xs border border-border'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-slate-50'
+                        ? 'bg-card text-primary font-bold shadow-2xs border border-border'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted'
                     }`}
                   >
                     <Icon className="w-3.5 h-3.5" />
@@ -739,29 +739,29 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
           </div>
 
           {/* Content Pane */}
-          <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 bg-white">
+          <div className="flex-1 min-h-0 overflow-y-auto p-3 sm:p-4 bg-card">
             
             {/* 1. LIVE DATA PREVIEW TAB */}
             {activeInspectorTab === 'preview' && (
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
                   <span>Showing latest records from partition: <code className="text-foreground">date=2026-09-10</code></span>
-                  <span className="text-emerald-700 flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-foreground flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-chart-4 animate-pulse" />
                     Real-time Buffer Synced
                   </span>
                 </div>
 
-                <div className="border border-border rounded-xl overflow-hidden shadow-2xs bg-white">
+                <div className="border border-border rounded-xl overflow-hidden shadow-2xs bg-card">
                   <div className="overflow-x-auto">
                     <table className="w-full text-left text-xs font-mono border-collapse">
                       <thead>
-                        <tr className="bg-white border-b border-border text-[11px] text-muted-foreground">
+                        <tr className="bg-card border-b border-border text-[11px] text-muted-foreground">
                           {selectedDataset.schema.map((col) => (
                             <th key={col.name} className="px-3 py-2 font-semibold whitespace-nowrap">
                               <div className="flex items-center gap-1">
                                 <span>{col.name}</span>
-                                {col.isKey && <span className="text-amber-500 font-bold" title="Primary Key">★</span>}
+                                {col.isKey && <span className="text-destructive font-bold" title="Primary Key">★</span>}
                               </div>
                               <span className="text-[9px] text-muted-foreground/80 font-normal">{col.type}</span>
                             </th>
@@ -770,7 +770,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                       </thead>
                       <tbody className="divide-y divide-border/60">
                         {selectedDataset.sampleData.map((row, idx) => (
-                          <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                          <tr key={idx} className="hover:bg-muted transition-colors">
                             {selectedDataset.schema.map((col) => {
                               const val = row[col.name];
                               const isNumeric = typeof val === 'number';
@@ -798,7 +798,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                       variant="ghost"
                       size="sm"
                       onClick={() => onSelectTab && onSelectTab('agent-builder')}
-                      className="h-6 text-[10px] font-mono text-blue-600 hover:text-blue-700 hover:bg-slate-50"
+                      className="h-6 text-[10px] font-mono text-primary hover:text-accent-foreground hover:bg-muted"
                     >
                       Connect in Agent Builder Canvas →
                     </Button>
@@ -812,15 +812,15 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
               <div className="space-y-3">
                 <div className="flex items-center justify-between text-xs font-mono text-muted-foreground">
                   <span>Arrow / Parquet Type Declarations &amp; Nullability</span>
-                  <Badge variant="outline" className="text-[10px] font-mono bg-white">
+                  <Badge variant="outline" className="text-[10px] font-mono bg-card">
                     Schema v2.4
                   </Badge>
                 </div>
 
-                <div className="border border-border rounded-xl overflow-hidden shadow-2xs bg-white">
+                <div className="border border-border rounded-xl overflow-hidden shadow-2xs bg-card">
                   <table className="w-full text-left text-xs font-mono">
                     <thead>
-                      <tr className="bg-white border-b border-border text-[11px] text-muted-foreground">
+                      <tr className="bg-card border-b border-border text-[11px] text-muted-foreground">
                         <th className="px-3.5 py-2 font-semibold">Field Name</th>
                         <th className="px-3.5 py-2 font-semibold">Data Type</th>
                         <th className="px-3.5 py-2 font-semibold">Nullable</th>
@@ -830,17 +830,17 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                     </thead>
                     <tbody className="divide-y divide-border/60">
                       {selectedDataset.schema.map((col) => (
-                        <tr key={col.name} className="hover:bg-slate-50 transition-colors">
+                        <tr key={col.name} className="hover:bg-muted transition-colors">
                           <td className="px-3.5 py-2.5 font-bold text-foreground flex items-center gap-1.5">
                             <code>{col.name}</code>
                             {col.isKey && (
-                              <Badge variant="outline" className="text-[9px] px-1 py-0 bg-amber-50 text-amber-700 border-amber-400/40">
+                              <Badge variant="outline" className="text-[9px] px-1 py-0 bg-muted text-foreground border-chart-3/40">
                                 PK
                               </Badge>
                             )}
                           </td>
                           <td className="px-3.5 py-2.5">
-                            <span className="px-1.5 py-0.5 rounded bg-white border border-border font-semibold text-primary text-[10px]">
+                            <span className="px-1.5 py-0.5 rounded bg-card border border-border font-semibold text-primary text-[10px]">
                               {col.type}
                             </span>
                           </td>
@@ -872,12 +872,12 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={handleCopyCode}
-                    className="h-7 text-xs font-mono gap-1.5 border-border bg-white hover:bg-slate-50 shadow-none"
+                    className="h-7 text-xs font-mono gap-1.5 border-border bg-card hover:bg-muted shadow-none"
                   >
                     {copiedCode ? (
                       <>
-                        <Check className="w-3 h-3 text-emerald-600" />
-                        <span className="text-emerald-600">Copied!</span>
+                        <Check className="w-3 h-3 text-chart-4" />
+                        <span className="text-chart-4">Copied!</span>
                       </>
                     ) : (
                       <>
@@ -888,18 +888,18 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                   </Button>
                 </div>
 
-                <div className="relative rounded-xl border border-border bg-white p-4 font-mono text-xs overflow-x-auto text-foreground shadow-2xs">
+                <div className="relative rounded-xl border border-border bg-card p-4 font-mono text-xs overflow-x-auto text-foreground shadow-2xs">
                   <pre className="leading-relaxed">
                     <code>{selectedDataset.querySnippet}</code>
                   </pre>
                 </div>
 
-                <div className="p-3 rounded-lg border border-border bg-white text-xs font-mono space-y-1 text-muted-foreground">
+                <div className="p-3 rounded-lg border border-border bg-card text-xs font-mono space-y-1 text-muted-foreground">
                   <div className="font-bold text-foreground flex items-center gap-1.5">
-                    <Server className="w-3.5 h-3.5 text-blue-600" />
+                    <Server className="w-3.5 h-3.5 text-primary" />
                     <span>Connection URI:</span>
                   </div>
-                  <p className="text-[11px] bg-white p-2 rounded border border-border select-all text-foreground font-semibold">
+                  <p className="text-[11px] bg-card p-2 rounded border border-border select-all text-foreground font-semibold">
                     arrow-flight://ny4.eqx.deshaw.internal:8815/repo/{selectedDataset.identifier}?compression=zstd
                   </p>
                 </div>
@@ -914,41 +914,41 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                 </div>
 
                 {/* Pipeline Flow Diagram */}
-                <div className="p-4 rounded-xl border border-border bg-white space-y-4">
+                <div className="p-4 rounded-xl border border-border bg-card space-y-4">
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-2 text-center text-xs font-mono">
-                    <div className="p-3 rounded-lg border border-blue-400/40 bg-blue-50/40">
-                      <Radio className="w-4 h-4 text-blue-600 mx-auto mb-1 animate-pulse" />
+                    <div className="p-3 rounded-lg border border-primary/40 bg-accent/40">
+                      <Radio className="w-4 h-4 text-primary mx-auto mb-1 animate-pulse" />
                       <div className="font-bold text-foreground">1. Source Origin</div>
                       <div className="text-[10px] text-muted-foreground mt-0.5">{selectedDataset.provider}</div>
-                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-white">Raw Multicast</Badge>
+                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-card">Raw Multicast</Badge>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-border bg-white shadow-2xs">
+                    <div className="p-3 rounded-lg border border-border bg-card shadow-2xs">
                       <Server className="w-4 h-4 text-primary mx-auto mb-1" />
                       <div className="font-bold text-foreground">2. Gateway Normalizer</div>
                       <div className="text-[10px] text-muted-foreground mt-0.5">NY4 Low-Latency Parser</div>
-                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-white">&lt;0.02ms Latency</Badge>
+                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-card">&lt;0.02ms Latency</Badge>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-border bg-white shadow-2xs">
+                    <div className="p-3 rounded-lg border border-border bg-card shadow-2xs">
                       <HardDrive className="w-4 h-4 text-primary mx-auto mb-1" />
                       <div className="font-bold text-foreground">3. Hot Lakehouse</div>
                       <div className="text-[10px] text-muted-foreground mt-0.5">Arrow IPC / Parquet</div>
-                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-white">ZSTD Compressed</Badge>
+                      <Badge variant="outline" className="text-[9px] mt-1.5 bg-card">ZSTD Compressed</Badge>
                     </div>
 
-                    <div className="p-3 rounded-lg border border-emerald-400/40 bg-emerald-50/40">
-                      <Sparkles className="w-4 h-4 text-emerald-600 mx-auto mb-1" />
+                    <div className="p-3 rounded-lg border border-chart-4/40 bg-muted/40">
+                      <Sparkles className="w-4 h-4 text-chart-4 mx-auto mb-1" />
                       <div className="font-bold text-foreground">4. Systematic Agent</div>
                       <div className="text-[10px] text-muted-foreground mt-0.5">Autonomous Rebalancer</div>
-                      <Badge variant="outline" className="text-[9px] mt-1.5 text-emerald-600 bg-white">Active Consumer</Badge>
+                      <Badge variant="outline" className="text-[9px] mt-1.5 text-chart-4 bg-card">Active Consumer</Badge>
                     </div>
                   </div>
 
-                  <div className="p-3 rounded-lg bg-white border border-border text-xs font-mono space-y-1.5 shadow-2xs">
+                  <div className="p-3 rounded-lg bg-card border border-border text-xs font-mono space-y-1.5 shadow-2xs">
                     <div className="font-bold text-foreground flex items-center justify-between">
                       <span>Data Quality Verifications</span>
-                      <span className="text-emerald-700 font-semibold">{selectedDataset.completeness} Verified</span>
+                      <span className="text-foreground font-semibold">{selectedDataset.completeness} Verified</span>
                     </div>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] text-muted-foreground pt-1">
                       <div>✓ Missing ticks: &lt; 0.001%</div>
@@ -974,14 +974,14 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
       {showIngestModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div 
-            className="fixed inset-0 bg-black/40 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 bg-secondary/40 backdrop-blur-xs transition-opacity"
             onClick={() => setShowIngestModal(false)}
           />
 
-          <Card className="relative w-full max-w-lg bg-white border-2 border-blue-400/60 rounded-2xl shadow-2xl z-10 p-5 font-mono text-xs space-y-4 animate-in zoom-in-95">
-            <div className="flex items-center justify-between pb-2 border-b border-border bg-white">
+          <Card className="relative w-full max-w-lg bg-popover border-2 border-primary/60 rounded-2xl shadow-2xl z-10 p-5 font-mono text-xs space-y-4 animate-in zoom-in-95">
+            <div className="flex items-center justify-between pb-2 border-b border-border bg-card">
               <div className="flex items-center gap-2">
-                <Database className="w-4 h-4 text-blue-600" />
+                <Database className="w-4 h-4 text-primary" />
                 <span className="font-bold text-sm text-foreground">Register New Institutional Dataset</span>
               </div>
               <button 
@@ -1001,7 +1001,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                   placeholder="e.g., Cboe Volatility Index Minute Snapshots"
                   value={newDsName}
                   onChange={(e) => setNewDsName(e.target.value)}
-                  className="font-mono text-xs bg-white"
+                  className="font-mono text-xs bg-card"
                 />
               </div>
 
@@ -1011,7 +1011,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                   <select
                     value={newDsCategory}
                     onChange={(e) => setNewDsCategory(e.target.value as any)}
-                    className="w-full h-9 rounded-md border border-border bg-white px-3 py-1 text-xs font-mono text-foreground"
+                    className="w-full h-9 rounded-md border border-border bg-card px-3 py-1 text-xs font-mono text-foreground"
                   >
                     <option value="market-depth">Market & Order Book</option>
                     <option value="factor-alpha">Factor & Alpha Signals</option>
@@ -1025,7 +1025,7 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                   <select
                     value={newDsFormat}
                     onChange={(e) => setNewDsFormat(e.target.value as any)}
-                    className="w-full h-9 rounded-md border border-border bg-white px-3 py-1 text-xs font-mono text-foreground"
+                    className="w-full h-9 rounded-md border border-border bg-card px-3 py-1 text-xs font-mono text-foreground"
                   >
                     <option value="Parquet">Parquet</option>
                     <option value="Arrow IPC">Arrow IPC</option>
@@ -1041,31 +1041,31 @@ export const DataRepositoryView: React.FC<DataRepositoryViewProps> = ({
                 <Input
                   type="text"
                   placeholder="s3://deshaw-lakehouse-east/feeds/new_dataset.parquet"
-                  className="font-mono text-xs bg-white"
+                  className="font-mono text-xs bg-card"
                 />
               </div>
 
               {ingestSuccess && (
-                <div className="p-2.5 rounded-lg bg-emerald-50 border border-emerald-300 text-emerald-700 flex items-center gap-2">
+                <div className="p-2.5 rounded-lg bg-muted border border-border text-foreground flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4 shrink-0" />
                   <span>Dataset registered successfully! Verified in catalog.</span>
                 </div>
               )}
 
-              <div className="pt-2 flex items-center justify-end gap-2 border-t border-border bg-white">
+              <div className="pt-2 flex items-center justify-end gap-2 border-t border-border bg-card">
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
                   onClick={() => setShowIngestModal(false)}
-                  className="bg-white hover:bg-slate-50"
+                  className="bg-card hover:bg-muted"
                 >
                   Cancel
                 </Button>
                 <Button
                   type="submit"
                   size="sm"
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-mono"
+                  className="bg-primary hover:bg-primary text-primary-foreground font-mono"
                 >
                   Register Dataset
                 </Button>

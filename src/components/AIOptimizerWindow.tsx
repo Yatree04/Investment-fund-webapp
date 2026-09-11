@@ -389,12 +389,12 @@ class CustomResearchNode(QuantParentAgent):
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-border p-5 shadow-xs space-y-4 select-none">
+    <div className="bg-card rounded-2xl border border-border p-5 shadow-xs space-y-4 select-none">
       
       {/* Header Banner */}
       <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-border">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-blue-600">
+          <div className="w-8 h-8 rounded-xl bg-accent border border-border flex items-center justify-center text-primary">
             <Sparkles className="w-4 h-4" />
           </div>
           <div>
@@ -402,7 +402,7 @@ class CustomResearchNode(QuantParentAgent):
               <h3 className="text-sm font-bold text-foreground font-mono">
                 AI Optimisation Window
               </h3>
-              <Badge variant="outline" className="text-[10px] font-mono bg-emerald-50 text-emerald-700 border-emerald-300">
+              <Badge variant="outline" className="text-[10px] font-mono bg-muted text-foreground border-border">
                 ● Live Research Node Generation
               </Badge>
             </div>
@@ -427,8 +427,8 @@ class CustomResearchNode(QuantParentAgent):
               onClick={() => setActiveCategory(cat.id)}
               className={`px-2.5 py-1 rounded-lg text-xs font-mono transition-all border ${
                 activeCategory === cat.id
-                  ? 'bg-blue-600 text-white font-bold border-blue-600 shadow-2xs'
-                  : 'bg-white text-muted-foreground border-border hover:bg-slate-50 hover:text-foreground'
+                  ? 'bg-primary text-primary-foreground font-bold border-primary shadow-2xs'
+                  : 'bg-card text-muted-foreground border-border hover:bg-muted hover:text-foreground'
               }`}
             >
               {cat.label}
@@ -450,19 +450,19 @@ class CustomResearchNode(QuantParentAgent):
                 onClick={() => setSelectedStrategyId(strat.id)}
                 className={`p-3 rounded-xl border text-left cursor-pointer transition-all shadow-2xs ${
                   isSelected
-                    ? 'bg-blue-50/40 border-blue-500 ring-2 ring-blue-400/20'
-                    : 'bg-white hover:bg-slate-50 border-border'
+                    ? 'bg-accent/40 border-primary ring-2 ring-ring/20'
+                    : 'bg-card hover:bg-muted border-border'
                 }`}
               >
                 <div className="flex items-center justify-between gap-1 mb-1">
                   <span className="text-xs font-bold text-foreground font-mono truncate">
                     {strat.title}
                   </span>
-                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white border border-border text-muted-foreground shrink-0 uppercase">
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-card border border-border text-muted-foreground shrink-0 uppercase">
                     {strat.category}
                   </span>
                 </div>
-                <div className="text-[10px] font-mono text-blue-700 flex items-center gap-1 mb-1.5">
+                <div className="text-[10px] font-mono text-accent-foreground flex items-center gap-1 mb-1.5">
                   <Bot className="w-3 h-3" />
                   <span className="truncate">{strat.sourceNode}</span>
                 </div>
@@ -470,7 +470,7 @@ class CustomResearchNode(QuantParentAgent):
                   {strat.description}
                 </p>
                 <div className="flex items-center justify-between pt-2 mt-2 border-t border-border/60 text-[10px] font-mono">
-                  <span className="text-emerald-700 font-semibold">{strat.offerings.expectedAlpha}</span>
+                  <span className="text-foreground font-semibold">{strat.offerings.expectedAlpha}</span>
                   <span className="text-muted-foreground">Sharpe: {strat.offerings.sharpeImpact}</span>
                 </div>
               </div>
@@ -479,12 +479,12 @@ class CustomResearchNode(QuantParentAgent):
         </div>
 
         {/* Right Column: Detailed Proposal "What this idea has to offer" (7 cols) */}
-        <div className="lg:col-span-7 bg-slate-50/60 rounded-xl border border-border p-4 flex flex-col justify-between space-y-3">
+        <div className="lg:col-span-7 bg-muted/60 rounded-xl border border-border p-4 flex flex-col justify-between space-y-3">
           <div className="space-y-3">
             {/* Title & Origin */}
             <div className="flex items-start justify-between gap-2">
               <div>
-                <div className="text-[10px] font-mono text-blue-700 font-semibold flex items-center gap-1">
+                <div className="text-[10px] font-mono text-accent-foreground font-semibold flex items-center gap-1">
                   <Cpu className="w-3 h-3" />
                   <span>Origin: {selectedStrategy.sourceNode}</span>
                 </div>
@@ -492,7 +492,7 @@ class CustomResearchNode(QuantParentAgent):
                   {selectedStrategy.title}
                 </h4>
               </div>
-              <Badge variant="outline" className="bg-white font-mono text-xs text-foreground border-border shadow-2xs">
+              <Badge variant="outline" className="bg-card font-mono text-xs text-foreground border-border shadow-2xs">
                 {selectedStrategy.category.toUpperCase()}
               </Badge>
             </div>
@@ -503,35 +503,35 @@ class CustomResearchNode(QuantParentAgent):
             </p>
 
             {/* "What this idea has to offer" highlighted container */}
-            <div className="bg-white rounded-xl border border-border p-3 space-y-2.5 shadow-2xs">
+            <div className="bg-card rounded-xl border border-border p-3 space-y-2.5 shadow-2xs">
               <div className="text-xs font-bold text-foreground font-mono flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
+                <TrendingUp className="w-3.5 h-3.5 text-primary" />
                 <span>What This Strategy Has to Offer:</span>
               </div>
 
               {/* 4 Quantitative Metrics Chips */}
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                <div className="p-2 rounded-lg bg-slate-50 border border-border">
+                <div className="p-2 rounded-lg bg-muted border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Expected Net Alpha</span>
-                  <span className="text-xs font-bold text-emerald-700 font-mono">
+                  <span className="text-xs font-bold text-foreground font-mono">
                     {selectedStrategy.offerings.expectedAlpha}
                   </span>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 border border-border">
+                <div className="p-2 rounded-lg bg-muted border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Sharpe Uplift</span>
-                  <span className="text-xs font-bold text-blue-700 font-mono">
+                  <span className="text-xs font-bold text-accent-foreground font-mono">
                     {selectedStrategy.offerings.sharpeImpact}
                   </span>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 border border-border">
+                <div className="p-2 rounded-lg bg-muted border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">VaR 95% Impact</span>
                   <span className="text-xs font-bold text-foreground font-mono">
                     {selectedStrategy.offerings.varImpact}
                   </span>
                 </div>
-                <div className="p-2 rounded-lg bg-slate-50 border border-border">
+                <div className="p-2 rounded-lg bg-muted border border-border">
                   <span className="text-[9px] font-mono text-muted-foreground block">Shock Cushion</span>
-                  <span className="text-xs font-bold text-purple-700 font-mono">
+                  <span className="text-xs font-bold text-foreground font-mono">
                     {selectedStrategy.offerings.drawdownProtection}
                   </span>
                 </div>
@@ -540,11 +540,11 @@ class CustomResearchNode(QuantParentAgent):
               {/* Qualitative Advantage Breakdown */}
               <div className="space-y-1.5 pt-1 text-xs font-mono">
                 <div className="flex items-start gap-1.5 text-foreground/90">
-                  <span className="text-blue-600 font-bold shrink-0">▸ Factor Neutrality:</span>
+                  <span className="text-primary font-bold shrink-0">▸ Factor Neutrality:</span>
                   <span className="text-[11px] text-muted-foreground">{selectedStrategy.offerings.factorNeutrality}</span>
                 </div>
                 <div className="flex items-start gap-1.5 text-foreground/90">
-                  <span className="text-emerald-600 font-bold shrink-0">▸ Core Edge:</span>
+                  <span className="text-chart-4 font-bold shrink-0">▸ Core Edge:</span>
                   <span className="text-[11px] text-muted-foreground">{selectedStrategy.offerings.keyEdge}</span>
                 </div>
               </div>
@@ -563,7 +563,7 @@ class CustomResearchNode(QuantParentAgent):
                   onExperimentInAgentWorkspace(selectedStrategy);
                 }
               }}
-              className="font-mono text-xs font-bold bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 h-9 gap-1.5 shadow-2xs shrink-0"
+              className="font-mono text-xs font-bold bg-primary hover:bg-primary text-primary-foreground rounded-lg px-4 h-9 gap-1.5 shadow-2xs shrink-0"
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Experiment in Agent Workspace on New Model</span>
@@ -574,9 +574,9 @@ class CustomResearchNode(QuantParentAgent):
       </div>
 
       {/* Bottom Ideation Box: Prompt the Research Node for a tailored strategy */}
-      <div className="p-3 rounded-xl border border-border bg-slate-50/50 flex flex-col sm:flex-row items-center gap-2">
+      <div className="p-3 rounded-xl border border-border bg-muted/50 flex flex-col sm:flex-row items-center gap-2">
         <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-foreground shrink-0">
-          <Bot className="w-4 h-4 text-blue-600" />
+          <Bot className="w-4 h-4 text-primary" />
           <span>Prompt Research Node:</span>
         </div>
         <input
@@ -587,16 +587,16 @@ class CustomResearchNode(QuantParentAgent):
             if (e.key === 'Enter') handleGenerateCustom();
           }}
           placeholder="e.g. Generate a delta-neutral pairs hedge for European semiconductor fab supply chains..."
-          className="flex-1 bg-white border border-border rounded-lg px-3 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-blue-500 w-full"
+          className="flex-1 bg-card border border-border rounded-lg px-3 py-1.5 text-xs font-mono text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-ring w-full"
         />
         <Button
           type="button"
           size="sm"
           disabled={isGeneratingCustom || !customPrompt.trim()}
           onClick={handleGenerateCustom}
-          className="font-mono text-xs font-semibold bg-white hover:bg-slate-100 text-foreground border border-border h-8 shrink-0 shadow-2xs gap-1"
+          className="font-mono text-xs font-semibold bg-card hover:bg-muted text-foreground border border-border h-8 shrink-0 shadow-2xs gap-1"
         >
-          <RefreshCw className={`w-3 h-3 ${isGeneratingCustom ? 'animate-spin text-blue-600' : ''}`} />
+          <RefreshCw className={`w-3 h-3 ${isGeneratingCustom ? 'animate-spin text-primary' : ''}`} />
           <span>{isGeneratingCustom ? 'Synthesizing Idea...' : 'Synthesize Strategy Idea'}</span>
         </Button>
       </div>

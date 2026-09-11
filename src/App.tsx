@@ -181,7 +181,7 @@ class SynthesizedModel(QuantParentAgent):
       varLimit: strategy.parameters?.varLimit || 1.15,
       expectedSharpe: parseFloat(strategy.offerings?.sharpeImpact?.split('→')[1]) || 2.18,
       expectedReturn: parseFloat(strategy.offerings?.expectedAlpha?.replace(/[^0-9.]/g, '')) || 16.2,
-      color: '#3b82f6',
+      color: 'var(--primary)',
       originStrategy: strategy.title,
       ideaBenefits: [
         strategy.offerings?.expectedAlpha,

@@ -54,7 +54,7 @@ export const StockWatchlist: React.FC<StockWatchlistProps> = ({
             <div
               key={stock.id || idx}
               onClick={() => onSelectHolding && onSelectHolding(stock)}
-              className="bg-white hover:bg-slate-50 border border-border rounded-lg p-2.5 transition-all cursor-pointer shadow-2xs group flex items-center justify-between text-xs"
+              className="bg-card hover:bg-muted border border-border rounded-lg p-2.5 transition-all cursor-pointer shadow-2xs group flex items-center justify-between text-xs"
             >
               {/* Column 1: Stock Name / Ticker */}
               <div className="flex items-center gap-2 min-w-[90px]">
@@ -88,7 +88,7 @@ export const StockWatchlist: React.FC<StockWatchlistProps> = ({
               {/* Column 3: Change / Weight */}
               <div className="text-right px-2">
                 <div className={`font-mono text-[11px] font-semibold flex items-center justify-end ${
-                  isPositive ? 'text-emerald-700' : 'text-rose-700'
+                  isPositive ? 'text-foreground' : 'text-foreground'
                 }`}>
                   {isPositive ? <ArrowUpRight className="w-3 h-3 inline" /> : <ArrowDownRight className="w-3 h-3 inline" />}
                   {stock.unrealizedPnLPct > 0 ? `+${stock.unrealizedPnLPct}%` : `${stock.unrealizedPnLPct}%`}
@@ -104,7 +104,7 @@ export const StockWatchlist: React.FC<StockWatchlistProps> = ({
               {/* Column 4: Unrealized P&L */}
               <div className="text-right min-w-[70px]">
                 <span className={`font-mono text-[11px] font-bold block ${
-                  isPositive ? 'text-emerald-700' : 'text-rose-700'
+                  isPositive ? 'text-foreground' : 'text-foreground'
                 }`}>
                   {formatPnL(stock.unrealizedPnL)}
                 </span>
