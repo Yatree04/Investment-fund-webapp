@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { MOCK_FUNDS, MOCK_TRADE_BLOTTER } from './data/mockFunds';
-import { Fund, Holding, TradeOrder, ViewTab, WorkspaceModel } from './types';
+import { Fund, Holding, TradeOrder, ViewTab, WorkspaceModel, FundMandateLimits } from './types';
 import { SidePanel } from './components/SidePanel';
 import { TopCommandBar } from './components/TopCommandBar';
 import { TopTickerStrip } from './components/TopTickerStrip';
@@ -11,6 +11,7 @@ import { AllocationOptimizerView } from './components/AllocationOptimizerView';
 import { TradeBlotterModal } from './components/TradeBlotterModal';
 import { AgentCommandModal } from './components/AgentCommandModal';
 import { WorkspaceViews } from './components/WorkspaceViews';
+import { FundSetupView } from './components/FundSetupView';
 
 export const App: React.FC = () => {
   const [funds, setFunds] = useState<Fund[]>(MOCK_FUNDS);
@@ -116,6 +117,27 @@ export const App: React.FC = () => {
     setOrders((prev) => [liquidationOrder, ...prev]);
   };
 
+  const handleUpdateFundLimits = (fundId: string, limits: FundMandateLimits, updatedMetadata?: Partial<Fund>) => {
+    setFunds((prev) =>
+      prev.map((f) => {
+        if (f.id === fundId) {
+          return {
+            ...f,
+            mandateLimits: limits,
+            ...updatedMetadata,
+          };
+        }
+        return f;
+      })
+    );
+  };
+
+  const handleCreateFund = (newFund: Fund) => {
+    setFunds((prev) => [newFund, ...prev]);
+    setSelectedFundId(newFund.id);
+    setActiveTab('fund-setup');
+  };
+
   const handleExecuteHedge = (order: TradeOrder) => {
     setOrders((prev) => [order, ...prev]);
     setIsSimulating(true);
@@ -206,7 +228,7 @@ class SynthesizedModel(QuantParentAgent):
         onSelectFund={(id) => setSelectedFundId(id)}
         isOpenMobile={isMobileSidePanelOpen}
         onCloseMobile={() => setIsMobileSidePanelOpen(false)}
-        onOpenSettings={() => setIsAgentModalOpen(true)}
+        onOpenSettings={() => setActiveTab('fund-setup')}
         onOpenHelp={() => setIsAgentModalOpen(true)}
         isCollapsed={isSidebarCollapsed}
         onToggleCollapse={() => setIsSidebarCollapsed((prev) => !prev)}
@@ -254,6 +276,8 @@ class SynthesizedModel(QuantParentAgent):
               onNavigateToOptimizer={() => setActiveTab('optimizer')}
               onNavigateToScenarios={() => setActiveTab('scenarios')}
               onNavigateToHoldings={() => setActiveTab('holdings')}
+              onNavigateToAudit={() => setActiveTab('audit-log')}
+              onNavigateToFundSetup={() => setActiveTab('fund-setup')}
               currency={currency}
               searchQuery={searchQuery}
               onSelectHolding={() => setActiveTab('holdings')}
@@ -262,8 +286,21 @@ class SynthesizedModel(QuantParentAgent):
                 if (cmd.toLowerCase().includes('holdings')) setActiveTab('holdings');
                 else if (cmd.toLowerCase().includes('stress')) setActiveTab('scenarios');
                 else if (cmd.toLowerCase().includes('optimi')) setActiveTab('optimizer');
+                else if (cmd.toLowerCase().includes('audit')) setActiveTab('audit-log');
+                else if (cmd.toLowerCase().includes('limit') || cmd.toLowerCase().includes('setup') || cmd.toLowerCase().includes('mandate')) setActiveTab('fund-setup');
                 else setIsAgentModalOpen(true);
               }}
+            />
+          )}
+
+          {activeTab === 'fund-setup' && (
+            <FundSetupView
+              funds={funds}
+              selectedFundId={selectedFundId}
+              onSelectFund={(id) => setSelectedFundId(id)}
+              onUpdateFundLimits={handleUpdateFundLimits}
+              onCreateFund={handleCreateFund}
+              onNavigateToOverview={() => setActiveTab('overview')}
             />
           )}
 

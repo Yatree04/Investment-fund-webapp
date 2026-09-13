@@ -1,6 +1,6 @@
 {
   "name": "DE Shaw Investment Decision Tool",
-  "description": "Institutional quantitative fund manager decision platform with AI strategy optimization, multi-model DAG workspace, and sandbox backtesting.",
+  "description": "Institutional quantitative fund manager decision platform with collaborative multi-agent intelligence fleet, autonomous factor risk vetoes, and cryptographic audit log governance.",
   "requestFramePermissions": [],
   "majorCapabilities": [
     "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"

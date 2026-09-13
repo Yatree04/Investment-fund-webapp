@@ -47,6 +47,53 @@ export interface ScenarioResult {
   sectorBreakdown: { sector: string; impactPct: number }[];
 }
 
+export interface FundMandateLimits {
+  // Core Portfolio Concentration & Position Limits
+  maxSinglePositionPct: number; // e.g. 8.5%
+  warningSinglePositionPct: number; // e.g. 7.0%
+  maxTop5HoldingsPct: number; // e.g. 35.0%
+  illiquidAssetsCapPct: number; // e.g. 2.0%
+
+  // Leverage & Balance Sheet Exposures
+  maxGrossExposurePct: number; // e.g. 200.0%
+  maxNetExposurePct: number; // e.g. 150.0%
+  minNetExposurePct: number; // e.g. -20.0%
+  maxLongShortRatio: number; // e.g. 2.0
+  minCashBufferPct: number; // e.g. 3.0%
+
+  // Risk Caps & Drawdown Circuit Breakers
+  maxVar95Pct: number; // e.g. 1.50% 1-day 95% VaR
+  maxStressVar99Pct: number; // e.g. 2.75% 1-day 99% VaR
+  maxDrawdownStopLossPct: number; // e.g. -6.0% (auto-derisk)
+  hardHaltDrawdownPct: number; // e.g. -8.5% (mandatory halt)
+  targetAnnualReturnPct: number; // e.g. 15.0%
+  targetVolPct: number; // e.g. 7.5%
+
+  // Barra Factor Beta Tolerances
+  betaToleranceMin: number; // e.g. -0.05
+  betaToleranceMax: number; // e.g. 0.25
+  maxTrackingErrorPct: number; // e.g. 3.5%
+
+  // Sector Exposure Caps (%)
+  sectorCaps: {
+    technology: number; // e.g. 35%
+    financials: number; // e.g. 25%
+    healthcare: number; // e.g. 20%
+    consumer: number; // e.g. 20%
+    energy: number; // e.g. 15%
+    industrials: number; // e.g. 15%
+  };
+
+  // Multi-Agent Fleet Governance & Autonomy
+  riskOfficerVetoMode: 'STRICT_HARD_VETO' | 'ADVISORY_ESCALATE' | 'AUTO_RESIZE_EXECUTE';
+  secCollarTolerancePct: number; // e.g. 1.5% from NBBO
+  darkPoolMaxPct: number; // e.g. 40%
+  advMaxSlicePct: number; // e.g. 2.5% of 30-day ADV
+  requirePmSignOffAboveM: number; // e.g. $50M order threshold
+  prohibitedAssetClasses: string[];
+  prohibitedTickers: string[];
+}
+
 export interface Fund {
   id: string;
   name: string;
@@ -66,6 +113,9 @@ export interface Fund {
   grossExposurePct: number;
   netExposurePct: number;
   longShortRatio: number;
+  baseCurrency?: 'USD' | 'INR' | 'EUR' | 'GBP';
+  benchmark?: string;
+  mandateLimits?: FundMandateLimits;
   assetAllocations: { asset: AssetClass; pct: number }[];
   factorExposures: FactorExposure[];
   historicalPerformance: {
@@ -94,6 +144,7 @@ export interface TradeOrder {
 
 export type ViewTab = 
   | 'overview' 
+  | 'fund-setup'
   | 'repository' 
   | 'agent-builder' 
   | 'progress-gate' 

@@ -13,7 +13,9 @@ import {
   X,
   ChevronLeft,
   ChevronRight,
-  Check
+  Check,
+  SlidersHorizontal,
+  Plus
 } from 'lucide-react';
 
 interface SidePanelProps {
@@ -128,6 +130,11 @@ export const SidePanel: React.FC<SidePanelProps> = ({
       id: 'overview',
       label: 'Portfolio Overview',
       icon: LayoutGrid,
+    },
+    {
+      id: 'fund-setup',
+      label: 'Fund Setup & Limits',
+      icon: SlidersHorizontal,
     },
     {
       id: 'optimizer',
@@ -317,16 +324,32 @@ export const SidePanel: React.FC<SidePanelProps> = ({
                         {f.id === selectedFundId && <Check className="w-3.5 h-3.5 text-primary shrink-0 ml-1" />}
                       </button>
                     ))}
+                    <div className="pt-1 mt-1 border-t border-border/80">
+                      <button
+                        onClick={() => {
+                          onSelectTab('fund-setup');
+                          setIsPortfolioMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-1.5 px-2 py-1.5 rounded text-xs font-mono font-semibold text-indigo-700 bg-indigo-50/70 hover:bg-indigo-100 transition-colors"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        <span>+ Setup &amp; Add Fund</span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
 
               {/* Settings link */}
               <button
-                onClick={onOpenSettings}
+                onClick={() => {
+                  if (onOpenSettings) onOpenSettings();
+                  else onSelectTab('fund-setup');
+                }}
                 className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground rounded-md transition-colors text-left"
               >
-                <span>Settings</span>
+                <Settings className="w-3.5 h-3.5 text-muted-foreground" />
+                <span>Mandate Limits &amp; Settings</span>
               </button>
 
               {/* User Profile matching screenshot:
